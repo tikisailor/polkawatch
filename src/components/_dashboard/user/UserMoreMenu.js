@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import editFill from '@iconify/icons-eva/edit-fill';

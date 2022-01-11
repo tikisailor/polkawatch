@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { Icon } from '@iconify/react';
 import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
 // material

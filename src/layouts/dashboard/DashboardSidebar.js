@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';

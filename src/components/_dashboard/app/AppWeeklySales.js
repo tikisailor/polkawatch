@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { Icon } from '@iconify/react';
 import androidFilled from '@iconify/icons-ant-design/android-filled';
 // material
