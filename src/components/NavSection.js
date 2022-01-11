@@ -3,7 +3,8 @@ import * as React from 'react';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom';
+import { useLocation } from '@reach/router';
+import { NavLink as RouterLink, matchPath } from 'react-router-dom';
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // material
