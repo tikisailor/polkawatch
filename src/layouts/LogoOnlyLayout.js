@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Link as RouterLink, Outlet } from 'react-router-dom';
+import PropTypes from "prop-types";
+import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 // components
@@ -22,7 +23,7 @@ const HeaderStyle = styled('header')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function LogoOnlyLayout() {
+export default function LogoOnlyLayout({children}) {
   return (
     <>
       <HeaderStyle>
@@ -30,7 +31,11 @@ export default function LogoOnlyLayout() {
           <Logo />
         </RouterLink>
       </HeaderStyle>
-      <Outlet />
+      {children}
     </>
   );
 }
+
+LogoOnlyLayout.propTypes = {
+  children: PropTypes.node.isRequired
+};
