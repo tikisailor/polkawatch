@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'gatsby';
 // material
 import { styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';

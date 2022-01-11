@@ -4,7 +4,8 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { useLocation } from '@reach/router';
-import { NavLink as RouterLink, matchPath } from 'react-router-dom';
+import { Link as RouterLink } from 'gatsby';
+import { matchPath } from 'react-router-dom';
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // material
