@@ -1,32 +1,27 @@
-# Gatsby example
+# Minimals Port to Gatsby
 
-## How to use
+## Stack
 
-Download the example [or clone the repo](https://github.com/mui-org/material-ui):
+This Minimal Gatsby started is based:
 
-<!-- #default-branch-switch -->
+- MUI Gatsby [example project](https://github.com/mui-org/material-ui/tree/master/examples/gatsby) 
+- Minimal [Free version](https://github.com/minimal-ui-kit/material-kit-react)
 
-```sh
-curl https://codeload.github.com/mui-org/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/gatsby
-cd gatsby
+## Changes
+
+Minimal is a React Application and can has been ported to Gatsby following the guidelines provided in 
+the [documantation](https://www.gatsbyjs.com/docs/porting-from-create-react-app-to-gatsby/)
+
+- Refactored Theme, split between theme and Top Layout Plugin
+- All components must include React
+- Removed react-router-dom dependencies
+- Restructured dashboard pages to explicitly use DashboardLayout
+- Moved /static path to /
+- Implemented dashboard to dashboard/app redirection via plugin [gatsby-plugin-meta-redirect](https://www.gatsbyjs.com/plugins/gatsby-plugin-meta-redirect/)
+
+## Development and Testing
+
 ```
-
-Install it and run:
-
-```sh
-npm install
-npm run develop
+yarn install
+gatsby develop
 ```
-
-## The idea behind the example
-
-The project uses [Gatsby](https://github.com/gatsbyjs/gatsby), which is a static site generator for React.
-It includes `@mui/material` and its peer dependencies, including `emotion`, the default style engine in MUI v5.
-If you prefer, you can [use styled-components instead](https://mui.com/guides/interoperability/#styled-components).
-
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation, continuing browsing it from the [templates](https://mui.com/getting-started/templates/) section.
