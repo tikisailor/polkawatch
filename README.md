@@ -2,7 +2,7 @@
 
 ## Stack
 
-This Minimal Gatsby started is based:
+This Minimal Gatsby dashboard/demo is based:
 
 - MUI Gatsby [example project](https://github.com/mui-org/material-ui/tree/master/examples/gatsby) 
 - Minimal [Free version](https://github.com/minimal-ui-kit/material-kit-react)
@@ -18,6 +18,7 @@ the [documantation](https://www.gatsbyjs.com/docs/porting-from-create-react-app-
 - Restructured dashboard pages to explicitly use DashboardLayout
 - Moved /static path to /
 - Implemented dashboard to dashboard/app redirection via plugin [gatsby-plugin-meta-redirect](https://www.gatsbyjs.com/plugins/gatsby-plugin-meta-redirect/)
+- Implemented alternative match path
 
 ## Development and Testing
 
