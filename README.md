@@ -9,8 +9,8 @@ This Minimal Gatsby dashboard/demo is based:
 
 ## Changes
 
-Minimal is a React Application and can has been ported to Gatsby following the guidelines provided in 
-the [documantation](https://www.gatsbyjs.com/docs/porting-from-create-react-app-to-gatsby/)
+Minimal is a React Application has been ported to Gatsby following the guidelines provided in 
+the [documentation](https://www.gatsbyjs.com/docs/porting-from-create-react-app-to-gatsby/)
 
 - Refactored Theme, split between theme and Top Layout Plugin
 - All components must include React
