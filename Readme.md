@@ -87,3 +87,6 @@ For deployment instructions check the [deployment tutorial](./deploy ).
 Polkawatch is Open Source, Apache License Version 2.0. 
 
 ©2022 [Valletech AB](https://valletech.eu), Authors and Contributors.
+
+
+![w3f foundation grants program](https://raw.githubusercontent.com/w3f/Grants-Program/master/src/badge_black.svg)
