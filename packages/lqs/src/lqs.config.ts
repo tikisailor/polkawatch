@@ -10,9 +10,10 @@ import { OpenAPI } from 'openapi-types';
  * Configures the Application. Allows to share configuration between Production
  * and Test runs.
  *
- * Returns the Swagge Document which is also required for testing.
+ * Returns the Swagger Document which is also required for testing.
  *
  * @param app
+ * @param setupSwaggerModule
  */
 export function configure(app, setupSwaggerModule = true): OpenAPI.Document {
 
@@ -32,6 +33,9 @@ export function configure(app, setupSwaggerModule = true): OpenAPI.Document {
 
     // Enable validation pipeline globally
     app.useGlobalPipes(new ValidationPipe());
+
+    // Set Cors
+    app.enableCors({ origin: configService.get('CORS_ORIGIN') });
 
     // Swagger setup
     const swaggerConfig = new DocumentBuilder()
