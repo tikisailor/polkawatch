@@ -43,13 +43,31 @@ export class GeoRegion extends BaseController {
             aggs: {
                 polkawatch: {
                     terms: {
-                        field: 'validator_country_group_name',
+                        field: 'validator_country_group_code',
                         order: {
                             reward: 'desc',
                         },
                         size: params.TopResults,
                     },
                     aggs: {
+                        name: {
+                            'top_hits': {
+                                'fields': [
+                                    {
+                                        'field': 'validator_country_group_name',
+                                    },
+                                ],
+                                '_source': false,
+                                'size': 1,
+                                'sort': [
+                                    {
+                                        'date': {
+                                            'order': 'desc',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
                         reward: {
                             sum: {
                                 script: {
@@ -58,10 +76,34 @@ export class GeoRegion extends BaseController {
                                 },
                             },
                         },
+                        countries: {
+                            'cardinality': {
+                                'field': 'validator_country_code',
+                            },
+                        },
+                        networks: {
+                            'cardinality': {
+                                'field': 'validator_asn_code',
+                            },
+                        },
+                        validator_groups: {
+                            'cardinality': {
+                                'field': 'validator_parent',
+                            },
+                        },
+                        validators: {
+                            'cardinality': {
+                                'field': 'validator',
+                            },
+                        },
+                        nominators: {
+                            'cardinality': {
+                                'field': 'nominator',
+                            },
+                        },
                     },
                 },
             },
-            size: 0,
             query: {
                 bool: {
                     filter: {

@@ -80,9 +80,9 @@ describe('LQS end-to-end testing', () => {
                     expect(response).toSatisfyApiSpec();
                 });
         });
-        it('Network Group', async () => {
+        it('Networks', async () => {
             await request(httpServer)
-                .post('/lqs/network/group')
+                .post('/lqs/net/network')
                 .send({ StartingEra: 500, TopResults: 3 })
                 .then(async (response) => {
                     expect(response.statusCode).toBe(200);

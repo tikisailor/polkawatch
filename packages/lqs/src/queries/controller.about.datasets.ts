@@ -9,7 +9,7 @@ import { AboutData } from './query.responses.dtos';
 import { AboutDataQueryDto } from './query.parameters.dtos';
 import { plainToInstance } from 'class-transformer';
 
-@ApiTags('about')
+@ApiTags('About')
 @Controller()
 export class AboutDataset extends BaseController {
     constructor(protected queryService: IndexQueryService) {
@@ -32,8 +32,10 @@ export class AboutDataset extends BaseController {
     }
 
     queryResponseTransformer(indexResponse): AboutData {
-        const aggs = indexResponse.body.aggregations;
-        return plainToInstance(AboutData, aggs, {
+        const aggregations = indexResponse.body.aggregations;
+        // We put the record count as an aggregation even it is not
+        aggregations.reward_events = indexResponse.body.hits.total;
+        return plainToInstance(AboutData, aggregations, {
             excludeExtraneousValues: true,
         });
     }
@@ -51,12 +53,42 @@ export class AboutDataset extends BaseController {
                         'field': 'reward',
                     },
                 },
-                'total_rewards_dot': {
+                'reward': {
                     'sum': {
                         'script': {
                             'source': 'doc[\'reward\'].value/10000000000.0',
                             'lang': 'painless',
                         },
+                    },
+                },
+                'regions': {
+                    'cardinality': {
+                        'field': 'validator_country_group_code',
+                    },
+                },
+                'countries': {
+                    'cardinality': {
+                        'field': 'validator_country_code',
+                    },
+                },
+                'networks': {
+                    'cardinality': {
+                        'field': 'validator_asn_code',
+                    },
+                },
+                'validator_groups': {
+                    'cardinality': {
+                        'field': 'validator_parent',
+                    },
+                },
+                'validators': {
+                    'cardinality': {
+                        'field': 'validator',
+                    },
+                },
+                'nominators': {
+                    'cardinality': {
+                        'field': 'nominator',
                     },
                 },
                 'latest_era': {
@@ -65,48 +97,22 @@ export class AboutDataset extends BaseController {
                     },
                 },
             },
-            'size': 0,
-            'fields': [
-                {
-                    'field': 'date',
-                    'format': 'date_time',
-                },
-            ],
-            'script_fields': {
-                'reward_dot': {
-                    'script': {
-                        'source': 'doc[\'reward\'].value/10000000000.0',
-                        'lang': 'painless',
-                    },
-                },
-                'nomination_value_dot': {
-                    'script': {
-                        'source': 'doc[\'nomination_value\'].value/10000000000.0 ',
-                        'lang': 'painless',
-                    },
-                },
-            },
-            'stored_fields': [
-                '*',
-            ],
-            'runtime_mappings': {},
-            '_source': {
-                'excludes': [],
-            },
             'query': {
                 'bool': {
-                    'must': [],
                     'filter': [
                         {
+                            'match_phrase': {
+                                'reward_type': 'staking reward',
+                            },
+                        },
+                        {
                             'range': {
-                                'era': {
-                                    'gte': params.StartingEra,
+                                era: {
+                                    gte: params.StartingEra,
                                 },
                             },
                         },
                     ],
-                    'should': [],
-                    'must_not': [],
                 },
             },
         };

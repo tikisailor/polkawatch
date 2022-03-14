@@ -50,12 +50,55 @@ export class ValidatorGroup extends BaseController {
                         'size': params.TopResults,
                     },
                     'aggs': {
+                        name: {
+                            'top_hits': {
+                                'fields': [
+                                    {
+                                        'field': 'validator_parent_name',
+                                    },
+                                ],
+                                '_source': false,
+                                'size': 1,
+                                'sort': [
+                                    {
+                                        'date': {
+                                            'order': 'desc',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
                         reward: {
                             'sum': {
                                 'script': {
                                     'source': 'doc[\'reward\'].value/10000000000.0 ',
                                     'lang': 'painless',
                                 },
+                            },
+                        },
+                        'regions': {
+                            'cardinality': {
+                                'field': 'validator_country_group_code',
+                            },
+                        },
+                        'countries': {
+                            'cardinality': {
+                                'field': 'validator_country_code',
+                            },
+                        },
+                        'networks': {
+                            'cardinality': {
+                                'field': 'validator_asn_code',
+                            },
+                        },
+                        'validators': {
+                            'cardinality': {
+                                'field': 'validator',
+                            },
+                        },
+                        'nominators': {
+                            'cardinality': {
+                                'field': 'nominator',
                             },
                         },
                         median_nomination: {
@@ -69,15 +112,9 @@ export class ValidatorGroup extends BaseController {
                                 ],
                             },
                         },
-                        validators_in_group: {
-                            'cardinality': {
-                                'field': 'validator',
-                            },
-                        },
                     },
                 },
             },
-            'size': 0,
             'query': {
                 'bool': {
                     'filter': [

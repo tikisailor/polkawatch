@@ -11,12 +11,12 @@ import { plainToInstance } from 'class-transformer';
 
 @ApiTags('network')
 @Controller()
-export class NetworkProviderGroup extends BaseController {
+export class NetworkProvider extends BaseController {
     constructor(protected queryService: IndexQueryService) {
         super(queryService);
     }
 
-    @Post('network/group')
+    @Post('net/network')
     @ApiOperation({
         description: 'Get the distribution of DOT Rewards per Computing Network Group',
     })
@@ -43,13 +43,31 @@ export class NetworkProviderGroup extends BaseController {
             aggs: {
                 polkawatch: {
                     terms: {
-                        field: 'validator_asn_group_name',
+                        field: 'validator_asn_code',
                         order: {
                             reward: 'desc',
                         },
                         size: params.TopResults,
                     },
                     aggs: {
+                        name: {
+                            'top_hits': {
+                                'fields': [
+                                    {
+                                        'field': 'validator_asn_name',
+                                    },
+                                ],
+                                '_source': false,
+                                'size': 1,
+                                'sort': [
+                                    {
+                                        'date': {
+                                            'order': 'desc',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
                         reward: {
                             sum: {
                                 script: {
@@ -58,19 +76,50 @@ export class NetworkProviderGroup extends BaseController {
                                 },
                             },
                         },
-                    },
-                },
-            },
-            size: 0,
-            query: {
-                bool: {
-                    filter: {
-                        range: {
-                            era: {
-                                gte: params.StartingEra,
+                        'regions': {
+                            'cardinality': {
+                                'field': 'validator_country_group_code',
+                            },
+                        },
+                        countries: {
+                            'cardinality': {
+                                'field': 'validator_country_code',
+                            },
+                        },
+                        validator_groups: {
+                            'cardinality': {
+                                'field': 'validator_parent',
+                            },
+                        },
+                        validators: {
+                            'cardinality': {
+                                'field': 'validator',
+                            },
+                        },
+                        nominators: {
+                            'cardinality': {
+                                'field': 'nominator',
                             },
                         },
                     },
+                },
+            },
+            query: {
+                bool: {
+                    filter: [
+                        {
+                            'match_phrase': {
+                                'reward_type': 'staking reward',
+                            },
+                        },
+                        {
+                            'range': {
+                                era: {
+                                    gte: params.StartingEra,
+                                },
+                            },
+                        },
+                    ],
                 },
             },
         };

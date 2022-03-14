@@ -3,14 +3,14 @@
 
 import { GeoRegion } from './controller.geo.region';
 import { GeoCountry } from './controller.geo.country';
-import { NetworkProviderGroup } from './controller.network.group';
+import { NetworkProvider } from './controller.network';
 import { ValidatorGroup } from './controller.validator.group';
 import { AboutDataset } from './controller.about.datasets';
 
 export default [
     GeoRegion,
     GeoCountry,
-    NetworkProviderGroup,
+    NetworkProvider,
     ValidatorGroup,
     AboutDataset,
 ];

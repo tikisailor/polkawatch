@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Expose, Transform } from 'class-transformer';
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiResponseProperty, PickType } from '@nestjs/swagger';
 
 /**
  * All queries will have as a response either a record or an array of records
@@ -14,11 +14,55 @@ export type QueryResponse = QueryResponseRecord | Array<QueryResponseRecord>;
  */
 export type QueryResponseRecord = RewardsByRegion | RewardsByCountry | RewardsByNetworkProvider | RewardsByValidationGroup | AboutData;
 
+
+/**
+ * Rewards Aggregations
+ */
+
+export class RewardAggregations {
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.value, { toClassOnly: true })
+    @Expose({ name: 'reward' })
+        DotRewards: number;
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.value, { toClassOnly: true })
+    @Expose({ name: 'regions' })
+        Regions: number;
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.value, { toClassOnly: true })
+    @Expose({ name: 'countries' })
+        Countries: number;
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.value, { toClassOnly: true })
+    @Expose({ name: 'networks' })
+        Networks: number;
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.value, { toClassOnly: true })
+    @Expose({ name: 'validator_groups' })
+        ValidatorGroups: number;
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.value, { toClassOnly: true })
+    @Expose({ name: 'validators' })
+        Validators: number;
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.value, { toClassOnly: true })
+    @Expose({ name: 'nominators' })
+        Nominators: number;
+
+}
+
 /**
  * About Data
  */
 
-export class AboutData {
+export class AboutData extends RewardAggregations {
     @ApiResponseProperty()
     @Transform(({ value }) => value.value, { toClassOnly: true })
     @Expose({ name: 'total_eras' })
@@ -26,13 +70,8 @@ export class AboutData {
 
     @ApiResponseProperty()
     @Transform(({ value }) => value.value, { toClassOnly: true })
-    @Expose({ name: 'total_rewards' })
+    @Expose({ name: 'reward_events' })
         RewardEvents: number;
-
-    @ApiResponseProperty()
-    @Transform(({ value }) => value.value, { toClassOnly: true })
-    @Expose({ name: 'total_rewards_dot' })
-        DotRewards: number;
 
     @ApiResponseProperty()
     @Transform(({ value }) => value.value, { toClassOnly: true })
@@ -44,45 +83,48 @@ export class AboutData {
  * Rewards by Region
  */
 
-export class RewardsByRegion {
-  @ApiResponseProperty()
-  @Expose({ name: 'key' })
-      Region: string;
+export class RewardsByRegion extends PickType(RewardAggregations, ['DotRewards', 'Countries', 'Networks', 'ValidatorGroups', 'Validators', 'Nominators'] as const) {
 
+    @ApiResponseProperty()
+    @Expose({ name: 'key' })
+        Id: string;
+    
   @ApiResponseProperty()
-  @Transform(({ value }) => value.value, { toClassOnly: true })
-  @Expose({ name: 'reward' })
-      DotRewards: number;
+  @Transform(({ value }) => value.hits.hits['0'].fields.validator_country_group_name['0'], { toClassOnly: true })
+  @Expose({ name: 'name' })
+      Region: string;
 }
 
 /**
  * Rewards by Country
  */
 
-export class RewardsByCountry {
+export class RewardsByCountry extends PickType(RewardAggregations, ['DotRewards', 'Networks', 'ValidatorGroups', 'Validators', 'Nominators'] as const) {
     @ApiResponseProperty()
     @Expose({ name: 'key' })
-        Country: string;
+        Id: string;
 
     @ApiResponseProperty()
-    @Transform(({ value }) => value.value, { toClassOnly: true })
-    @Expose({ name: 'reward' })
-        DotRewards: number;
+    @Transform(({ value }) => value.hits.hits['0'].fields.validator_country_name['0'], { toClassOnly: true })
+    @Expose({ name: 'name' })
+        Country: string;
+
 }
 
 /**
  * Rewards by Computing Network Provider
  */
 
-export class RewardsByNetworkProvider {
-    @ApiResponseProperty()
-    @Expose({ name: 'key' })
-        NetworkProvider: string;
+export class RewardsByNetworkProvider extends PickType(RewardAggregations, ['DotRewards', 'Regions', 'Countries', 'ValidatorGroups', 'Validators', 'Nominators'] as const) {
 
     @ApiResponseProperty()
-    @Transform(({ value }) => value.value, { toClassOnly: true })
-    @Expose({ name: 'reward' })
-        DotRewards: number;
+    @Expose({ name: 'key' })
+        Id: string;
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.hits.hits['0'].fields.validator_asn_name['0'], { toClassOnly: true })
+    @Expose({ name: 'name' })
+        NetworkProvider: string;
 
 }
 
@@ -90,24 +132,20 @@ export class RewardsByNetworkProvider {
  * Rewards by Validator Group
  */
 
-export class RewardsByValidationGroup {
-    @ApiResponseProperty()
-    @Expose({ name: 'key' })
-        ValidationGroup: string;
+export class RewardsByValidationGroup extends PickType(RewardAggregations, ['DotRewards', 'Regions', 'Countries', 'Networks', 'Validators', 'Nominators'] as const) {
 
     @ApiResponseProperty()
-    @Transform(({ value }) => value.value, { toClassOnly: true })
-    @Expose({ name: 'reward' })
-        DotRewards: number;
+    @Expose({ name: 'key' })
+        Id: string;
+
+    @ApiResponseProperty()
+    @Transform(({ value }) => value.hits.hits['0'].fields.validator_parent_name['0'], { toClassOnly: true })
+    @Expose({ name: 'name' })
+        ValidationGroup: string;
 
     @ApiResponseProperty()
     @Transform(({ value }) => value.values['50.0'], { toClassOnly: true })
     @Expose({ name: 'median_nomination' })
         DotMedianNomination: number;
-
-    @ApiResponseProperty()
-    @Transform(({ value }) => value.value, { toClassOnly: true })
-    @Expose({ name: 'validators_in_group' })
-        ValidatorsInGroup: number;
 
 }
