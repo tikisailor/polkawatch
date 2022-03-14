@@ -5,35 +5,35 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '../lqs.controller';
 import { AggregatedIndexData, IndexQueryService, QueryTemplate } from '../lqs.index.service';
-import { RewardsByRegion } from './query.responses.dtos';
+import { RewardsByNetworkProvider } from './query.responses.dtos';
 import { RewardDistributionQueryDto } from './query.parameters.dtos';
 import { plainToInstance } from 'class-transformer';
 
-@ApiTags('geography')
+@ApiTags('network')
 @Controller()
-export class GeoRegion extends BaseController {
+export class NetworkProvider extends BaseController {
     constructor(protected queryService: IndexQueryService) {
         super(queryService);
     }
 
-    @Post('geo/region')
+    @Post('net/network')
     @ApiOperation({
-        description: 'Get the distribution of DOT Rewards per Region',
+        description: 'Get the distribution of DOT Rewards per Computing Network Group',
     })
-    @ApiOkResponse({ description: 'The distribution of DOT Rewards per Region', type: RewardsByRegion, isArray: true })
+    @ApiOkResponse({ description: 'The distribution of DOT Rewards per Computing Network Group', type: RewardsByNetworkProvider, isArray: true })
     @HttpCode(HttpStatus.OK)
     async post(
-        @Body() params: RewardDistributionQueryDto): Promise<Array<RewardsByRegion>> {
+        @Body() params: RewardDistributionQueryDto): Promise<Array<RewardsByNetworkProvider>> {
         return (await super.runQuery(
             params,
             this.queryTemplate as QueryTemplate,
             this.queryResponseTransformer,
-        )) as Array<RewardsByRegion>;
+        )) as Array<RewardsByNetworkProvider>;
     }
 
-    queryResponseTransformer(indexResponse): Array<RewardsByRegion> {
+    queryResponseTransformer(indexResponse): Array<RewardsByNetworkProvider> {
         const buckets = indexResponse.body.aggregations['polkawatch'].buckets as AggregatedIndexData;
-        return plainToInstance(RewardsByRegion, buckets, {
+        return plainToInstance(RewardsByNetworkProvider, buckets, {
             excludeExtraneousValues: true,
         });
     }
@@ -43,7 +43,7 @@ export class GeoRegion extends BaseController {
             aggs: {
                 polkawatch: {
                     terms: {
-                        field: 'validator_country_group_code',
+                        field: 'validator_asn_code',
                         order: {
                             reward: 'desc',
                         },
@@ -54,7 +54,7 @@ export class GeoRegion extends BaseController {
                             'top_hits': {
                                 'fields': [
                                     {
-                                        'field': 'validator_country_group_name',
+                                        'field': 'validator_asn_name',
                                     },
                                 ],
                                 '_source': false,
@@ -76,14 +76,14 @@ export class GeoRegion extends BaseController {
                                 },
                             },
                         },
+                        'regions': {
+                            'cardinality': {
+                                'field': 'validator_country_group_code',
+                            },
+                        },
                         countries: {
                             'cardinality': {
                                 'field': 'validator_country_code',
-                            },
-                        },
-                        networks: {
-                            'cardinality': {
-                                'field': 'validator_asn_code',
                             },
                         },
                         validator_groups: {
@@ -106,16 +106,24 @@ export class GeoRegion extends BaseController {
             },
             query: {
                 bool: {
-                    filter: {
-                        range: {
-                            era: {
-                                gte: params.StartingEra,
+                    filter: [
+                        {
+                            'match_phrase': {
+                                'reward_type': 'staking reward',
                             },
                         },
-                    },
+                        {
+                            'range': {
+                                era: {
+                                    gte: params.StartingEra,
+                                },
+                            },
+                        },
+                    ],
                 },
             },
         };
     }
+
 }
 
