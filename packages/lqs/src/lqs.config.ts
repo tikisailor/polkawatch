@@ -31,7 +31,7 @@ export function configure(app, setupSwaggerModule = true): OpenAPI.Document {
     app.setGlobalPrefix(globalPrefix);
 
     // Enable validation pipeline globally
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(new ValidationPipe({ transform:true }));
 
     // Swagger setup
     const swaggerConfig = new DocumentBuilder()

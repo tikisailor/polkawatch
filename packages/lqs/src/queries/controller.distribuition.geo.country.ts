@@ -6,7 +6,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '../lqs.controller';
 import { AggregatedIndexData, IndexQueryService, QueryTemplate } from '../lqs.index.service';
 import { RewardsByCountry } from './query.responses.dtos';
-import { RewardDistributionQueryDto } from './query.parameters.dtos';
+import { RewardDistributionQuery } from './query.parameters.dtos';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('geography')
@@ -16,14 +16,14 @@ export class GeoCountry extends BaseController {
         super(queryService);
     }
 
-    @Post('geo/country')
+    @Post('distribution/geo/country')
     @ApiOperation({
         description: 'Get the distribution of DOT Rewards per Country',
     })
     @ApiOkResponse({ description: 'The distribution of DOT Rewards per Country', type: RewardsByCountry, isArray: true })
     @HttpCode(HttpStatus.OK)
     async post(
-        @Body() params: RewardDistributionQueryDto): Promise<Array<RewardsByCountry>> {
+        @Body() params: RewardDistributionQuery): Promise<Array<RewardsByCountry>> {
         return (await super.runQuery(
             params,
             this.queryTemplate as QueryTemplate,
@@ -165,7 +165,7 @@ export class GeoCountry extends BaseController {
         };
     }
 
-    queryTemplate(params: RewardDistributionQueryDto) {
+    queryTemplate(params: RewardDistributionQuery) {
         return {
             'aggs': {
                 polkawatch: {
@@ -230,8 +230,8 @@ export class GeoCountry extends BaseController {
                 'bool': {
                     'filter': [
                         {
-                            'match_phrase': {
-                                'reward_type': 'staking reward',
+                            'wildcard': {
+                                'reward_type': params.RewardType == 'all' ? '*' : params.RewardType,
                             },
                         },
                         {

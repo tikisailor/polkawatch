@@ -1,30 +1,54 @@
 // Copyright 2021-2022 Valletech AB authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsNumber, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsEnum, IsOptional } from 'class-validator';
 
 /**
  * All possible query parameters.
  */
-export type QueryParameters = RewardDistributionQueryDto | AboutDataQueryDto;
+export type QueryParameters = RewardDistributionQuery | AboutDataQuery | EvolutionQuery;
+
+
+enum RewardTypes {
+    Staking='staking reward',
+    Commission='validator commission',
+    All='all'
+}
+
+/**
+ * Base Query, we will normally query the tip of the blockchain
+ */
+
+export class BaseQuery {
+    @IsOptional()
+    @IsNumber()
+    @ApiProperty({
+        description: 'Limit the dataset by starting Era',
+        minimum: 1,
+        default: 1,
+        example: 510,
+        required: false,
+    })
+        StartingEra = 1;
+
+    @IsOptional()
+    @IsEnum(RewardTypes)
+    @ApiProperty({
+        description: 'Limit the dataset by type of reward',
+        enum: ['validator commission', 'staking reward', 'all'],
+        default: 'staking reward',
+        required: false,
+    })
+        RewardType = 'staking reward';
+
+}
 
 
 /**
  * Query parameters for reward distribution queries
  */
-export class RewardDistributionQueryDto {
-  @IsOptional()
-  @IsNumber()
-  @ApiProperty({
-      description: 'Limit the dataset by starting Era',
-      minimum: 1,
-      default: 0,
-      example: 510,
-      required: false,
-  })
-      StartingEra: number;
-
+export class RewardDistributionQuery extends BaseQuery {
   @IsOptional()
   @IsNumber()
   @ApiProperty({
@@ -33,7 +57,10 @@ export class RewardDistributionQueryDto {
       default: 10,
       required: false,
   })
-      TopResults: number;
+      TopResults = 10;
 }
 
-export class AboutDataQueryDto extends PickType(RewardDistributionQueryDto, ['StartingEra'] as const) {}
+export class AboutDataQuery extends BaseQuery {}
+
+
+export class EvolutionQuery extends BaseQuery {}

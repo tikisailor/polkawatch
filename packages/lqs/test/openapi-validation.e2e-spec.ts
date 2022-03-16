@@ -50,11 +50,10 @@ describe('LQS end-to-end testing', () => {
         httpServer = app.getHttpServer();
     });
 
-    describe('E2E API Test', () => {
-
+    describe('Reward Distribution APIs', () => {
         it('About Dataset', async () => {
             await request(httpServer)
-                .post('/lqs/about/dataset')
+                .post('/lqs/distribution/about/dataset')
                 .send({ StartingEra: 499 })
                 .then(async (response) => {
                     expect(response.statusCode).toBe(200);
@@ -64,7 +63,7 @@ describe('LQS end-to-end testing', () => {
 
         it('Geo Region', async () => {
             await request(httpServer)
-                .post('/lqs/geo/region')
+                .post('/lqs/distribution/geo/region')
                 .send({ StartingEra: 499, TopResults: 10 })
                 .then(async (response) => {
                     expect(response.statusCode).toBe(200);
@@ -73,7 +72,7 @@ describe('LQS end-to-end testing', () => {
         });
         it('Get Country', async () => {
             await request(httpServer)
-                .post('/lqs/geo/country')
+                .post('/lqs/distribution/geo/country')
                 .send({ StartingEra: 501, TopResults: 5 })
                 .then(async (response) => {
                     expect(response.statusCode).toBe(200);
@@ -82,7 +81,7 @@ describe('LQS end-to-end testing', () => {
         });
         it('Networks', async () => {
             await request(httpServer)
-                .post('/lqs/net/network')
+                .post('/lqs/distribution/net/network')
                 .send({ StartingEra: 500, TopResults: 3 })
                 .then(async (response) => {
                     expect(response.statusCode).toBe(200);
@@ -91,17 +90,40 @@ describe('LQS end-to-end testing', () => {
         });
         it('Validator Group', async () => {
             await request(httpServer)
-                .post('/lqs/validator/group')
+                .post('/lqs/distribution/validator/group')
                 .send({ StartingEra: 500, TopResults: 3 })
                 .then(async (response) => {
                     expect(response.statusCode).toBe(200);
                     expect(response).toSatisfyApiSpec();
                 });
         });
+    });
 
+    describe('Reward Evolution APIs', () => {
+        it('Regional Evolution', async () => {
+            await request(httpServer)
+                .post('/lqs/evolution/geo/region')
+                .send({ StartingEra: 500 })
+                .then(async (response) => {
+                    expect(response.statusCode).toBe(200);
+                    expect(response).toSatisfyApiSpec();
+                });
+        });
+        it('Dataset Evolution', async () => {
+            await request(httpServer)
+                .post('/lqs/evolution/about/era')
+                .send({ StartingEra: 500 })
+                .then(async (response) => {
+                    expect(response.statusCode).toBe(200);
+                    expect(response).toSatisfyApiSpec();
+                });
+        });
+    });
+
+    describe('API parameter validation and defaulting', () => {
         it('Will test era validation', async () => {
             await request(httpServer)
-                .post('/lqs/geo/region')
+                .post('/lqs/distribution/geo/region')
                 .send({ StartingEra: 'error', TopResults: 3 })
                 .then(async (response) => {
                     expect(response.statusCode).toBe(400);
@@ -110,22 +132,33 @@ describe('LQS end-to-end testing', () => {
 
         it('Will test top results validation', async () => {
             await request(httpServer)
-                .post('/lqs/geo/region')
+                .post('/lqs/distribution/geo/region')
                 .send({ StartingEra: 400, TopResults: 'error' })
                 .then(async (response) => {
                     expect(response.statusCode).toBe(400);
                 });
         });
 
-        // For convenience we generate the openapi specification document
-        // only after having verified that some e2e tests are successful.
+        it('Will test default query parameters', async ()=>{
+            await request(httpServer)
+                .post('/lqs/distribution/about/dataset')
+                .send({ })
+                .then(async (response) => {
+                    expect(response.statusCode).toBe(200);
+                    expect(response).toSatisfyApiSpec();
+                });
+        });
 
-        it('Will create openapi specification', async () => {
-            const doc = configure(app, true);
-            const outPath = 'lqs-api-spec.json';
-            fs.writeFile(outPath, JSON.stringify(doc), (error) => {
-                if (error) throw error;
-            });
+    });
+
+    // For convenience we generate the openapi specification document
+    // only after having verified that some e2e tests are successful.
+
+    it('Will create openapi specification', async () => {
+        const doc = configure(app, true);
+        const outPath = 'lqs-api-spec.json';
+        fs.writeFile(outPath, JSON.stringify(doc), (error) => {
+            if (error) throw error;
         });
     });
 });
