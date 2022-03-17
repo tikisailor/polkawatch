@@ -30,8 +30,9 @@ export class ElasticService {
                 doc: {
                     date: new Date(parseInt(reward.timeStamp)),
                     era: reward.era,
+                    traced: reward.traced,
                     reward: reward.newReward,
-                    reward_commission: reward.comission,
+                    reward_commission: reward.commission,
                     reward_type: reward.rewardType,
 
                     nominator: reward.nominator,
@@ -39,12 +40,13 @@ export class ElasticService {
 
                     validator: reward.validator.id,
                     validator_type: reward.validatorType,
+                    validator_identity: reward.validator.info.display.identity,
 
                     traced_heartbeat_id: reward.previousHeartbeat ? reward.previousHeartbeat.id : 'NOT_TRACED',
                     traced_heartbeat_type: reward.previousHeartbeatTrace,
                     traced_payout_id: reward.payout ? reward.payout.id : 'NOT_TRACED',
 
-                    validator_parent: reward.validator.info.parentId,
+                    validator_parent: reward.validator.info.display.parentId,
                     validator_name: reward.validator.info.display.name,
                     validator_parent_name: reward.validator.info.display.groupName,
                     validator_parent_web: reward.validator.info.display.groupWeb,
@@ -111,6 +113,7 @@ const REWARD_PROPERTIES = {
 
     date: { type: 'date' },
     era: { type: 'long' },
+    traced: { type: 'boolean' },
     nominator:  { type: 'keyword' },
 
     reward: { type: 'long' },
@@ -121,6 +124,7 @@ const REWARD_PROPERTIES = {
     validator: { type: 'keyword' },
     validator_name: { type: 'keyword' },
     validator_type: { type: 'keyword' },
+    validator_identity: { type: 'boolean' },
 
     // orphan validators will be their own parent (1 validator group)
     validator_parent: { type: 'keyword' },

@@ -101,13 +101,12 @@ export class SubstrateHistoryService {
         // becuase we dont find in history-depth a matching record of exposure
         if(!exposure) this.logger.warn(`No EXPOSURE traced in ${reward.id}`);
         reward.nominationExposure = exposureByStaker[reward.nominator];
-        reward.comission = validatorPrefs.comission;
+        reward.commission = validatorPrefs.commission;
 
         // Here we try to caracterize the reward and validator for later analysis or grouping
-        reward.validatorType = validatorPrefs.comission == 1 ? 'custodial' : 'public';
-        reward.rewardType = reward.validator.id == reward.nominator ? 'validator comission' : 'staking reward';
+        reward.validatorType = validatorPrefs.commission == 1 ? 'custodial' : 'public';
+        reward.rewardType = reward.validator.id == reward.nominator ? 'validator commission' : 'staking reward';
 
-        if(reward.validatorType == 'custodial') this.logger.warn(`Found custodial validator ${reward.validator.id}`);
         return reward;
     }
 
@@ -279,6 +278,7 @@ export class SubstrateHistoryService {
     getValidatorInfoDisplay(vi) {
         return {
             name: this.getValidatorDisplayName(vi),
+            identity: (vi.info || vi.parentInfo) ? true : false,
             parentId: vi.parentId ? vi.parentId : vi.id,
             groupName: this.getValidatorGroupName(vi),
             groupWeb: this.getValidatorGroupAttributute(vi, 'web'),
@@ -298,8 +298,17 @@ export class SubstrateHistoryService {
         if (vi.info) {
             if (vi.info.display) {return this.decodeInfoField(vi.info.display);}
         }
-        if(vi.parentInfo && vi.childId) return `${this.getValidatorGroupName(vi)} / ${this.decodeInfoField(vi.childId)}`;
+        if(vi.parentInfo && vi.childId) return `${this.getValidatorGroupName(vi)} / ${this.getValidatorChildId(vi)}`;
         return vi.id;
+    }
+
+    getValidatorChildId(vi) {
+        let ret = vi.id;
+        if (vi.childId) {
+            const childId = this.decodeInfoField(vi.childId);
+            if(childId) ret = childId;
+        }
+        return ret;
     }
 
     /**
