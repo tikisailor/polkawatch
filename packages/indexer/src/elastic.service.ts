@@ -31,7 +31,7 @@ export class ElasticService {
                     date: new Date(parseInt(reward.timeStamp)),
                     era: reward.era,
                     reward: reward.newReward,
-                    reward_commission: reward.comission,
+                    reward_commission: reward.commission,
                     reward_type: reward.rewardType,
 
                     nominator: reward.nominator,

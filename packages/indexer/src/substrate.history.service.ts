@@ -101,13 +101,12 @@ export class SubstrateHistoryService {
         // becuase we dont find in history-depth a matching record of exposure
         if(!exposure) this.logger.warn(`No EXPOSURE traced in ${reward.id}`);
         reward.nominationExposure = exposureByStaker[reward.nominator];
-        reward.comission = validatorPrefs.comission;
+        reward.commission = validatorPrefs.commission;
 
         // Here we try to caracterize the reward and validator for later analysis or grouping
-        reward.validatorType = validatorPrefs.comission == 1 ? 'custodial' : 'public';
-        reward.rewardType = reward.validator.id == reward.nominator ? 'validator comission' : 'staking reward';
+        reward.validatorType = validatorPrefs.commission == 1 ? 'custodial' : 'public';
+        reward.rewardType = reward.validator.id == reward.nominator ? 'validator commission' : 'staking reward';
 
-        if(reward.validatorType == 'custodial') this.logger.warn(`Found custodial validator ${reward.validator.id}`);
         return reward;
     }
 
