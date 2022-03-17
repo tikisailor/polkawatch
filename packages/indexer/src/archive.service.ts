@@ -5,6 +5,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { gql, Client, createClient } from '@urql/core';
+import LRU from 'lru-cache';
 import { fetch } from 'cross-fetch';
 
 /**
@@ -29,8 +30,9 @@ export class ArchiveService {
     // We will not cache the main reward processing query
     private readonly client: Client;
 
-    // We will cache queries to handle missing traces
-    private readonly cachedClient: Client;
+    private readonly peerCache;
+    private readonly firstHeartbeatCache;
+    private readonly lastHeartbeatCache;
 
     constructor(private configService: ConfigService) {
         const host = configService.get('INDEXER_ARCHIVE_HOST');
@@ -41,25 +43,15 @@ export class ArchiveService {
             requestPolicy: 'network-only',
         });
 
-        this.cachedClient = createClient({
-            url: `http://${host}:${port}/graphql`,
-            fetch: fetch,
-            requestPolicy: 'cache-first',
-        });
+        // We want thin control of the Caches that we are using
+        // for sizing we assume 300 active validators
+        this.peerCache = new LRU({ max:300 });
+        this.firstHeartbeatCache = new LRU({ max:300 });
+        this.lastHeartbeatCache = new LRU({ max:300 });
     }
 
     async query(query, params): Promise<any> {
         return this.client.query(query, params).toPromise();
-    }
-
-    /**
-     * We want to select which queries we cache, as we know that queries that target the "edge" of the blockchain
-     * are changing all the time, while queries that target older blocks are efficient and safe to cache.
-     * @param query
-     * @param params
-     */
-    async cachedQuery(query, params): Promise<any> {
-        return this.cachedClient.query(query, params).toPromise();
     }
 
     async queryRewards(params): Promise<any> {
@@ -83,24 +75,26 @@ export class ArchiveService {
         let trace = 'session';
 
         if (!reward.previousHeartbeat) {
+            trace = 'missing';
+
             // A Heartbeat event was not traced during archive. We resort to finding the closest heartbeat
             // from any libp2p peer associated with the validator.
-            const peers = await this.getPeersByValidatorId(reward.validator.id);
+            const peers = await this.getCachedPeersByValidatorId(reward.validator.id);
 
             if (peers) {
-                trace = 'peer_prev';
-                // Ideally we want the heartbeats that came just before the rewards event.
-                let lhb = await this.getLastHeartbeatsByPeers(reward.blockNumber, peers);
-                if (!lhb.length) {
-                    trace = 'peer_post';
+                // Ideally we want the heartbeats that came just before the reward events.
+                let lhb = await this.getCachedLastHeartbeatsByPeers(reward.blockNumber, peers);
+                if (lhb.length) {trace = 'peer_prev';} else {
                     // If we could not find any HB before the reward event, we take the first we ever received from
                     // Any of those peers.
-                    lhb = await this.getFirstHeartbeatsByPeers(peers);
+                    lhb = await this.getCachedFirstHeartbeatsByPeers(peers);
+                    if(lhb.length) trace = 'peer_post';
                 }
 
-                if (!lhb.length) trace = 'missing';
-                else reward.previousHeartbeat = lhb[0];
+                // capture the HB if either worked
+                if(lhb.length) reward.previousHeartbeat = lhb[0];
             }
+
         }
 
         // We put on the dataset which tracing we used to resolve this relationship
@@ -122,13 +116,27 @@ export class ArchiveService {
      * @param validatorId
      */
     async getPeersByValidatorId(validatorId): Promise<Array<any>> {
-        return this.cachedQuery(PEERS_BY_VALIDATOR_ID_QUERY, {
+        return this.query(PEERS_BY_VALIDATOR_ID_QUERY, {
             validatorId: validatorId,
         }).then((results) => results.data.peers.nodes.map((peer) => peer.id));
     }
 
     /**
-     * Returns the last hearbeat received from a group of peers before a given block number.
+     * Cached Version of Peers by Validator ID
+     * @param validatorId
+     */
+    async getCachedPeersByValidatorId(validatorId): Promise<Array<any>> {
+        const cacheKey = `validator-${validatorId}`;
+
+        if (this.peerCache.has(cacheKey)) {return this.peerCache.get(cacheKey);} else {
+            const valuePromise = this.getPeersByValidatorId(validatorId);
+            this.peerCache.set(cacheKey, valuePromise);
+            return valuePromise;
+        }
+    }
+
+    /**
+     * Returns the last heartbeat received from a group of peers before a given block number.
      * @param blockNumberLimit
      * @param peers
      */
@@ -136,10 +144,28 @@ export class ArchiveService {
         blockNumberLimit,
         peers: Array<string>,
     ): Promise<Array<any>> {
-        return this.cachedQuery(LAST_HEARTBEAT_BY_PEERS_QUERY, {
+        return this.query(LAST_HEARTBEAT_BY_PEERS_QUERY, {
             blockNumberLimit: blockNumberLimit,
             peers: peers,
         }).then((results) => results.data.heartbeats.nodes);
+    }
+
+    /**
+     * Cached version of Last Heartbeat by peers
+     * @param blockNumberLimit
+     * @param peers
+     */
+    async getCachedLastHeartbeatsByPeers(
+        blockNumberLimit,
+        peers: Array<string>,
+    ): Promise<Array<any>> {
+        const cacheKey = `last-hb-${blockNumberLimit}-${JSON.stringify(peers)}`;
+
+        if (this.lastHeartbeatCache.has(cacheKey)) {return this.lastHeartbeatCache.get(cacheKey);} else {
+            const valuePromise = this.getLastHeartbeatsByPeers(blockNumberLimit, peers);
+            this.lastHeartbeatCache.set(cacheKey, valuePromise);
+            return valuePromise;
+        }
     }
 
     /**
@@ -147,10 +173,25 @@ export class ArchiveService {
      * @param peers
      */
     async getFirstHeartbeatsByPeers(peers: Array<string>): Promise<Array<any>> {
-        return this.cachedQuery(FIRST_HEARTBEAT_BY_PEERS_QUERY, {
+        return this.query(FIRST_HEARTBEAT_BY_PEERS_QUERY, {
             peers: peers,
         }).then((results) => results.data.heartbeats.nodes);
     }
+
+    /**
+     * Cached version of first heartbeat
+     * @param peers
+     */
+    async getCachedFirstHeartbeatsByPeers(peers: Array<string>):Promise<Array<any>> {
+        const cacheKey = `peers-${JSON.stringify(peers)}`;
+
+        if (this.firstHeartbeatCache.has(cacheKey)) {return this.firstHeartbeatCache.get(cacheKey);} else {
+            const valuePromise = this.getFirstHeartbeatsByPeers(peers);
+            this.firstHeartbeatCache.set(cacheKey, valuePromise);
+            return valuePromise;
+        }
+    }
+
 }
 
 // The actual GraphQL queries associates with the methods above follow:
