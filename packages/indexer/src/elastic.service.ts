@@ -39,6 +39,7 @@ export class ElasticService {
 
                     validator: reward.validator.id,
                     validator_type: reward.validatorType,
+                    validator_identity: reward.validator.info.display.identity,
 
                     traced_heartbeat_id: reward.previousHeartbeat ? reward.previousHeartbeat.id : 'NOT_TRACED',
                     traced_heartbeat_type: reward.previousHeartbeatTrace,
@@ -121,6 +122,7 @@ const REWARD_PROPERTIES = {
     validator: { type: 'keyword' },
     validator_name: { type: 'keyword' },
     validator_type: { type: 'keyword' },
+    validator_identity: { type: 'boolean' },
 
     // orphan validators will be their own parent (1 validator group)
     validator_parent: { type: 'keyword' },

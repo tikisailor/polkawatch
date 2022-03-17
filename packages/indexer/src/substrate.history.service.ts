@@ -278,6 +278,7 @@ export class SubstrateHistoryService {
     getValidatorInfoDisplay(vi) {
         return {
             name: this.getValidatorDisplayName(vi),
+            identity: (vi.info || vi.parentInfo) ? true : false,
             parentId: vi.parentId ? vi.parentId : vi.id,
             groupName: this.getValidatorGroupName(vi),
             groupWeb: this.getValidatorGroupAttributute(vi, 'web'),
