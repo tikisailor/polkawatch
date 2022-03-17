@@ -102,6 +102,10 @@ export class IndexerSchedulerService {
    * @param reward
    */
     async processReward(reward): Promise<any> {
+        // Any processor that finds non-traceable information must report here:
+        reward.traced = true;
+
+        // Reward processors
         reward = await this.archiveService.traceLastHeartbeat(reward);
         reward = await this.substrateHistory.processReward(reward);
         reward = await this.geoliteService.processReward(reward);

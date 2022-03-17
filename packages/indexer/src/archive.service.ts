@@ -93,6 +93,8 @@ export class ArchiveService {
 
                 // capture the HB if either worked
                 if(lhb.length) reward.previousHeartbeat = lhb[0];
+                // report traceability issue
+                else reward.traced = false;
             }
 
         }

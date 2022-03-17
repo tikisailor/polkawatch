@@ -30,6 +30,7 @@ export class ElasticService {
                 doc: {
                     date: new Date(parseInt(reward.timeStamp)),
                     era: reward.era,
+                    traced: reward.traced,
                     reward: reward.newReward,
                     reward_commission: reward.commission,
                     reward_type: reward.rewardType,
@@ -112,6 +113,7 @@ const REWARD_PROPERTIES = {
 
     date: { type: 'date' },
     era: { type: 'long' },
+    traced: { type: 'boolean' },
     nominator:  { type: 'keyword' },
 
     reward: { type: 'long' },

@@ -29,8 +29,8 @@ export class GeoliteService {
                 const ASNs = publicIPV46Addresses.map(ip => this.geolite.asn.get(ip));
                 reward.geo_countries = countries;
                 reward.geo_ASNs = ASNs;
-            }
-        }
+            } else {reward.traced = false;}
+        } else {reward.traced = false;}
 
         // On top of "Raw" data as returned by the Database, we add the preferred display form of this information.
         reward = this.addGeoCountriesDisplay(reward);
