@@ -4,9 +4,8 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { gql, Client, createClient } from '@urql/core';
+import { gql, GraphQLClient } from 'graphql-request';
 import LRU from 'lru-cache';
-import { fetch } from 'cross-fetch';
 
 /**
  * This Service access Polkawatch Archive GraphQL end point
@@ -28,7 +27,7 @@ export class ArchiveService {
     private readonly tracing = false;
 
     // We will not cache the main reward processing query
-    private readonly client: Client;
+    private readonly client: GraphQLClient;
 
     private readonly peerCache;
     private readonly firstHeartbeatCache;
@@ -37,10 +36,8 @@ export class ArchiveService {
     constructor(private configService: ConfigService) {
         const host = configService.get('INDEXER_ARCHIVE_HOST');
         const port = configService.get('INDEXER_ARCHIVE_PORT');
-        this.client = createClient({
-            url: `http://${host}:${port}/graphql`,
-            fetch: fetch,
-            requestPolicy: 'network-only',
+        this.client = new GraphQLClient(`http://${host}:${port}/graphql`, {
+            headers: {},
         });
 
         // We want thin control of the Caches that we are using
@@ -51,7 +48,7 @@ export class ArchiveService {
     }
 
     async query(query, params): Promise<any> {
-        return this.client.query(query, params).toPromise();
+        return this.client.request(query, params);
     }
 
     async queryRewards(params): Promise<any> {
@@ -120,7 +117,7 @@ export class ArchiveService {
     async getPeersByValidatorId(validatorId): Promise<Array<any>> {
         return this.query(PEERS_BY_VALIDATOR_ID_QUERY, {
             validatorId: validatorId,
-        }).then((results) => results.data.peers.nodes.map((peer) => peer.id));
+        }).then((results) => results.peers.nodes.map((peer) => peer.id));
     }
 
     /**
@@ -149,7 +146,7 @@ export class ArchiveService {
         return this.query(LAST_HEARTBEAT_BY_PEERS_QUERY, {
             blockNumberLimit: blockNumberLimit,
             peers: peers,
-        }).then((results) => results.data.heartbeats.nodes);
+        }).then((results) => results.heartbeats.nodes);
     }
 
     /**
@@ -177,7 +174,7 @@ export class ArchiveService {
     async getFirstHeartbeatsByPeers(peers: Array<string>): Promise<Array<any>> {
         return this.query(FIRST_HEARTBEAT_BY_PEERS_QUERY, {
             peers: peers,
-        }).then((results) => results.data.heartbeats.nodes);
+        }).then((results) => results.heartbeats.nodes);
     }
 
     /**

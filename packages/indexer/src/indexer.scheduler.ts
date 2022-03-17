@@ -64,19 +64,20 @@ export class IndexerSchedulerService {
             // We will run the query in batches
             // Each batch will be processed asynchronously
             // Return Query Status, required for cursor/batch processing, and the results of processing all reward events
+
             qr = await this.archiveService
                 .queryRewards({ batchSize: 10, cursor: qr.cursor, startBlockNumber: startBlockNumber })
                 .then((results) =>
                     Promise.all([
                         Promise.resolve({
-                            hasNext: results.data.rewards.pageInfo.hasNextPage,
+                            hasNext: results.rewards.pageInfo.hasNextPage,
                             cursor:
-                results.data.rewards.edges[
-                    results.data.rewards.edges.length - 1
+                results.rewards.edges[
+                    results.rewards.edges.length - 1
                 ].cursor,
                         }),
                         Promise.all(
-                            results.data.rewards.edges.map((reward) =>
+                            results.rewards.edges.map((reward) =>
                                 this.processReward(reward.node),
                             ),
                         ),
