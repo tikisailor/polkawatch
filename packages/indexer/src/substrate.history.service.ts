@@ -298,8 +298,17 @@ export class SubstrateHistoryService {
         if (vi.info) {
             if (vi.info.display) {return this.decodeInfoField(vi.info.display);}
         }
-        if(vi.parentInfo && vi.childId) return `${this.getValidatorGroupName(vi)} / ${this.decodeInfoField(vi.childId)}`;
+        if(vi.parentInfo && vi.childId) return `${this.getValidatorGroupName(vi)} / ${this.getValidatorChildId(vi)}`;
         return vi.id;
+    }
+
+    getValidatorChildId(vi) {
+        let ret = vi.id;
+        if (vi.childId) {
+            const childId = this.decodeInfoField(vi.childId);
+            if(childId) ret = childId;
+        }
+        return ret;
     }
 
     /**
