@@ -44,7 +44,7 @@ export class ElasticService {
                     traced_heartbeat_type: reward.previousHeartbeatTrace,
                     traced_payout_id: reward.payout ? reward.payout.id : 'NOT_TRACED',
 
-                    validator_parent: reward.validator.info.parentId,
+                    validator_parent: reward.validator.info.display.parentId,
                     validator_name: reward.validator.info.display.name,
                     validator_parent_name: reward.validator.info.display.groupName,
                     validator_parent_web: reward.validator.info.display.groupWeb,
