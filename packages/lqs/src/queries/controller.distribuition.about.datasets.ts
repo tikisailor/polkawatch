@@ -2,28 +2,29 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags, ApiBody } from '@nestjs/swagger';
 import { BaseController } from '../lqs.controller';
 import { IndexQueryService, QueryTemplate } from '../lqs.index.service';
 import { AboutData } from './query.responses.dtos';
-import { AboutDataQueryDto } from './query.parameters.dtos';
+import { AboutDataQuery } from './query.parameters.dtos';
 import { plainToInstance } from 'class-transformer';
 
-@ApiTags('About')
+@ApiTags('about')
 @Controller()
 export class AboutDataset extends BaseController {
     constructor(protected queryService: IndexQueryService) {
         super(queryService);
     }
 
-    @Post('about/dataset')
+    @Post('distribution/about/dataset')
+    @ApiBody({ type: AboutDataQuery })
     @ApiOperation({
         description: 'Get information about the dataset',
     })
     @ApiOkResponse({ description: 'Returns information about the dataset', type: AboutData, isArray: false })
     @HttpCode(HttpStatus.OK)
     async post(
-        @Body() params: AboutDataQueryDto): Promise<AboutData> {
+        @Body() params: AboutDataQuery): Promise<AboutData> {
         return (await super.runQuery(
             params,
             this.queryTemplate as QueryTemplate,
@@ -40,7 +41,7 @@ export class AboutDataset extends BaseController {
         });
     }
 
-    queryTemplate(params: AboutDataQueryDto) {
+    queryTemplate(params: AboutDataQuery) {
         return {
             'aggs': {
                 'total_eras': {
@@ -101,8 +102,8 @@ export class AboutDataset extends BaseController {
                 'bool': {
                     'filter': [
                         {
-                            'match_phrase': {
-                                'reward_type': 'staking reward',
+                            'wildcard': {
+                                'reward_type': params.RewardType == 'all' ? '*' : params.RewardType,
                             },
                         },
                         {

@@ -4,7 +4,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BaseController } from './lqs.controller';
 import { IndexQueryService, QueryTemplate } from './lqs.index.service';
-import { RewardDistributionQueryDto } from './queries/query.parameters.dtos';
+import { RewardDistributionQuery } from './queries/query.parameters.dtos';
 import { ArgumentMetadata, ValidationPipe } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { AppModule } from './lqs.module';
@@ -62,6 +62,7 @@ describe('Validation Unit Tests - test DTO against nestjs validation pipeline', 
         const testObject1 = {
             StartingEra: 500,
             TopResults: 10,
+            RewardType: 'all',
         };
         const testObject2 = {
             StartingEra: '500',
@@ -70,7 +71,7 @@ describe('Validation Unit Tests - test DTO against nestjs validation pipeline', 
         const target: ValidationPipe = new ValidationPipe({ transform: true, whitelist: true });
         const metadata: ArgumentMetadata = {
             type: 'body',
-            metatype: RewardDistributionQueryDto,
+            metatype: RewardDistributionQuery,
             data: '',
         };
 

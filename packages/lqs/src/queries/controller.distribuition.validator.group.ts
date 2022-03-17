@@ -5,56 +5,56 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '../lqs.controller';
 import { AggregatedIndexData, IndexQueryService, QueryTemplate } from '../lqs.index.service';
-import { RewardsByNetworkProvider } from './query.responses.dtos';
-import { RewardDistributionQueryDto } from './query.parameters.dtos';
+import { RewardsByValidationGroup } from './query.responses.dtos';
+import { RewardDistributionQuery } from './query.parameters.dtos';
 import { plainToInstance } from 'class-transformer';
 
-@ApiTags('network')
+@ApiTags('validator')
 @Controller()
-export class NetworkProvider extends BaseController {
+export class ValidatorGroup extends BaseController {
     constructor(protected queryService: IndexQueryService) {
         super(queryService);
     }
 
-    @Post('net/network')
+    @Post('distribution/validator/group')
     @ApiOperation({
-        description: 'Get the distribution of DOT Rewards per Computing Network Group',
+        description: 'Get the distribution of DOT Rewards per Validator Group',
     })
-    @ApiOkResponse({ description: 'The distribution of DOT Rewards per Computing Network Group', type: RewardsByNetworkProvider, isArray: true })
+    @ApiOkResponse({ description: 'The distribution of DOT Rewards per Validator Group', type: RewardsByValidationGroup, isArray: true })
     @HttpCode(HttpStatus.OK)
     async post(
-        @Body() params: RewardDistributionQueryDto): Promise<Array<RewardsByNetworkProvider>> {
+        @Body() params: RewardDistributionQuery): Promise<Array<RewardsByValidationGroup>> {
         return (await super.runQuery(
             params,
             this.queryTemplate as QueryTemplate,
             this.queryResponseTransformer,
-        )) as Array<RewardsByNetworkProvider>;
+        )) as Array<RewardsByValidationGroup>;
     }
 
-    queryResponseTransformer(indexResponse): Array<RewardsByNetworkProvider> {
+    queryResponseTransformer(indexResponse): Array<RewardsByValidationGroup> {
         const buckets = indexResponse.body.aggregations['polkawatch'].buckets as AggregatedIndexData;
-        return plainToInstance(RewardsByNetworkProvider, buckets, {
+        return plainToInstance(RewardsByValidationGroup, buckets, {
             excludeExtraneousValues: true,
         });
     }
 
-    queryTemplate(params: RewardDistributionQueryDto) {
+    queryTemplate(params: RewardDistributionQuery) {
         return {
-            aggs: {
+            'aggs': {
                 polkawatch: {
-                    terms: {
-                        field: 'validator_asn_code',
-                        order: {
+                    'terms': {
+                        'field': 'validator_parent_name',
+                        'order': {
                             reward: 'desc',
                         },
-                        size: params.TopResults,
+                        'size': params.TopResults,
                     },
-                    aggs: {
+                    'aggs': {
                         name: {
                             'top_hits': {
                                 'fields': [
                                     {
-                                        'field': 'validator_asn_name',
+                                        'field': 'validator_parent_name',
                                     },
                                 ],
                                 '_source': false,
@@ -69,10 +69,10 @@ export class NetworkProvider extends BaseController {
                             },
                         },
                         reward: {
-                            sum: {
-                                script: {
-                                    source: 'doc[\'reward\'].value/10000000000.0',
-                                    lang: 'painless',
+                            'sum': {
+                                'script': {
+                                    'source': 'doc[\'reward\'].value/10000000000.0 ',
+                                    'lang': 'painless',
                                 },
                             },
                         },
@@ -81,35 +81,46 @@ export class NetworkProvider extends BaseController {
                                 'field': 'validator_country_group_code',
                             },
                         },
-                        countries: {
+                        'countries': {
                             'cardinality': {
                                 'field': 'validator_country_code',
                             },
                         },
-                        validator_groups: {
+                        'networks': {
                             'cardinality': {
-                                'field': 'validator_parent',
+                                'field': 'validator_asn_code',
                             },
                         },
-                        validators: {
+                        'validators': {
                             'cardinality': {
                                 'field': 'validator',
                             },
                         },
-                        nominators: {
+                        'nominators': {
                             'cardinality': {
                                 'field': 'nominator',
+                            },
+                        },
+                        median_nomination: {
+                            'percentiles': {
+                                'script': {
+                                    'source': 'if (doc[\'nomination_value\'].size()!=0) return doc[\'nomination_value\'].value/10000000000.0;',
+                                    'lang': 'painless',
+                                },
+                                'percents': [
+                                    50,
+                                ],
                             },
                         },
                     },
                 },
             },
-            query: {
-                bool: {
-                    filter: [
+            'query': {
+                'bool': {
+                    'filter': [
                         {
-                            'match_phrase': {
-                                'reward_type': 'staking reward',
+                            'wildcard': {
+                                'reward_type': params.RewardType == 'all' ? '*' : params.RewardType,
                             },
                         },
                         {
@@ -124,6 +135,5 @@ export class NetworkProvider extends BaseController {
             },
         };
     }
-
 }
 

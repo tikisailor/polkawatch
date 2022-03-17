@@ -6,7 +6,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '../lqs.controller';
 import { AggregatedIndexData, IndexQueryService, QueryTemplate } from '../lqs.index.service';
 import { RewardsByRegion } from './query.responses.dtos';
-import { RewardDistributionQueryDto } from './query.parameters.dtos';
+import { RewardDistributionQuery } from './query.parameters.dtos';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('geography')
@@ -16,14 +16,14 @@ export class GeoRegion extends BaseController {
         super(queryService);
     }
 
-    @Post('geo/region')
+    @Post('distribution/geo/region')
     @ApiOperation({
         description: 'Get the distribution of DOT Rewards per Region',
     })
     @ApiOkResponse({ description: 'The distribution of DOT Rewards per Region', type: RewardsByRegion, isArray: true })
     @HttpCode(HttpStatus.OK)
     async post(
-        @Body() params: RewardDistributionQueryDto): Promise<Array<RewardsByRegion>> {
+        @Body() params: RewardDistributionQuery): Promise<Array<RewardsByRegion>> {
         return (await super.runQuery(
             params,
             this.queryTemplate as QueryTemplate,
@@ -38,7 +38,7 @@ export class GeoRegion extends BaseController {
         });
     }
 
-    queryTemplate(params: RewardDistributionQueryDto) {
+    queryTemplate(params: RewardDistributionQuery) {
         return {
             aggs: {
                 polkawatch: {
@@ -106,13 +106,20 @@ export class GeoRegion extends BaseController {
             },
             query: {
                 bool: {
-                    filter: {
-                        range: {
-                            era: {
-                                gte: params.StartingEra,
+                    filter: [
+                        {
+                            'wildcard': {
+                                'reward_type': params.RewardType == 'all' ? '*' : params.RewardType,
                             },
                         },
-                    },
+                        {
+                            'range': {
+                                era: {
+                                    gte: params.StartingEra,
+                                },
+                            },
+                        },
+                    ],
                 },
             },
         };
