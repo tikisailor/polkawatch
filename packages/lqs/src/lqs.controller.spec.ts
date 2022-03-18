@@ -63,6 +63,8 @@ describe('Validation Unit Tests - test DTO against nestjs validation pipeline', 
             StartingEra: 500,
             TopResults: 10,
             RewardType: 'all',
+            ValidatorIdentityType:'with identity',
+            ValidatorType: 'public',
         };
         const testObject2 = {
             StartingEra: '500',
