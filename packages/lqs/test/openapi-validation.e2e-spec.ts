@@ -70,7 +70,7 @@ describe('LQS end-to-end testing', () => {
                     expect(response).toSatisfyApiSpec();
                 });
         });
-        it('Get Country', async () => {
+        it('Geo Country', async () => {
             await request(httpServer)
                 .post('/lqs/distribution/geo/country')
                 .send({ StartingEra: 501, TopResults: 5 })
