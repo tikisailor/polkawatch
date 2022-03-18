@@ -7,11 +7,20 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 /**
  * All queries will have as a response either a record or an array of records
  */
-export type QueryResponse = QueryResponseRecord | Array<QueryResponseRecord> | Array<QueryResponseSegment<QueryResponseRecord>>;
+export type QueryResponse =
+    QueryResponseRecord |
+    Array<QueryResponseRecord> |
+    Array<QueryResponseSegment<QueryResponseRecord>> |
+    ChartDistribution;
 
 /**
  * A segmented query returns multiple arrays of records
  */
+
+export interface ChartDistribution{
+    labels: string[],
+    data: number[],
+}
 
 export class QueryResponseSegment<T> {
 

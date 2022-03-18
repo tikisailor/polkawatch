@@ -33,6 +33,8 @@ export function configure(app, setupSwaggerModule = true): OpenAPI.Document {
     // Enable validation pipeline globally
     app.useGlobalPipes(new ValidationPipe({ transform:true }));
 
+    app.enableCors({ origin: true });
+
     // Swagger setup
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Polkawatch Live Query Sever')

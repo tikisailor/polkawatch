@@ -5,9 +5,10 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '../lqs.controller';
 import { AggregatedIndexData, IndexQueryService, QueryTemplate } from '../lqs.index.service';
-import { RewardsByRegion } from './query.responses.dtos';
+import {ChartDistribution, RewardsByRegion} from './query.responses.dtos';
 import { RewardDistributionQuery } from './query.parameters.dtos';
 import { plainToInstance } from 'class-transformer';
+import * as dataForge from 'data-forge';
 
 @ApiTags('geography')
 @Controller()
@@ -27,7 +28,8 @@ export class GeoRegion extends BaseController {
         return (await super.runQuery(
             params,
             this.queryTemplate as QueryTemplate,
-            this.queryResponseTransformer,
+            // this.queryResponseTransformer,
+            this.chartTransformer,
         )) as Array<RewardsByRegion>;
     }
 
@@ -36,6 +38,18 @@ export class GeoRegion extends BaseController {
         return plainToInstance(RewardsByRegion, buckets, {
             excludeExtraneousValues: true,
         });
+    }
+
+    chartTransformer(indexResponse): ChartDistribution {
+        const buckets = indexResponse.body.aggregations['polkawatch'].buckets as AggregatedIndexData;
+        const rewardsByRegion = plainToInstance(RewardsByRegion, buckets, {
+            excludeExtraneousValues: true,
+        });
+
+        const df = new dataForge.DataFrame(rewardsByRegion);
+        const xLablesSeries = df.getSeries('Region').toArray();
+        const dataSeries = df.getSeries('DotRewards').toArray();
+        return { data: dataSeries, labels: xLablesSeries } as ChartDistribution;
     }
 
     queryTemplate(params: RewardDistributionQuery) {
