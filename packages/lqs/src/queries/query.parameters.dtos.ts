@@ -16,6 +16,13 @@ enum RewardTypes {
     All='all'
 }
 
+enum ValidatorTypes {
+    Public='public',
+    Custodial='custodial',
+    All='all'
+}
+
+
 /**
  * Base Query, we will normally query the tip of the blockchain
  */
@@ -41,6 +48,17 @@ export class BaseQuery {
         required: false,
     })
         RewardType = 'staking reward';
+
+    @IsOptional()
+    @IsEnum(ValidatorTypes)
+    @ApiProperty({
+        description: 'Limit the dataset by validator type',
+        enum: ['public', 'custodial', 'all'],
+        default: 'public',
+        required: false,
+    })
+        ValidatorType = 'public';
+
 
 }
 

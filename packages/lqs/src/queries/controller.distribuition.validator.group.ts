@@ -124,6 +124,11 @@ export class ValidatorGroup extends BaseController {
                             },
                         },
                         {
+                            'wildcard': {
+                                'validator_type': params.ValidatorType == 'all' ? '*' : params.ValidatorType,
+                            },
+                        },
+                        {
                             'range': {
                                 era: {
                                     gte: params.StartingEra,

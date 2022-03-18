@@ -85,6 +85,11 @@ export class AboutEraEvolution extends BaseController {
                             },
                         },
                         {
+                            'wildcard': {
+                                'validator_type': params.ValidatorType == 'all' ? '*' : params.ValidatorType,
+                            },
+                        },
+                        {
                             'range': {
                                 era: {
                                     gte: params.StartingEra,

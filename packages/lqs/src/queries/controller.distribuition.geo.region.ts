@@ -113,6 +113,11 @@ export class GeoRegion extends BaseController {
                             },
                         },
                         {
+                            'wildcard': {
+                                'validator_type': params.ValidatorType == 'all' ? '*' : params.ValidatorType,
+                            },
+                        },
+                        {
                             'range': {
                                 era: {
                                     gte: params.StartingEra,
