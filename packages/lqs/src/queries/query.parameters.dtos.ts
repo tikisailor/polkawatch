@@ -22,6 +22,12 @@ enum ValidatorTypes {
     All='all'
 }
 
+enum IdentityTypes {
+    WithIdentity='with identity',
+    Anonymous='anonymous',
+    All='all'
+}
+
 
 /**
  * Base Query, we will normally query the tip of the blockchain
@@ -59,6 +65,15 @@ export class BaseQuery {
     })
         ValidatorType = 'public';
 
+    @IsOptional()
+    @IsEnum(IdentityTypes)
+    @ApiProperty({
+        description: 'Limit the dataset by validator identity type',
+        enum: ['with identity', 'anonymous', 'all'],
+        default: 'with identity',
+        required: false,
+    })
+        ValidatorIdentityType = 'with identity';
 
 }
 
