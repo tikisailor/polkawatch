@@ -54,6 +54,7 @@ module.exports = {
         'space-unary-ops': 'error',
         'spaced-comment': 'error',
         yoda: 'error',
+        '@typescript-eslint/no-inferrable-types': 0,
         '@typescript-eslint/explicit-function-return-type': 0,
         '@typescript-eslint/explicit-member-accessibility': 0,
         '@typescript-eslint/indent': 0,

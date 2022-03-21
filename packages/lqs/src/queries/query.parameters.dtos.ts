@@ -43,7 +43,7 @@ export class BaseQuery {
         example: 510,
         required: false,
     })
-        StartingEra = 1;
+        StartingEra:number = 1;
 
     @IsOptional()
     @IsEnum(RewardTypes)
@@ -90,7 +90,7 @@ export class RewardDistributionQuery extends BaseQuery {
       default: 10,
       required: false,
   })
-      TopResults = 10;
+      TopResults:number = 10;
 }
 
 export class AboutDataQuery extends BaseQuery {}

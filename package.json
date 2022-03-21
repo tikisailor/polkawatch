@@ -7,6 +7,8 @@
   ],
   "scripts": {
     "docker": "yarn docker:testdeploy",
+    "build:tools": "yarn build:openapi:tool",
+    "build:openapi:tool": "docker build util/openapi-tool -t openapitool",
     "docker:build": "yarn lock && docker-compose --profile testdeploy build",
     "docker:getdata": "docker-compose --profile getdata up",
     "docker:archive": "docker-compose --profile archive up",
@@ -14,6 +16,7 @@
     "docker:testdeploy": "docker-compose --profile testdeploy up",
     "docker:clean": "docker-compose rm -f && docker volume rm $(basename $(pwd))_pgdata $(basename $(pwd))_esdata",
     "build": "yarn workspaces run build:workspace",
+    "build:client": "yarn workspaces run build:workspace:client",
     "lock": "yarn workspaces run lock:workspace",
     "test": "yarn workspaces run test:workspace",
     "test:e2e": "yarn workspaces run test:workspace:e2e",
