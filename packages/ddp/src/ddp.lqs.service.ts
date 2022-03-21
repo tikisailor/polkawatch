@@ -3,11 +3,22 @@
 
 import { Injectable } from '@nestjs/common';
 
+import {Configuration,
+    GeographyApi,
+    ValidatorApi,
+    NetworkApi,
+} from "@lqs/client";
+
+
 import {RewardsByCountry, RewardsByRegion} from "@lqs/types";
 
 @Injectable()
 export class DdpLqsService {
-    getHello(): string {
-        return 'Hello World!';
+
+    private apiConfig:Configuration;
+
+    constructor() {
+
     }
+
 }
