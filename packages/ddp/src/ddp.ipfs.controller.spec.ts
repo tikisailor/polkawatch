@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { DdpIpfsController } from './ddp.ipfs.controller';
+import { DdpIpfs } from './ddp.ipfs.controller';
 import { DdpLqsService } from './ddp.lqs.service';
 import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
 
 describe('AppController', () => {
-    let appController: DdpIpfsController;
+    let appController: DdpIpfs;
 
     beforeEach(async () => {
         const app: TestingModule = await Test.createTestingModule({
@@ -22,11 +22,11 @@ describe('AppController', () => {
                     }),
                 }),
             ],
-            controllers: [DdpIpfsController],
+            controllers: [DdpIpfs],
             providers: [DdpLqsService],
         }).compile();
 
-        appController = app.get<DdpIpfsController>(DdpIpfsController);
+        appController = app.get<DdpIpfs>(DdpIpfs);
     });
 
     describe('root', () => {

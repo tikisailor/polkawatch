@@ -11,7 +11,7 @@ import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 
 @Controller()
 @ApiTags('polkawatch')
-export class DdpIpfsController {
+export class DdpIpfs {
 
     constructor(private readonly lqs: DdpLqsService) {
         // nothing

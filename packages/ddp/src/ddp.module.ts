@@ -3,7 +3,7 @@
 
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DdpIpfsController } from './ddp.ipfs.controller';
+import { DdpIpfs } from './ddp.ipfs.controller';
 import { DdpLqsService } from './ddp.lqs.service';
 import * as Joi from 'joi';
 
@@ -24,7 +24,7 @@ import * as Joi from 'joi';
             }),
         }),
     ],
-    controllers: [DdpIpfsController],
+    controllers: [DdpIpfs],
     providers: [DdpLqsService],
 })
 export class DdpModule {}
