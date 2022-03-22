@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.4.12",
   "workspaces": [
-    "packages/*"
+    "packages/archive",
+    "packages/indexer",
+    "packages/lqs",
+    "packages/ddp"
   ],
   "scripts": {
     "docker": "yarn docker:testdeploy",
@@ -16,7 +19,7 @@
     "docker:testdeploy": "docker-compose --profile testdeploy up",
     "docker:clean": "docker-compose rm -f && docker volume rm $(basename $(pwd))_pgdata $(basename $(pwd))_esdata",
     "build": "yarn workspaces run build:workspace",
-    "build:client": "yarn workspaces run build:workspace:client",
+    "build:client": "yarn build:tools && yarn workspaces run build:workspace:client",
     "lock": "yarn workspaces run lock:workspace",
     "test": "yarn workspaces run test:workspace",
     "test:e2e": "yarn workspaces run test:workspace:e2e",
