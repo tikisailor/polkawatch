@@ -1,6 +1,7 @@
 # compiled output
 /dist
 /node_modules
+/esm_modules
 
 # Logs
 logs
@@ -36,3 +37,8 @@ lerna-debug.log*
 
 # Generated
 ddp-api-spec.json
+
+# set by workspace root
+yarn.lock
+A
+yarn.lock
