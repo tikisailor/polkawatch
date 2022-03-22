@@ -13,6 +13,7 @@ build polkawatch packages:
     # Setup Git for Push
     - apk add --no-cache docker-cli
   script:
+    - export DOCKER_HOST="tcp://docker:2375"
     - yarn install
     - yarn lint:test
     - yarn build:client
