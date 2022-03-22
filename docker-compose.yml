@@ -160,3 +160,15 @@ services:
       - indexer-elasticsearch
     profiles:
       - testdeploy
+
+  ddp:
+    build: ./packages/ddp
+    restart: always
+    environment:
+      DDP_LQS_HOST: lqs
+    ports:
+      - 7200:7200
+    depends_on:
+      - lqs
+    profiles:
+      - testdeploy

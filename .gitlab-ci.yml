@@ -59,24 +59,28 @@ polkawatch docker image deployment:
   stage: deploy
   dependencies:
     - polkawatch release
-  image: docker:19.03.12
+  image: node:14-alpine
   services:
     - docker:19.03.12-dind
   before_script:
+    # Setup Git for Push
+    - apk add --no-cache docker-cli
+  script:
+    - export DOCKER_HOST="tcp://docker:2375"
     # Login in docker repo
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
     # Get the version from the artifacts
     - APP_VERSION=$(cat .APP_VERSION)
+    # Builds clients, locks packages, shares esm_modules
+    - yarn docker:pre
     # Build the Docker Containers, lock the individual packages
     - >
-      for PACKAGE in archive indexer lqs; do
-        cp yarn.lock packages/${PACKAGE}; 
+      for PACKAGE in archive indexer lqs ddp; do         
         docker build -t $CI_REGISTRY/valletech/polkawatch-${PACKAGE}:latest -t $CI_REGISTRY/valletech/polkawatch-${PACKAGE}:${APP_VERSION} packages/${PACKAGE};
       done
     # Push the docker containers to the registry
     - >
-      for PACKAGE in archive indexer lqs; do
+      for PACKAGE in archive indexer lqs ddp; do
         docker push $CI_REGISTRY/valletech/polkawatch-${PACKAGE}:latest;
         docker push $CI_REGISTRY/valletech/polkawatch-${PACKAGE}:${APP_VERSION}
       done
