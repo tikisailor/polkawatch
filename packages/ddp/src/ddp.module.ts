@@ -3,7 +3,7 @@
 
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DdpController } from './ddp.controller';
+import { DdpIpfsController } from './ddp.ipfs.controller';
 import { DdpLqsService } from './ddp.lqs.service';
 import * as Joi from 'joi';
 
@@ -15,6 +15,7 @@ import * as Joi from 'joi';
                 NODE_ENV: Joi.string()
                     .valid('development', 'production', 'test')
                     .default('development'),
+                DDP_CORS_ORIGIN: Joi.string().default('*'),
                 DDP_PORT: Joi.number().default(7200),
                 DDP_GLOBAL_PREFIX: Joi.string().default('ddp'),
                 DDP_LQS_HOST: Joi.string().default('localhost'),
@@ -23,7 +24,7 @@ import * as Joi from 'joi';
             }),
         }),
     ],
-    controllers: [DdpController],
+    controllers: [DdpIpfsController],
     providers: [DdpLqsService],
 })
 export class DdpModule {}
