@@ -1,0 +1,13 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@lqs/client(.*)$": "<rootDir>/../../lqs-client",
+    "^@lqs/types(.*)$": "<rootDir>/../../lqs/src/queries/query.responses.dtos"
+  }
+}

@@ -7,9 +7,16 @@ stages:
 build polkawatch packages:
   stage: build
   image: node:14-alpine
+  services:
+    - docker:19.03.12-dind
+  before_script:
+    # Setup Git for Push
+    - apk add --no-cache docker-cli
   script:
+    - export DOCKER_HOST="tcp://docker:2375"
     - yarn install
     - yarn lint:test
+    - yarn build:client
     - yarn test
     - yarn test:e2e
     # In our context Build works more like "pack"
