@@ -119,6 +119,11 @@ export class ValidatorGroup extends BaseController {
                 'bool': {
                     'filter': [
                         {
+                            'match_phrase': {
+                                'traced': true,
+                            },
+                        },
+                        {
                             'wildcard': {
                                 'reward_type': params.RewardType == 'all' ? '*' : params.RewardType,
                             },
