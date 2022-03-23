@@ -40,5 +40,6 @@ ddp-api-spec.json
 
 # set by workspace root
 yarn.lock
-A
-yarn.lock
+
+# local settings
+*.env
