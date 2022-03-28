@@ -3,8 +3,8 @@
 
 import { Injectable } from '@nestjs/common';
 import * as dataForge from 'data-forge';
-import { QueryResponseRecord, RegionalRewardEraEvolution } from '@lqs/types';
-import { ChartDistribution } from './ddp.types';
+import { RegionalRewardEraEvolution, RewardsByRegion } from '@lqs/client';
+import { DistributionChart, EvolutionChart } from './ddp.types';
 
 const range = (start, end) => {
     if(start === end) return [start];
@@ -22,11 +22,11 @@ export class DdpTransformationService {
      * @param lqsResponse
      */
 
-    transformDistribution(lqsResponse: Array<QueryResponseRecord>) {
+    toDistributionChart(lqsResponse: Array<RewardsByRegion>): DistributionChart {
         const df = new dataForge.DataFrame(lqsResponse);
         const xLablesSeries = df.getSeries('Region').toArray();
         const dataSeries = df.getSeries('DotRewards').toArray();
-        return { data: dataSeries, labels: xLablesSeries } as ChartDistribution;
+        return { data: dataSeries, labels: xLablesSeries };
     }
 
     /**
@@ -34,7 +34,7 @@ export class DdpTransformationService {
      * @param lqsResponse
      */
 
-    transformEvolution(lqsResponse: Array<RegionalRewardEraEvolution>) {
+    toEvolutionChart(lqsResponse: Array<RegionalRewardEraEvolution>): EvolutionChart {
         const eras = [];
         const transformedData = lqsResponse.map(entry => {
             const df = new dataForge.DataFrame(entry.Segment);

@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DdpIpfs } from './ddp.ipfs.controller';
 import { DdpLqsService } from './ddp.lqs.service';
 import * as Joi from 'joi';
-import {DdpTransformationService} from "./ddp.transformations.service";
+import { DdpTransformationService } from './ddp.transformations.service';
 
 @Module({
     imports: [

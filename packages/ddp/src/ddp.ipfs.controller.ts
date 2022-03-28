@@ -106,25 +106,16 @@ export class DdpIpfs {
         const evolutionQuery = distributionQuery;
 
         return {
-            topRegionalDistribution: (await api.geography.geoRegionPost({
+            topRegionalDistributionChart: this.transformer.toDistributionChart((await api.geography.geoRegionPost({
                 rewardDistributionQuery: distributionQuery,
-            })).data,
-            topRegionalDistributionChart: this.transformer.transformDistribution((await api.geography.geoRegionPost({
-                rewardDistributionQuery: distributionQuery,
+            })).data),
+            regionalEvolutionChart: this.transformer.toEvolutionChart((await api.geography.geoRegionEvolutionPost({
+                evolutionQuery: evolutionQuery,
             })).data),
             regionalDistributionDetail: (await api.geography.geoRegionPost({
                 rewardDistributionQuery: detailQuery,
             })).data,
-            regionalDistributionDetailChart: this.transformer.transformDistribution((await api.geography.geoRegionPost({
-                rewardDistributionQuery: detailQuery,
-            })).data),
-            regionalEvolutionDetail: (await api.geography.geoRegionEvolutionPost({
-                evolutionQuery: evolutionQuery,
-            })).data,
-            regionalEvolutionDetailChart: this.transformer.transformEvolution((await api.geography.geoRegionEvolutionPost({
-                evolutionQuery: evolutionQuery,
-            })).data),
-        };
+        } as GeoRegionOverview;
     }
 
 
@@ -142,5 +133,6 @@ export class DdpIpfs {
         if(params.top_regions) queryParams['TopResults'] = params.top_regions;
         return queryParams;
     }
+
 
 }
