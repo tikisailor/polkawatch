@@ -1,3 +1,5 @@
+const path = require('path');
+
 
 exports.createPages = ({ graphql, actions }) => {
     const { createRedirect } = actions;
@@ -14,3 +16,13 @@ exports.createPages = ({ graphql, actions }) => {
         isPermanent: true
     });
 };
+
+exports.onCreateWebpackConfig = function({ actions }) {
+    actions.setWebpackConfig({
+        resolve: {
+            alias: {
+                '@ddp/client': path.resolve(__dirname, '../ddp-client')
+            }
+        }
+    })
+}
