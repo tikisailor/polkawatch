@@ -5,6 +5,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { DdpLqsService } from './ddp.lqs.service';
+import { DdpTransformationService } from './ddp.transformations.service';
 import {
     AboutData,
     GeoRegionOverview,
@@ -24,7 +25,10 @@ import {
 @ApiTags('polkawatch')
 export class DdpIpfs {
 
-    constructor(private readonly lqs: DdpLqsService) {
+    constructor(
+        private readonly lqs: DdpLqsService,
+        private readonly transformer: DdpTransformationService,
+    ) {
         // nothing
     }
 
@@ -105,14 +109,24 @@ export class DdpIpfs {
             topRegionalDistribution: (await api.geography.geoRegionPost({
                 rewardDistributionQuery: distributionQuery,
             })).data,
+            topRegionalDistributionChart: this.transformer.transformDistribution((await api.geography.geoRegionPost({
+                rewardDistributionQuery: distributionQuery,
+            })).data),
             regionalDistributionDetail: (await api.geography.geoRegionPost({
                 rewardDistributionQuery: detailQuery,
             })).data,
+            regionalDistributionDetailChart: this.transformer.transformDistribution((await api.geography.geoRegionPost({
+                rewardDistributionQuery: detailQuery,
+            })).data),
             regionalEvolutionDetail: (await api.geography.geoRegionEvolutionPost({
                 evolutionQuery: evolutionQuery,
             })).data,
+            regionalEvolutionDetailChart: this.transformer.transformEvolution((await api.geography.geoRegionEvolutionPost({
+                evolutionQuery: evolutionQuery,
+            })).data),
         };
     }
+
 
     /**
      * Helper method to fill up convert shared request parameters to LQS request parameters
