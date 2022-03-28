@@ -39,7 +39,7 @@ export function configure(app, setupSwaggerModule = true): OpenAPI.Document {
     // Swagger setup
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Polkawatch Distributed Data Pack')
-        .setDescription('DDP Client/IPFS API')
+        .setDescription('DDP Development Endpoint/IPFS data pack generation source API')
         .setVersion(configService.get('npm_package_version'))
         .build();
     const document = SwaggerModule.createDocument(app, swaggerConfig);

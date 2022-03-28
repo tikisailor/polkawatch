@@ -97,6 +97,11 @@ export class AboutDataset extends BaseController {
                         'field': 'era',
                     },
                 },
+                'last_updated': {
+                    'max': {
+                        'field': 'date',
+                    },
+                },
             },
             'query': {
                 'bool': {

@@ -114,6 +114,13 @@ export class AboutData extends RewardAggregations {
     @Transform(({ value }) => value.value, { toClassOnly: true })
     @Expose({ name: 'latest_era' })
         LastestEra: number;
+
+    @ApiProperty({
+        description: 'Date of the last updated of the dataset, milliseconds since 1 January 1970 UTC',
+    })
+    @Transform(({ value }) => value.value, { toClassOnly: true })
+    @Expose({ name: 'last_updated' })
+        LastUpdated: number;
 }
 
 /**
