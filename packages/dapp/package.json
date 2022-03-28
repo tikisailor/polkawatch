@@ -7,7 +7,7 @@
     "not dead"
   ],
   "scripts": {
-    "build:workspace": "yarn codegen && yarn build",
+    "build:workspace": "echo Not Implemented Yet",
     "build:workspace:client": "echo Not required",
     "build:workspace:predocker": "echo Not required",
     "lock:workspace": "cp ../../yarn.lock .",
