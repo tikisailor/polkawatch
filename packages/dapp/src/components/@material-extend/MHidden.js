@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import PropTypes from 'prop-types';
 // material
 import { useMediaQuery } from '@mui/material';
