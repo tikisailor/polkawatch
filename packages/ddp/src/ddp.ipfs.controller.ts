@@ -5,6 +5,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { DdpLqsService } from './ddp.lqs.service';
+import { DdpTransformationService } from './ddp.transformations.service';
 import {
     AboutData,
     GeoRegionOverview,
@@ -24,7 +25,10 @@ import {
 @ApiTags('polkawatch')
 export class DdpIpfs {
 
-    constructor(private readonly lqs: DdpLqsService) {
+    constructor(
+        private readonly lqs: DdpLqsService,
+        private readonly transformer: DdpTransformationService,
+    ) {
         // nothing
     }
 
@@ -102,17 +106,18 @@ export class DdpIpfs {
         const evolutionQuery = distributionQuery;
 
         return {
-            topRegionalDistribution: (await api.geography.geoRegionPost({
+            topRegionalDistributionChart: this.transformer.toDistributionChart((await api.geography.geoRegionPost({
                 rewardDistributionQuery: distributionQuery,
-            })).data,
+            })).data),
+            regionalEvolutionChart: this.transformer.toEvolutionChart((await api.geography.geoRegionEvolutionPost({
+                evolutionQuery: evolutionQuery,
+            })).data),
             regionalDistributionDetail: (await api.geography.geoRegionPost({
                 rewardDistributionQuery: detailQuery,
             })).data,
-            regionalEvolutionDetail: (await api.geography.geoRegionEvolutionPost({
-                evolutionQuery: evolutionQuery,
-            })).data,
-        };
+        } as GeoRegionOverview;
     }
+
 
     /**
      * Helper method to fill up convert shared request parameters to LQS request parameters
@@ -128,5 +133,6 @@ export class DdpIpfs {
         if(params.top_regions) queryParams['TopResults'] = params.top_regions;
         return queryParams;
     }
+
 
 }

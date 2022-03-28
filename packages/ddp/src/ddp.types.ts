@@ -11,8 +11,20 @@ export {
 
 import {
     RewardsByRegion,
-    RegionalRewardEraEvolution,
 } from '@lqs/types';
+
+export class DistributionChart {
+    labels: string[];
+    data: number[];
+}
+
+export class EvolutionChartSegment {
+    name: string;
+    data: number[];
+    labels: number[];
+}
+
+export type EvolutionChart = Array<EvolutionChartSegment>
 
 /**
  * This is a bundle reply type. Packs all required responses for Geographic Regional Evolution
@@ -20,21 +32,20 @@ import {
 export class GeoRegionOverview {
 
     @ApiProperty({
-        type: RewardsByRegion,
+        type: DistributionChart,
+    })
+        topRegionalDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: EvolutionChartSegment,
         isArray: true,
     })
-        topRegionalDistribution: RewardsByRegion[];
+        regionalEvolutionChart: Array<EvolutionChartSegment>;
 
     @ApiProperty({
         type: RewardsByRegion,
         isArray: true,
     })
-        regionalDistributionDetail: RewardsByRegion[];
-
-    @ApiProperty({
-        type: RegionalRewardEraEvolution,
-        isArray: true,
-    })
-        regionalEvolutionDetail: RegionalRewardEraEvolution[];
+        regionalDistributionDetail: Array<RewardsByRegion>;
 
 }
