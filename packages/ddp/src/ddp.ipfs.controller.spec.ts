@@ -6,6 +6,7 @@ import { DdpIpfs } from './ddp.ipfs.controller';
 import { DdpLqsService } from './ddp.lqs.service';
 import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
+import { DdpTransformationService } from './ddp.transformations.service';
 
 describe('AppController', () => {
     let appController: DdpIpfs;
@@ -23,7 +24,7 @@ describe('AppController', () => {
                 }),
             ],
             controllers: [DdpIpfs],
-            providers: [DdpLqsService],
+            providers: [DdpLqsService, DdpTransformationService],
         }).compile();
 
         appController = app.get<DdpIpfs>(DdpIpfs);
