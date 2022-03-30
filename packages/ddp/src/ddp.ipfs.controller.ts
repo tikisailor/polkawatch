@@ -78,6 +78,8 @@ export class DdpIpfs {
      *
      */
     @Get('/geography/overview/:validation_type/:last_eras/:top_regions.json')
+    @ApiOkResponse({ description: 'Data bundle of regional data', type: GeoRegionOverview, isArray: false })
+
     @ApiParam({
         description: 'Available set of eras to query',
         type: Number,

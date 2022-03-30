@@ -14,14 +14,40 @@ import {
 } from '@lqs/types';
 
 export class DistributionChart {
-    labels: string[];
-    data: number[];
+    @ApiProperty({
+        description: 'Distribution Chart Labels',
+        isArray: true,
+        type: String,
+    })
+        labels: string[];
+
+    @ApiProperty({
+        description: 'Distribution Chart Values',
+        isArray: true,
+        type: Number,
+    })
+        data: number[];
 }
 
 export class EvolutionChartSegment {
-    name: string;
-    data: number[];
-    labels: number[];
+    @ApiProperty({
+        description: 'Segment Name',
+    })
+        name: string;
+
+    @ApiProperty({
+        description: 'Segment Data Points',
+        type: Number,
+        isArray: true,
+    })
+        data: number[];
+
+    @ApiProperty({
+        description: 'Segment Labels',
+        type: Number,
+        isArray: true,
+    })
+        labels: number[];
 }
 
 export type EvolutionChart = Array<EvolutionChartSegment>
