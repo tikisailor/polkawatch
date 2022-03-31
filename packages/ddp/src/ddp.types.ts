@@ -10,7 +10,8 @@ export {
 } from '@lqs/client';
 
 import {
-    RewardsByRegion,
+    RewardsByNetworkProvider,
+    RewardsByRegion, RewardsByValidationGroup,
 } from '@lqs/types';
 
 export class DistributionChart {
@@ -73,5 +74,41 @@ export class GeoRegionOverview {
         isArray: true,
     })
         regionalDistributionDetail: Array<RewardsByRegion>;
+}
+
+/**
+ * Network Overview bundle
+ */
+export class NetworkOverview {
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topNetworkDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: RewardsByNetworkProvider,
+        isArray: true,
+    })
+        networkDistributionDetail: Array<RewardsByNetworkProvider>;
+
+}
+
+/**
+ * Validator Group / Operator overview
+ */
+
+export class OperatorOverview {
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+    topOperatorDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: RewardsByValidationGroup,
+        isArray: true,
+    })
+    operatorDistributionDetail: Array<RewardsByValidationGroup>;
 
 }

@@ -8,7 +8,7 @@ import { DdpLqsService } from './ddp.lqs.service';
 import { DdpTransformationService } from './ddp.transformations.service';
 import {
     AboutData,
-    GeoRegionOverview,
+    GeoRegionOverview, NetworkOverview, OperatorOverview,
 } from './ddp.types';
 
 /**
@@ -74,12 +74,11 @@ export class DdpIpfs {
      *
      * @param last_eras
      * @param validation_type
-     * @param top_regions
+     * @param top_results
      *
      */
-    @Get('/geography/overview/:validation_type/:last_eras/:top_regions.json')
+    @Get('/geography/overview/:validation_type/:last_eras/:top_results.json')
     @ApiOkResponse({ description: 'Data bundle of regional data', type: GeoRegionOverview, isArray: false })
-
     @ApiParam({
         description: 'Available set of eras to query',
         type: Number,
@@ -93,24 +92,24 @@ export class DdpIpfs {
     })
     @ApiParam({
         description: 'Number of top regions',
-        name:'top_regions',
+        name:'top_results',
         enum: [3, 4, 5],
     })
     async geoRegionOverview(
         @Param('last_eras') last_eras:number,
         @Param('validation_type') validation_type,
-        @Param('top_regions') top_regions:number,
+        @Param('top_results') top_results:number,
     ): Promise<GeoRegionOverview> {
         const api = this.lqs.getAPI();
 
-        const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_regions });
+        const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_regions: top_results });
         const detailQuery = { ... distributionQuery, TopResults: 10 };
         const evolutionQuery = distributionQuery;
 
         return {
             topRegionalDistributionChart: this.transformer.toDistributionChart((await api.geography.geoRegionPost({
                 rewardDistributionQuery: distributionQuery,
-            })).data),
+            })).data, 'Region'),
             regionalEvolutionChart: this.transformer.toEvolutionChart((await api.geography.geoRegionEvolutionPost({
                 evolutionQuery: evolutionQuery,
             })).data),
@@ -120,6 +119,99 @@ export class DdpIpfs {
         } as GeoRegionOverview;
     }
 
+    /**
+     * Network information bundle.
+     *
+     * Returns all the queries required to present status by operating network in one single object. Top N distribution and detail.
+     *
+     * @param last_eras
+     * @param validation_type
+     * @param top_results
+     *
+     */
+    @Get('/network/overview/:validation_type/:last_eras/:top_results.json')
+    @ApiParam({
+        description: 'Available set of eras to query',
+        type: Number,
+        name:'last_eras',
+        enum: [10, 30, 60],
+    })
+    @ApiParam({
+        description: 'Limit to Staking Rewards of Public Validators with Identity or include ALL rewards and commissions from All validators',
+        name:'validation_type',
+        enum:['public', 'all'],
+    })
+    @ApiParam({
+        description: 'Number of top networks',
+        name:'top_results',
+        enum: [10, 20],
+    })
+    async networkOverview(
+        @Param('last_eras') last_eras:number,
+        @Param('validation_type') validation_type,
+        @Param('top_results') top_results:number,
+    ): Promise<NetworkOverview> {
+        const api = this.lqs.getAPI();
+
+        const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: top_results });
+        const detailQuery = { ... distributionQuery, TopResults: 10 };
+
+        return {
+            topNetworkDistributionChart: this.transformer.toDistributionChart((await api.network.networkProviderPost({
+                rewardDistributionQuery: distributionQuery,
+            })).data, 'NetworkProvider'),
+            networkDistributionDetail: (await api.network.networkProviderPost({
+                rewardDistributionQuery: detailQuery,
+            })).data,
+        } as NetworkOverview;
+    }
+
+    /**
+     * ValidationGroup/Operator information bundle.
+     *
+     * Returns all the queries required to present status by vdalidator group or operator in one single object. Top N distribution and detail.
+     *
+     * @param last_eras
+     * @param validation_type
+     * @param top_results
+     *
+     */
+    @Get('/operator/overview/:validation_type/:last_eras/:top_results.json')
+    @ApiParam({
+        description: 'Available set of eras to query',
+        type: Number,
+        name:'last_eras',
+        enum: [10, 30, 60],
+    })
+    @ApiParam({
+        description: 'Limit to Staking Rewards of Public Validators with Identity or include ALL rewards and commissions from All validators',
+        name:'validation_type',
+        enum:['public', 'all'],
+    })
+    @ApiParam({
+        description: 'Number of top validator groups / operators',
+        name:'top_results',
+        enum: [10, 20],
+    })
+    async operatorOverview(
+        @Param('last_eras') last_eras:number,
+        @Param('validation_type') validation_type,
+        @Param('top_results') top_results:number,
+    ): Promise<OperatorOverview> {
+        const api = this.lqs.getAPI();
+
+        const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: top_results });
+        const detailQuery = { ... distributionQuery, TopResults: 10 };
+
+        return {
+            topOperatorDistributionChart: this.transformer.toDistributionChart((await api.validator.validatorGroupPost({
+                rewardDistributionQuery: distributionQuery,
+            })).data, 'ValidationGroup'),
+            operatorDistributionDetail: (await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
+            })).data,
+        } as OperatorOverview;
+    }
 
     /**
      * Helper method to fill up convert shared request parameters to LQS request parameters
@@ -132,7 +224,7 @@ export class DdpIpfs {
             queryParams['ValidatorType'] = params.validation_type == 'public' ? 'public' : 'all';
             queryParams['ValidatorIdentityType'] = params.validation_type == 'public' ? 'with identity' : 'all';
         }
-        if(params.top_regions) queryParams['TopResults'] = params.top_regions;
+        if(params.top_results) queryParams['TopResults'] = params.top_results;
         return queryParams;
     }
 

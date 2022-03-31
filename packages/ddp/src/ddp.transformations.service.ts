@@ -3,7 +3,12 @@
 
 import { Injectable } from '@nestjs/common';
 import * as dataForge from 'data-forge';
-import { RegionalRewardEraEvolution, RewardsByRegion } from '@lqs/client';
+import {
+    RegionalRewardEraEvolution,
+    RewardsByNetworkProvider,
+    RewardsByRegion,
+    RewardsByValidationGroup
+} from '@lqs/client';
 import { DistributionChart, EvolutionChart } from './ddp.types';
 
 const range = (start, end) => {
@@ -22,9 +27,12 @@ export class DdpTransformationService {
      * @param lqsResponse
      */
 
-    toDistributionChart(lqsResponse: Array<RewardsByRegion>): DistributionChart {
+    toDistributionChart(
+        lqsResponse: Array<RewardsByRegion | RewardsByNetworkProvider | RewardsByValidationGroup>,
+        labelSeries
+    ): DistributionChart {
         const df = new dataForge.DataFrame(lqsResponse);
-        const xLablesSeries = df.getSeries('Region').toArray();
+        const xLablesSeries = df.getSeries(labelSeries).toArray();
         const dataSeries = df.getSeries('DotRewards').toArray();
         return { data: dataSeries, labels: xLablesSeries };
     }
