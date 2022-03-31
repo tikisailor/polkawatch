@@ -158,8 +158,8 @@ export class DdpIpfs {
         const detailQuery = { ... distributionQuery, TopResults: 75 };
 
         return {
-            topNetworkDistributionChart: this.transformer.toDistributionChart((await api.network.networkProviderPost({
-                rewardDistributionQuery: distributionQuery,
+            topNetworkDistributionChart: this.transformer.toTreemapChart((await api.network.networkProviderPost({
+                rewardDistributionQuery: detailQuery,
             })).data, 'NetworkProvider'),
             networkDistributionDetail: (await api.network.networkProviderPost({
                 rewardDistributionQuery: detailQuery,

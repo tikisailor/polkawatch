@@ -53,6 +53,34 @@ export class EvolutionChartSegment {
 
 export type EvolutionChart = Array<EvolutionChartSegment>
 
+export class TreemapPoint {
+    @ApiProperty({
+        description: 'Point Label',
+    })
+        x: string;
+
+    @ApiProperty({
+        description: 'Point Value',
+    })
+        y: number;
+}
+
+export class TreemapSegment {
+    @ApiProperty({
+        description: 'Segment Name',
+    })
+        name: string;
+
+    @ApiProperty({
+        description: 'Segment Data',
+        type: TreemapPoint,
+        isArray: true,
+    })
+        data: Array<TreemapPoint>;
+}
+
+export type TreemapChart = Array<TreemapSegment>;
+
 /**
  * This is a bundle reply type. Packs all required responses for Geographic Regional Evolution
  */
@@ -82,9 +110,10 @@ export class GeoRegionOverview {
 export class NetworkOverview {
 
     @ApiProperty({
-        type: DistributionChart,
+        type: TreemapSegment,
+        isArray: true,
     })
-        topNetworkDistributionChart: DistributionChart;
+        topNetworkDistributionChart: Array<TreemapSegment>;
 
     @ApiProperty({
         type: RewardsByNetworkProvider,

@@ -9,7 +9,7 @@ import {
     RewardsByRegion,
     RewardsByValidationGroup,
 } from '@lqs/client';
-import { DistributionChart, EvolutionChart } from './ddp.types';
+import { DistributionChart, EvolutionChart, TreemapChart } from './ddp.types';
 
 const range = (start, end) => {
     if(start === end) return [start];
@@ -24,17 +24,37 @@ export class DdpTransformationService {
 
     /**
      * Transforms the response received from LQS distribution query into chart input format
-     * @param lqsResponse
+     * @param rewardDistribution
      */
 
     toDistributionChart(
-        lqsResponse: Array<RewardsByRegion | RewardsByNetworkProvider | RewardsByValidationGroup>,
+        rewardDistribution: Array<RewardsByRegion | RewardsByNetworkProvider | RewardsByValidationGroup>,
         labelSeries,
     ): DistributionChart {
-        const df = new dataForge.DataFrame(lqsResponse);
+        const df = new dataForge.DataFrame(rewardDistribution);
         const xLablesSeries = df.getSeries(labelSeries).toArray();
         const dataSeries = df.getSeries('DotRewards').toArray();
         return { data: dataSeries, labels: xLablesSeries };
+    }
+
+    /**
+     * Transforms a RewardDistribution into a TreeMap Chart
+     * @param rewardDistribution
+     * @param label
+     */
+    toTreemapChart(
+        rewardDistribution: Array<RewardsByRegion | RewardsByNetworkProvider | RewardsByValidationGroup>,
+        label,
+    ): TreemapChart {
+        return [{
+            name: label,
+            data: rewardDistribution.map(reward =>{
+                return {
+                    x: reward[label],
+                    y: reward.DotRewards,
+                };
+            }),
+        }];
     }
 
     /**
