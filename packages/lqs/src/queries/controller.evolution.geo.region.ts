@@ -54,7 +54,7 @@ export class GeoRegionEvolution extends BaseController {
                         'order': {
                             'reward': 'desc',
                         },
-                        'size': 3,
+                        'size': params.TopResults,
                     },
                     'aggs': {
                         'eras': {

@@ -131,22 +131,16 @@ async function clean(){
 /**
  * Build All Required files.
  *
- * The requests are processed in a series of batched run in parallel.
+ * The requests are processed in series
  */
 async function build(){
-    let promise=Promise.resolve([]);
-    let promiseBatch=[];
+    let promise=Promise.resolve();
     getApiEndpoints().forEach(endpoint => {
         getEndpointFileSet(endpoint).forEach(async file =>{
-            promiseBatch.push(dumpFile(file));
+            promise=promise.then(r=>dumpFile(file));
         });
-        if(promiseBatch.length == batchSize) {
-            promise = promise.then(r => Promise.all(promiseBatch));
-            promiseBatch=[];
-        }
     });
 
-    promise = promise.then(r => Promise.all(promiseBatch));
     return promise;
 }
 

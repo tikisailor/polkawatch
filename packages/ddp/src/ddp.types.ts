@@ -10,21 +10,76 @@ export {
 } from '@lqs/client';
 
 import {
-    RewardsByRegion,
+    RewardsByNetworkProvider,
+    RewardsByRegion, RewardsByValidationGroup,
 } from '@lqs/types';
 
 export class DistributionChart {
-    labels: string[];
-    data: number[];
+    @ApiProperty({
+        description: 'Distribution Chart Labels',
+        isArray: true,
+        type: String,
+    })
+        labels: string[];
+
+    @ApiProperty({
+        description: 'Distribution Chart Values',
+        isArray: true,
+        type: Number,
+    })
+        data: number[];
 }
 
 export class EvolutionChartSegment {
-    name: string;
-    data: number[];
-    labels: number[];
+    @ApiProperty({
+        description: 'Segment Name',
+    })
+        name: string;
+
+    @ApiProperty({
+        description: 'Segment Data Points',
+        type: Number,
+        isArray: true,
+    })
+        data: number[];
+
+    @ApiProperty({
+        description: 'Segment Labels',
+        type: Number,
+        isArray: true,
+    })
+        labels: number[];
 }
 
 export type EvolutionChart = Array<EvolutionChartSegment>
+
+export class TreemapPoint {
+    @ApiProperty({
+        description: 'Point Label',
+    })
+        x: string;
+
+    @ApiProperty({
+        description: 'Point Value',
+    })
+        y: number;
+}
+
+export class TreemapSegment {
+    @ApiProperty({
+        description: 'Segment Name',
+    })
+        name: string;
+
+    @ApiProperty({
+        description: 'Segment Data',
+        type: TreemapPoint,
+        isArray: true,
+    })
+        data: Array<TreemapPoint>;
+}
+
+export type TreemapChart = Array<TreemapSegment>;
 
 /**
  * This is a bundle reply type. Packs all required responses for Geographic Regional Evolution
@@ -47,5 +102,42 @@ export class GeoRegionOverview {
         isArray: true,
     })
         regionalDistributionDetail: Array<RewardsByRegion>;
+}
+
+/**
+ * Network Overview bundle
+ */
+export class NetworkOverview {
+
+    @ApiProperty({
+        type: TreemapSegment,
+        isArray: true,
+    })
+        topNetworkDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: RewardsByNetworkProvider,
+        isArray: true,
+    })
+        networkDistributionDetail: Array<RewardsByNetworkProvider>;
+
+}
+
+/**
+ * Validator Group / Operator overview
+ */
+
+export class OperatorOverview {
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topOperatorDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: RewardsByValidationGroup,
+        isArray: true,
+    })
+        operatorDistributionDetail: Array<RewardsByValidationGroup>;
 
 }
