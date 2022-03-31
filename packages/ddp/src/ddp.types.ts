@@ -103,12 +103,12 @@ export class OperatorOverview {
     @ApiProperty({
         type: DistributionChart,
     })
-    topOperatorDistributionChart: DistributionChart;
+        topOperatorDistributionChart: DistributionChart;
 
     @ApiProperty({
         type: RewardsByValidationGroup,
         isArray: true,
     })
-    operatorDistributionDetail: Array<RewardsByValidationGroup>;
+        operatorDistributionDetail: Array<RewardsByValidationGroup>;
 
 }

@@ -7,7 +7,7 @@ import {
     RegionalRewardEraEvolution,
     RewardsByNetworkProvider,
     RewardsByRegion,
-    RewardsByValidationGroup
+    RewardsByValidationGroup,
 } from '@lqs/client';
 import { DistributionChart, EvolutionChart } from './ddp.types';
 
@@ -29,7 +29,7 @@ export class DdpTransformationService {
 
     toDistributionChart(
         lqsResponse: Array<RewardsByRegion | RewardsByNetworkProvider | RewardsByValidationGroup>,
-        labelSeries
+        labelSeries,
     ): DistributionChart {
         const df = new dataForge.DataFrame(lqsResponse);
         const xLablesSeries = df.getSeries(labelSeries).toArray();

@@ -130,6 +130,7 @@ export class DdpIpfs {
      *
      */
     @Get('/network/overview/:validation_type/:last_eras/:top_results.json')
+    @ApiOkResponse({ description: 'Data bundle of operator network data', type: NetworkOverview, isArray: false })
     @ApiParam({
         description: 'Available set of eras to query',
         type: Number,
@@ -177,6 +178,7 @@ export class DdpIpfs {
      *
      */
     @Get('/operator/overview/:validation_type/:last_eras/:top_results.json')
+    @ApiOkResponse({ description: 'Data bundle of validation group/operator data', type: OperatorOverview, isArray: false })
     @ApiParam({
         description: 'Available set of eras to query',
         type: Number,
