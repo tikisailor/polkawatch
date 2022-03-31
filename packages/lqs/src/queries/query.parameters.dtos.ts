@@ -96,4 +96,4 @@ export class RewardDistributionQuery extends BaseQuery {
 export class AboutDataQuery extends BaseQuery {}
 
 
-export class EvolutionQuery extends BaseQuery {}
+export class EvolutionQuery extends RewardDistributionQuery {}
