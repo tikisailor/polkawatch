@@ -102,7 +102,7 @@ export class DdpIpfs {
     ): Promise<GeoRegionOverview> {
         const api = this.lqs.getAPI();
 
-        const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_regions: top_results });
+        const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: top_results });
         const detailQuery = { ... distributionQuery, TopResults: 10 };
         const evolutionQuery = distributionQuery;
 
@@ -145,7 +145,7 @@ export class DdpIpfs {
     @ApiParam({
         description: 'Number of top networks',
         name:'top_results',
-        enum: [10, 20],
+        enum: [5, 10, 20],
     })
     async networkOverview(
         @Param('last_eras') last_eras:number,
@@ -155,7 +155,7 @@ export class DdpIpfs {
         const api = this.lqs.getAPI();
 
         const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: top_results });
-        const detailQuery = { ... distributionQuery, TopResults: 10 };
+        const detailQuery = { ... distributionQuery, TopResults: 75 };
 
         return {
             topNetworkDistributionChart: this.transformer.toDistributionChart((await api.network.networkProviderPost({
@@ -203,9 +203,10 @@ export class DdpIpfs {
         const api = this.lqs.getAPI();
 
         const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: top_results });
-        const detailQuery = { ... distributionQuery, TopResults: 10 };
+        const detailQuery = { ... distributionQuery, TopResults: 200 };
 
         return {
+            // TODO: treemap chart
             topOperatorDistributionChart: this.transformer.toDistributionChart((await api.validator.validatorGroupPost({
                 rewardDistributionQuery: distributionQuery,
             })).data, 'ValidationGroup'),
