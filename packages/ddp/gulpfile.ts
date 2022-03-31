@@ -1,3 +1,17 @@
+
+/**
+ * This gulp file is responsible for "dumping" the ipfs data package form the DDP service.
+ *
+ * This is viable because all DDP endpoints are GET, all parameters are PATH parameters and
+ * all the values are a finite set that we can predict.
+ *
+ * Therefore, we can "dump" all possible queries to the filesystem and then use the filesystem
+ * as source for the API.
+ *
+ * Please note that this file will not run DDP for you.
+ *
+ */
+
 import * as fs from 'fs';
 import * as Mustache from 'mustache';
 
@@ -9,15 +23,14 @@ const del = require('del');
 const customTags = [ '{', '}' ];
 
 /**
- * This gulp file is responsible for "dumping" the ipfs data package form the DDP service.
- *
- * This is viable because all DDP endpoints are GET, all parameters are PATH parameters and
- * all the values are a finite set that we can predict.
- *
- * Therefore we can "dump" all possible queries to the filesystem and then use the filesystem
- * as source for the API.
- *
+ * Parameters that can be controlled via environment variables and their defaults
  */
+const DDP_PROTO = process.env['DDP_PROTO'] || 'http';
+const DDP_HOST = process.env['DDP_HOST'] || 'localhost';
+const DDP_PORT = process.env['DDP_PORT'] || '7200';
+const BATCH_SIZE = process.env['BATCH_SIZE'] || '10';
+const batchSize = parseInt(BATCH_SIZE);
+
 
 /**
  * Reads generated API specification and stract the endpoints and parameters
@@ -72,6 +85,12 @@ function getAllPossibleCalls(params:Array<any>){
     }
 }
 
+/**
+ * For a given endpoint will apply all possible parameter calls to the endpoint as specified.
+ * This results in an array of all possible IPFS files.
+ *
+ * @param endpoint
+ */
 function getEndpointFileSet(endpoint){
     // Get All possible parameters for that endpoint
     const calls=getAllPossibleCalls(endpoint.params);
@@ -81,11 +100,15 @@ function getEndpointFileSet(endpoint){
     return calls.map(call=>Mustache.render(url,call,{},customTags));
 }
 
+/**
+ * Requests the data and stores it in the filesystem
+ * @param file
+ */
 async function dumpFile(file){
     // GET request for remote image in node.js
-    await axios({
+    return axios({
         method: 'get',
-        url: `http://localhost:7200${file}`,
+        url: `${DDP_PROTO}://${DDP_HOST}:${DDP_PORT}${file}`,
         responseType: 'stream'
     })
         .then(function (response) {
@@ -98,16 +121,33 @@ async function dumpFile(file){
         });
 }
 
+/**
+ * Clean the output directory
+ */
 async function clean(){
     return del('ipfs_dist/**', {force:true});
 }
 
+/**
+ * Build All Required files.
+ *
+ * The requests are processed in a series of batched run in parallel.
+ */
 async function build(){
-    getApiEndpoints().forEach(async endpoint => {
+    let promise=Promise.resolve([]);
+    let promiseBatch=[];
+    getApiEndpoints().forEach(endpoint => {
         getEndpointFileSet(endpoint).forEach(async file =>{
-            await dumpFile(file);
-        })
+            promiseBatch.push(dumpFile(file));
+        });
+        if(promiseBatch.length == batchSize) {
+            promise = promise.then(r => Promise.all(promiseBatch));
+            promiseBatch=[];
+        }
     });
+
+    promise = promise.then(r => Promise.all(promiseBatch));
+    return promise;
 }
 
 exports.build = build;
