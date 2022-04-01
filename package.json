@@ -1,7 +1,7 @@
 {
   "name": "polkawatch",
   "private": true,
-  "version": "0.4.14",
+  "version": "0.4.15",
   "workspaces": [
     "packages/archive",
     "packages/indexer",
