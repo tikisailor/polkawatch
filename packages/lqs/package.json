@@ -1,6 +1,6 @@
 {
   "name": "lqs",
-  "version": "0.4.17",
+  "version": "0.4.18",
   "private": true,
   "scripts": {
     "build:workspace": "yarn build",
