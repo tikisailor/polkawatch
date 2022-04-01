@@ -11,5 +11,5 @@ RUN yarn global add @nestjs/cli rimraf && yarn build
 FROM node:14-alpine
 WORKDIR /app
 COPY --from=builder /app ./
-CMD ["yarn", "start:prod"]
+CMD ["yarn", "start:prod-docker"]
 
