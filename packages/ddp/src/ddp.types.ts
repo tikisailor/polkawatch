@@ -43,6 +43,16 @@ export class EvolutionChartSegment {
     })
         data: number[];
 
+}
+
+export class EvolutionChart {
+    @ApiProperty({
+        description: 'Segment Data Points',
+        type: EvolutionChartSegment,
+        isArray: true,
+    })
+        segments: Array<EvolutionChartSegment>;
+
     @ApiProperty({
         description: 'Segment Labels',
         type: Number,
@@ -50,8 +60,6 @@ export class EvolutionChartSegment {
     })
         labels: number[];
 }
-
-export type EvolutionChart = Array<EvolutionChartSegment>
 
 export class TreemapPoint {
     @ApiProperty({
@@ -92,10 +100,10 @@ export class GeoRegionOverview {
         topRegionalDistributionChart: DistributionChart;
 
     @ApiProperty({
-        type: EvolutionChartSegment,
-        isArray: true,
+        type: EvolutionChart,
+        isArray: false,
     })
-        regionalEvolutionChart: Array<EvolutionChartSegment>;
+        regionalEvolutionChart: EvolutionChart;
 
     @ApiProperty({
         type: RewardsByRegion,
