@@ -77,7 +77,7 @@ export class DdpTransformationService {
         // this part fills gaps with 0
         const eraRange = range(Math.min(...eras), Math.max(...eras));
 
-        return transformedData.map(entry => {
+        const noValueToZeroes = transformedData.map((entry, index: number) => {
 
             const df = new dataForge.DataFrame({ columns: { data: entry.data, label: entry.labels } });
 
@@ -95,13 +95,24 @@ export class DdpTransformationService {
                 },
             );
 
-            return {
-                name: entry.name,
-                data: joined.getSeries('data').toArray(),
-                labels: joined.getSeries('labels').toArray(),
-            };
+            if (index === 0) {
+                return {
+                    name: entry.name,
+                    data: joined.getSeries('data').toArray(),
+                    labels: joined.getSeries('labels').toArray(),
+                };
+            } else {
+                return {
+                    name: entry.name,
+                    data: joined.getSeries('data').toArray(),
+                };
 
+            }
         });
+
+        const labels = noValueToZeroes[0].labels;
+        delete noValueToZeroes[0].labels;
+        return { labels: labels, segments: noValueToZeroes };
     }
 
 }
