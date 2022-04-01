@@ -129,7 +129,7 @@ export class DdpIpfs {
      * @param top_results
      *
      */
-    @Get('/network/overview/:validation_type/:last_eras/:top_results.json')
+    @Get('/network/overview/:validation_type/:last_eras.json')
     @ApiOkResponse({ description: 'Data bundle of operator network data', type: NetworkOverview, isArray: false })
     @ApiParam({
         description: 'Available set of eras to query',
@@ -142,20 +142,13 @@ export class DdpIpfs {
         name:'validation_type',
         enum:['public', 'all'],
     })
-    @ApiParam({
-        description: 'Number of top networks',
-        name:'top_results',
-        enum: [5, 10, 20],
-    })
     async networkOverview(
         @Param('last_eras') last_eras:number,
         @Param('validation_type') validation_type,
-        @Param('top_results') top_results:number,
     ): Promise<NetworkOverview> {
         const api = this.lqs.getAPI();
 
-        const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: top_results });
-        const detailQuery = { ... distributionQuery, TopResults: 75 };
+        const detailQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: 75 });
 
         return {
             topNetworkDistributionChart: this.transformer.toTreemapChart((await api.network.networkProviderPost({
@@ -177,7 +170,7 @@ export class DdpIpfs {
      * @param top_results
      *
      */
-    @Get('/operator/overview/:validation_type/:last_eras/:top_results.json')
+    @Get('/operator/overview/:validation_type/:last_eras.json')
     @ApiOkResponse({ description: 'Data bundle of validation group/operator data', type: OperatorOverview, isArray: false })
     @ApiParam({
         description: 'Available set of eras to query',
@@ -190,25 +183,17 @@ export class DdpIpfs {
         name:'validation_type',
         enum:['public', 'all'],
     })
-    @ApiParam({
-        description: 'Number of top validator groups / operators',
-        name:'top_results',
-        enum: [10, 20],
-    })
     async operatorOverview(
         @Param('last_eras') last_eras:number,
         @Param('validation_type') validation_type,
-        @Param('top_results') top_results:number,
     ): Promise<OperatorOverview> {
         const api = this.lqs.getAPI();
 
-        const distributionQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: top_results });
-        const detailQuery = { ... distributionQuery, TopResults: 200 };
+        const detailQuery = await this.getCommonRequestParameters({ last_eras, validation_type, top_results: 200 });
 
         return {
-            // TODO: treemap chart
-            topOperatorDistributionChart: this.transformer.toDistributionChart((await api.validator.validatorGroupPost({
-                rewardDistributionQuery: distributionQuery,
+            topOperatorDistributionChart: this.transformer.toTreemapChart((await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
             })).data, 'ValidationGroup'),
             operatorDistributionDetail: (await api.validator.validatorGroupPost({
                 rewardDistributionQuery: detailQuery,
