@@ -130,9 +130,9 @@ export class NetworkOverview {
 export class OperatorOverview {
 
     @ApiProperty({
-        type: DistributionChart,
+        type: TreemapSegment,
     })
-        topOperatorDistributionChart: DistributionChart;
+        topOperatorDistributionChart: Array<TreemapSegment>;
 
     @ApiProperty({
         type: RewardsByValidationGroup,
