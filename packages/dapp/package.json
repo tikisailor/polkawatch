@@ -1,6 +1,6 @@
 {
   "name": "gatsby",
-  "version": "5.0.0",
+  "version": "0.4.15",
   "private": true,
   "browserslist": [
     ">0.25%",
