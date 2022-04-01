@@ -1,0 +1,8 @@
+#!/bin/sh
+
+export DDP_IPFS_HOME=$(pwd)
+
+(
+  cd /app
+  gulp
+)
