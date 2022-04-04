@@ -77,6 +77,62 @@ export class BaseQuery {
 
 }
 
+/**
+ * Filtered base query
+ */
+
+export class FilteredBaseQuery extends BaseQuery {
+
+    @ApiProperty({
+        description: 'Filter by Region ID',
+        type: String,
+        default: null,
+        required: false,
+    })
+        RegionFilter;
+
+    @ApiProperty({
+        description: 'Filter by Country ID',
+        type: String,
+        default: null,
+        required: false,
+    })
+        CountryFilter;
+
+    @ApiProperty({
+        description: 'Filter by Network ID',
+        type: String,
+        default: null,
+        required: false,
+    })
+        NetworkFilter;
+
+    @ApiProperty({
+        description: 'Filter by Validator Group ID',
+        type: String,
+        default: null,
+        required: false,
+    })
+        ValidatorGroupFilter;
+
+    @ApiProperty({
+        description: 'Filter by Validator ID',
+        type: String,
+        default: null,
+        required: false,
+    })
+        ValidatorFilter;
+
+    @ApiProperty({
+        description: 'Filter by Nominator ID',
+        type: String,
+        default: null,
+        required: false,
+    })
+        NominatorFilter;
+
+}
+
 
 /**
  * Query parameters for reward distribution queries
@@ -93,7 +149,7 @@ export class RewardDistributionQuery extends BaseQuery {
       TopResults:number = 10;
 }
 
-export class AboutDataQuery extends BaseQuery {}
+export class AboutDataQuery extends FilteredBaseQuery {}
 
 
 export class EvolutionQuery extends RewardDistributionQuery {}
