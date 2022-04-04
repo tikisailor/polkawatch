@@ -135,6 +135,36 @@ export class GeoCountry extends BaseController {
                                 },
                             },
                         },
+                        {
+                            'wildcard': {
+                                'validator_country_group_code': params.RegionFilter ? params.RegionFilter : '*',
+                            },
+                        },
+                        {
+                            'wildcard': {
+                                'validator_country_code': params.CountryFilter ? params.CountryFilter : '*',
+                            },
+                        },
+                        {
+                            'wildcard': {
+                                'validator_asn_code': params.NetworkFilter ? params.NetworkFilter : '*',
+                            },
+                        },
+                        {
+                            'wildcard': {
+                                'validator_parent': params.ValidatorGroupFilter ? params.ValidatorGroupFilter : '*',
+                            },
+                        },
+                        {
+                            'wildcard': {
+                                'validator': params.ValidatorFilter ? params.ValidatorFilter : '*',
+                            },
+                        },
+                        {
+                            'wildcard': {
+                                'nominator': params.NominatorFilter ? params.NominatorFilter : '*',
+                            },
+                        },
                     ],
                 },
             },

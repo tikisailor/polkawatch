@@ -74,14 +74,28 @@ export class BaseQuery {
         required: false,
     })
         ValidatorIdentityType = 'with identity';
-
 }
 
 /**
- * Filtered base query
+ * In our queries we are often interested in the top N results.
  */
+export class TopBaseQuery extends BaseQuery {
+    @IsOptional()
+    @IsNumber()
+    @ApiProperty({
+        description: 'Return only the Top N Results',
+        minimum: 1,
+        default: 10,
+        required: false,
+    })
+        TopResults:number = 10;
+}
 
-export class FilteredBaseQuery extends BaseQuery {
+/**
+ * In Some cases it may be desired to filter queries by some other entitites too.
+ * This is a generic filtering that may not make sense in some particular cases.
+ */
+export class FilteredBaseQuery extends TopBaseQuery {
 
     @ApiProperty({
         description: 'Filter by Region ID',
@@ -137,19 +151,11 @@ export class FilteredBaseQuery extends BaseQuery {
 /**
  * Query parameters for reward distribution queries
  */
-export class RewardDistributionQuery extends BaseQuery {
-  @IsOptional()
-  @IsNumber()
-  @ApiProperty({
-      description: 'Return only the Top N Results',
-      minimum: 1,
-      default: 10,
-      required: false,
-  })
-      TopResults:number = 10;
+export class RewardDistributionQuery extends FilteredBaseQuery {
 }
 
 export class AboutDataQuery extends FilteredBaseQuery {}
 
 
-export class EvolutionQuery extends RewardDistributionQuery {}
+export class EvolutionQuery extends TopBaseQuery {
+}

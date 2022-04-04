@@ -122,6 +122,24 @@ export class AboutDataset extends BaseController {
                             },
                         },
                         {
+                            'script': {
+                                'script': {
+                                    'source': 'boolean compare(Supplier s, def v) {return s.get() == v || v == \'all\';}compare(() -> { if(doc[\'validator_identity\'].value) return \'with identity\';else return \'anonymous\'; }, params.value);',
+                                    'lang': 'painless',
+                                    'params': {
+                                        'value': params.ValidatorIdentityType,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            'range': {
+                                era: {
+                                    gte: params.StartingEra,
+                                },
+                            },
+                        },
+                        {
                             'wildcard': {
                                 'validator_country_group_code': params.RegionFilter ? params.RegionFilter : '*',
                             },
@@ -149,24 +167,6 @@ export class AboutDataset extends BaseController {
                         {
                             'wildcard': {
                                 'nominator': params.NominatorFilter ? params.NominatorFilter : '*',
-                            },
-                        },
-                        {
-                            'script': {
-                                'script': {
-                                    'source': 'boolean compare(Supplier s, def v) {return s.get() == v || v == \'all\';}compare(() -> { if(doc[\'validator_identity\'].value) return \'with identity\';else return \'anonymous\'; }, params.value);',
-                                    'lang': 'painless',
-                                    'params': {
-                                        'value': params.ValidatorIdentityType,
-                                    },
-                                },
-                            },
-                        },
-                        {
-                            'range': {
-                                era: {
-                                    gte: params.StartingEra,
-                                },
                             },
                         },
                     ],
