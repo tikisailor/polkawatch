@@ -7,7 +7,9 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 /**
  * All queries will have as a response either a record or an array of records
  */
-export type QueryResponse = QueryResponseRecord | Array<QueryResponseRecord> | Array<QueryResponseSegment<QueryResponseRecord>>;
+export type QueryResponse = QueryResponseRecord |
+    Array<QueryResponseRecord> |
+    Array<QueryResponseSegment<QueryResponseRecord>>;
 
 /**
  * A segmented query returns multiple arrays of records
@@ -28,9 +30,26 @@ export class QueryResponseSegment<T> {
 /**
  * Here we list all possible Response Records we may get
  */
-export type QueryResponseRecord = RewardsByRegion | RewardsByCountry | RewardsByNetworkProvider |
-            RewardsByValidationGroup | AboutData | EntitiesEraEvolution | RewardEraEvolution;
+export type QueryResponseRecord = RewardsByRegion |
+    RewardsByCountry |
+    RewardsByNetworkProvider |
+    RewardsByValidationGroup |
+    AboutData |
+    EntitiesEraEvolution |
+    RewardEraEvolution |
+    InventoryRecord;
 
+/**
+ * Inventory, just a collection of IDs for discovery use cases.
+ */
+
+export class InventoryRecord {
+    @ApiProperty({
+        description: 'The Record ID',
+    })
+    @Expose({ name: 'key' })
+        Id: string;
+}
 
 /**
  * Rewards Aggregations

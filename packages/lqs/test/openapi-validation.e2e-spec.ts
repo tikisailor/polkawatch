@@ -11,6 +11,8 @@ import { configure } from '../src/lqs.config';
 import { loadFixture, saveFixture } from './regression.tools';
 import * as fs from 'fs';
 
+jest.setTimeout(10 * 1000);
+
 describe('LQS end-to-end testing', () => {
     let httpServer;
     let app;

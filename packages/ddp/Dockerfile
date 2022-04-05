@@ -11,5 +11,8 @@ RUN yarn global add @nestjs/cli rimraf && yarn build
 FROM node:14-alpine
 WORKDIR /app
 COPY --from=builder /app ./
-CMD ["yarn", "start:prod"]
+COPY --from=builder /app/bin/* /usr/local/bin
+RUN yarn global add gulp
+EXPOSE 7200
+CMD ["yarn", "start:prod-docker"]
 

@@ -28,8 +28,7 @@ const customTags = [ '{', '}' ];
 const DDP_PROTO = process.env['DDP_PROTO'] || 'http';
 const DDP_HOST = process.env['DDP_HOST'] || 'localhost';
 const DDP_PORT = process.env['DDP_PORT'] || '7200';
-const BATCH_SIZE = process.env['BATCH_SIZE'] || '10';
-const batchSize = parseInt(BATCH_SIZE);
+const DDP_IPFS_HOME = process.env['DDP_IPFS_HOME'] || './';
 
 
 /**
@@ -112,7 +111,7 @@ async function dumpFile(file){
         responseType: 'stream'
     })
         .then(function (response) {
-            const dest=`./ipfs_dist${file}`;
+            const dest=`${DDP_IPFS_HOME}/ipfs_dist${file}`;
             console.log("Creating IPFS file: "+dest);
             fs.mkdirSync(path.dirname(dest),{
                 recursive: true
@@ -125,7 +124,7 @@ async function dumpFile(file){
  * Clean the output directory
  */
 async function clean(){
-    return del('ipfs_dist/**', {force:true});
+    return del('${DDP_IPFS_HOME}/ipfs_dist/**', {force:true});
 }
 
 /**
