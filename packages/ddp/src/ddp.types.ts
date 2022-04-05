@@ -162,7 +162,7 @@ export class RegionDetail {
         topCountryDistributionChart: Array<TreemapSegment>;
 
     @ApiProperty({
-        type: RewardsByValidationGroup,
+        type: RewardsByCountry,
         isArray: true,
     })
         countryDistributionDetail: Array<RewardsByCountry>;
