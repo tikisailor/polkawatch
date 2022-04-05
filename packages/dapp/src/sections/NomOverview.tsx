@@ -22,11 +22,11 @@ export default function NomOverview() {
     //
     // const [pwData, setPwData] = useState({} as OperatorOverview);
 
-    const [w3accounts, setW3accounts] = useState([]);
+    const [w3account, setW3account] = useState([]);
 
-    const handleSetW3 = (accounts) => {
-        setW3accounts(accounts);
-        console.log('got parent account', accounts);
+    const handleSetW3 = (account) => {
+        setW3account(account);
+        console.log('got account', account);
     }
 
     return (
