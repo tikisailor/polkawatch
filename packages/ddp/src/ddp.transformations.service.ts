@@ -5,8 +5,9 @@ import { Injectable } from '@nestjs/common';
 import * as dataForge from 'data-forge';
 import {
     RegionalRewardEraEvolution,
-    RewardsByNetworkProvider,
     RewardsByRegion,
+    RewardsByCountry,
+    RewardsByNetworkProvider,
     RewardsByValidationGroup,
 } from '@lqs/client';
 import { DistributionChart, EvolutionChart, TreemapChart } from './ddp.types';
@@ -28,7 +29,7 @@ export class DdpTransformationService {
      */
 
     toDistributionChart(
-        rewardDistribution: Array<RewardsByRegion | RewardsByNetworkProvider | RewardsByValidationGroup>,
+        rewardDistribution: Array<RewardsByRegion | RewardsByCountry | RewardsByNetworkProvider | RewardsByValidationGroup>,
         labelSeries,
     ): DistributionChart {
         const df = new dataForge.DataFrame(rewardDistribution);
@@ -43,7 +44,7 @@ export class DdpTransformationService {
      * @param label
      */
     toTreemapChart(
-        rewardDistribution: Array<RewardsByRegion | RewardsByNetworkProvider | RewardsByValidationGroup>,
+        rewardDistribution: Array<RewardsByRegion | RewardsByCountry| RewardsByNetworkProvider | RewardsByValidationGroup>,
         label,
     ): TreemapChart {
         return [{

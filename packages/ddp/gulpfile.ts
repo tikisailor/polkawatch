@@ -19,6 +19,7 @@ const axios = require('axios').default;
 const path = require('path');
 
 const { series } = require('gulp');
+const log = require('fancy-log');
 const del = require('del');
 const customTags = [ '{', '}' ];
 
@@ -28,8 +29,34 @@ const customTags = [ '{', '}' ];
 const DDP_PROTO = process.env['DDP_PROTO'] || 'http';
 const DDP_HOST = process.env['DDP_HOST'] || 'localhost';
 const DDP_PORT = process.env['DDP_PORT'] || '7200';
-const DDP_IPFS_HOME = process.env['DDP_IPFS_HOME'] || './';
+const DDP_IPFS_HOME = process.env['DDP_IPFS_HOME'] || '.';
 
+/**
+ * returns the available IDs for a given record type
+ */
+
+async function getInventory(recordType):Promise<Array<string>>{
+    return axios({
+        method: 'get',
+        url: `${DDP_PROTO}://${DDP_HOST}:${DDP_PORT}/ddp/about/inventory/${recordType}.json`
+    }).then(
+        result =>
+            result.data.map(record => record.Id) as Array<string>);
+}
+
+/**
+ * Request Inventories only once for the whole session
+ */
+let InventoryCache;
+
+async function PopulateInventoryCache(){
+    let cache={}
+    for (const recordType of ['region', 'country', 'network', 'validator_group', 'validator', 'nominator']) {
+        log(`Populating inventory for ${recordType}`);
+        cache[recordType] = await getInventory(recordType);
+    }
+    return cache;
+}
 
 /**
  * Reads generated API specification and stract the endpoints and parameters
@@ -42,7 +69,7 @@ function getApiEndpoints(){
             params: apiSpec.paths[endpoint].get.parameters.map(param => {
                 return {
                     name: param.name,
-                    values: param.schema.enum
+                    values: param.schema.enum ? param.schema.enum : InventoryCache[param.name]
                 }
             })
         }
@@ -112,7 +139,7 @@ async function dumpFile(file){
     })
         .then(function (response) {
             const dest=`${DDP_IPFS_HOME}/ipfs_dist${file}`;
-            console.log("Creating IPFS file: "+dest);
+            log("Creating "+dest);
             fs.mkdirSync(path.dirname(dest),{
                 recursive: true
             })
@@ -133,6 +160,11 @@ async function clean(){
  * The requests are processed in series
  */
 async function build(){
+
+    // Cache the Inventory
+    InventoryCache= await PopulateInventoryCache();
+
+    // Return all generation promises. Note that each endpoint normally involve multiple calls
     let promise=Promise.resolve();
     getApiEndpoints().forEach(endpoint => {
         getEndpointFileSet(endpoint).forEach(async file =>{
