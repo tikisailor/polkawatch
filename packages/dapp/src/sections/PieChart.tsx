@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 import { merge } from 'lodash';
-import ReactApexChart from 'react-apexcharts';
+import ReactApexChart from '../components/ReactApexCharts';
 // material
 import { useTheme, styled } from '@mui/material/styles';
 import { Card, CardHeader } from '@mui/material';
 // utils
-import { fNumber } from '../../utils/formatNumber';
+import { fNumber } from '../utils/formatNumber';
 //
-import { BaseOptionChart } from '../charts';
+import { BaseOptionChart } from '../components/charts';
 
 const CHART_HEIGHT = 372;
 const LEGEND_HEIGHT = 72;
@@ -29,7 +29,7 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
     }
 }));
 
-export default function PieChart({title, data, labels}) {
+export default function PieChart({title,labels,series}) {
     const theme = useTheme();
 
     const chartOptions = merge(BaseOptionChart(), {
@@ -56,12 +56,11 @@ export default function PieChart({title, data, labels}) {
             pie: { donut: { labels: { show: false } } }
         }
     });
-    // @ts-ignore
     return (
         <Card>
             <CardHeader title={title} />
             <ChartWrapperStyle dir="ltr">
-                <ReactApexChart type="donut" series={data} options={chartOptions} height={280} />
+                <ReactApexChart type="donut" series={series} options={chartOptions} height={280} />
             </ChartWrapperStyle>
         </Card>
     );

@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton, Button } from '@mui/material';
 // components
 import { MHidden } from '../../components/@material-extend';
 //
@@ -13,6 +13,7 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import WalletConnect from "../../sections/detail/WalletConnect";
 
 // ----------------------------------------------------------------------
 
@@ -48,19 +49,20 @@ export default function DashboardNavbar({ onOpenSidebar }) {
   return (
     <RootStyle>
       <ToolbarStyle>
-        <MHidden width="lgUp">
-          <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
-            <Icon icon={menu2Fill} />
-          </IconButton>
-        </MHidden>
+        {/*<MHidden width="lgUp">*/}
+        {/*  <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>*/}
+        {/*    <Icon icon={menu2Fill} />*/}
+        {/*  </IconButton>*/}
+        {/*</MHidden>*/}
 
-        <Searchbar />
+        {/*<Searchbar />*/}
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <LanguagePopover />
-          <NotificationsPopover />
-          <AccountPopover />
+          {/*<LanguagePopover />*/}
+          {/*<NotificationsPopover />*/}
+          {/*<WalletConnect />*/}
+          {/*<AccountPopover />*/}
         </Stack>
       </ToolbarStyle>
     </RootStyle>

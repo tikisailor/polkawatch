@@ -1,13 +1,11 @@
 import * as React from 'react';
 
 import { Icon } from '@iconify/react';
-import pieChart2Fill from '@iconify/icons-eva/pie-chart-2-fill';
-import peopleFill from '@iconify/icons-eva/people-fill';
-import shoppingBagFill from '@iconify/icons-eva/shopping-bag-fill';
-import fileTextFill from '@iconify/icons-eva/file-text-fill';
-import lockFill from '@iconify/icons-eva/lock-fill';
-import personAddFill from '@iconify/icons-eva/person-add-fill';
-import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill';
+import homeSolid from '@iconify/icons-clarity/home-solid';
+import location from '@iconify/icons-akar-icons/location';
+import network4 from '@iconify/icons-carbon/network-4';
+import lock from '@iconify/icons-bxs/lock';
+import dots from '@iconify/icons-simple-icons/polkadot';
 
 // ----------------------------------------------------------------------
 
@@ -17,27 +15,27 @@ const sidebarConfig = [
   {
     title: 'home',
     path: '/dashboard/home',
-    icon: getIcon(pieChart2Fill)
+    icon: getIcon(homeSolid)
   },
   {
     title: 'geography',
     path: '/dashboard/geography',
-    icon: getIcon(peopleFill)
+    icon: getIcon(location)
   },
   {
     title: 'network',
     path: '/dashboard/network',
-    icon: getIcon(shoppingBagFill)
-  },
-  {
-    title: 'nominator',
-    path: '/dashboard/nominator',
-    icon: getIcon(fileTextFill)
+    icon: getIcon(network4)
   },
   {
     title: 'validator',
     path: '/dashboard/validator',
-    icon: getIcon(lockFill)
+    icon: getIcon(lock)
+  },
+  {
+    title: 'nominator',
+    path: '/dashboard/nominator',
+    icon: getIcon(dots)
   },
 ];
 

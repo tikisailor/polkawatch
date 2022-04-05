@@ -5,7 +5,7 @@ import Page from '../../components/Page';
 import DashboardLayout from "../../layouts/dashboard";
 import AboutDataset from "../../sections/AboutData";
 
-export default function DashboardApp() {
+export default function DashboardHome() {
     return (
         <DashboardLayout>
             <Page title="Dashboard | Minimal-UI">
