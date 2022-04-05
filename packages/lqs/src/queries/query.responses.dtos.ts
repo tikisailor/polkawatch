@@ -49,6 +49,12 @@ export class InventoryRecord {
     })
     @Expose({ name: 'key' })
         Id: string;
+
+    @ApiProperty({
+        description: 'The Record Searchable Name',
+    })
+    @Expose({ name: 'name' })
+    Name: string;
 }
 
 /**
