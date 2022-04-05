@@ -4,12 +4,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
-import { DdpLqsService } from './ddp.lqs.service';
+import { DdpLqsService, InventoryRecord } from './ddp.lqs.service';
 import { DdpTransformationService } from './ddp.transformations.service';
 import {
     AboutData,
-    GeoRegionOverview, NetworkOverview, OperatorOverview,
+    GeoRegionOverview, NetworkOverview, OperatorOverview, RegionDetail,
 } from './ddp.types';
+import { InventoryQuery } from '@lqs/client';
 
 /**
  * Distributed Data Pack Controller.
@@ -63,6 +64,43 @@ export class DdpIpfs {
 
         return (await api.about.aboutDatasetPost({
             aboutDataQuery: await this.getCommonRequestParameters({ last_eras, validation_type }),
+        })).data;
+    }
+
+    /**
+     * Information about the dataset. Inventory of IDs of participating objects.
+     * This is required for IPFS generation
+     *
+     * @param record_type
+     */
+    @Get('/about/inventory/:record_type.json')
+    @ApiOperation({
+        description: 'Identifiers of participating entities. Available only for 60 eras and public validation.',
+    })
+    @ApiOkResponse({ description: 'The information about the selected dataset', type: InventoryRecord, isArray: true })
+    @ApiParam({
+        description: 'The record type to get Identifiers from',
+        name:'record_type',
+        enum:['region', 'country', 'network', 'validator_group', 'validator', 'nominator'],
+    })
+    async aboutInventory(
+        @Param('record_type') record_type,
+    ): Promise<Array<InventoryRecord>> {
+        const api = this.lqs.getAPI();
+
+        const commonParams = await this.getCommonRequestParameters({
+            last_eras: 60,
+            validation_type: 'public',
+            top_results: 25000,
+        });
+
+        const query:InventoryQuery = {
+            RecordType: record_type,
+            ...commonParams,
+        };
+
+        return (await api.about.dataSetInventoryPost({
+            inventoryQuery: query,
         })).data;
     }
 
@@ -200,6 +238,41 @@ export class DdpIpfs {
             })).data,
         } as OperatorOverview;
     }
+
+    /**
+     * Region Detail View
+     */
+    @Get('/geography/region/:region/:last_eras.json')
+    @ApiOkResponse({ description: 'Data bundle of validation group/operator data', type: OperatorOverview, isArray: false })
+    @ApiParam({
+        description: 'Region ID to request',
+        name:'region',
+    })
+    @ApiParam({
+        description: 'Available set of eras to query',
+        type: Number,
+        name:'last_eras',
+        enum: [10, 30, 60],
+    })
+    async regionDetail(
+        @Param('region') region,
+        @Param('last_eras') last_eras:number,
+    ): Promise<RegionDetail> {
+        const api = this.lqs.getAPI();
+
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 200 });
+        const detailQuery = { RegionFilter: region, ... commonParams };
+
+        return {
+            topCountryDistributionChart: this.transformer.toTreemapChart((await api.geography.geoCountryPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'Country'),
+            countryDistributionDetail: (await api.geography.geoCountryPost({
+                rewardDistributionQuery: detailQuery,
+            })).data,
+        } as RegionDetail;
+    }
+
 
     /**
      * Helper method to fill up convert shared request parameters to LQS request parameters

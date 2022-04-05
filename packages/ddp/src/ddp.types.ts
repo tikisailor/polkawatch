@@ -10,6 +10,7 @@ export {
 } from '@lqs/client';
 
 import {
+    RewardsByCountry,
     RewardsByNetworkProvider,
     RewardsByRegion, RewardsByValidationGroup,
 } from '@lqs/types';
@@ -148,4 +149,21 @@ export class OperatorOverview {
     })
         operatorDistributionDetail: Array<RewardsByValidationGroup>;
 
+}
+
+/**
+ * Region Detail
+ */
+
+export class RegionDetail {
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topCountryDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: RewardsByValidationGroup,
+        isArray: true,
+    })
+        countryDistributionDetail: Array<RewardsByCountry>;
 }
