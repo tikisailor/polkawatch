@@ -54,7 +54,7 @@ export class InventoryRecord {
         description: 'The Record Searchable Name',
     })
     @Expose({ name: 'name' })
-    Name: string;
+        Name: string;
 }
 
 /**
