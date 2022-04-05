@@ -243,7 +243,7 @@ export class DdpIpfs {
      * Region Detail View
      */
     @Get('/geography/region/:region/:last_eras.json')
-    @ApiOkResponse({ description: 'Data bundle of validation group/operator data', type: OperatorOverview, isArray: false })
+    @ApiOkResponse({ description: 'Data bundle of region detail data', type: RegionDetail, isArray: false })
     @ApiParam({
         description: 'Region ID to request',
         name:'region',
