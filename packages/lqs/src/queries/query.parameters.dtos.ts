@@ -7,7 +7,7 @@ import { IsNumber, IsEnum, IsOptional } from 'class-validator';
 /**
  * All possible query parameters.
  */
-export type QueryParameters = RewardDistributionQuery | AboutDataQuery | EvolutionQuery;
+export type QueryParameters = RewardDistributionQuery | AboutDataQuery | EvolutionQuery | InventoryQuery;
 
 
 enum RewardTypes {
@@ -147,6 +147,46 @@ export class FilteredBaseQuery extends TopBaseQuery {
 
 }
 
+/**
+ * Type of inventory to retrieve
+ */
+
+enum IdentityTypes {
+    Region='region',
+    Country='country',
+    Network='network',
+    ValidatorGroup='validator_group',
+    Validator='validator',
+    Nominator='nominator'
+}
+
+/**
+ * Helper decoder of Elastic Search Field names
+ */
+export const IdentityType2ElasticField = {
+    'region': 'validator_country_group_code',
+    'country': 'validator_country_code',
+    'network': 'validator_asn_code',
+    'validator_group': 'validator_parent',
+    'validator': 'validator',
+    'nominator': 'nominator',
+};
+
+/**
+ * The Inventory Query allows us to discover entity IDs.
+ * This is required for the DDP in order to generate IPFS filesystem
+ */
+
+export class InventoryQuery extends TopBaseQuery {
+    @IsOptional()
+    @IsEnum(IdentityTypes)
+    @ApiProperty({
+        description: 'Type of record to retrieve the inventory for',
+        enum: ['region', 'country', 'network', 'validator_group', 'validator', 'nominator'],
+        required: true,
+    })
+        RecordType:IdentityTypes;
+}
 
 /**
  * Query parameters for reward distribution queries
