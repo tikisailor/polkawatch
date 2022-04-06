@@ -7,35 +7,22 @@ import {
     Card,
     Table,
     Stack,
-    Avatar,
-    Checkbox,
     TableRow,
     TableBody,
     TableCell,
-    Container,
     Typography,
     TableContainer,
     TablePagination
 } from '@mui/material';
 // components
-import DashboardLayout from "../../layouts/dashboard";
+// import DashboardLayout from "../../layouts/dashboard";
 import Page from '../../components/Page';
 import DetailTableHead from './DetailTableHead';
-
-// {
-//     "DotRewards": 4701.0045424333,
-//     "Regions": 1,
-//     "Countries": 1,
-//     "Networks": 1,
-//     "Validators": 6,
-//     "Nominators": 1200,
-//     "Id": "Jaco",
-//     "ValidationGroup": "Jaco",
-//     "DotMedianNomination": 329.573372614025
-// },
+import {navigate} from 'gatsby';
+// import { useLocation } from '@reach/router';
 
 
-export default function DetailTable({data, title}) {
+export default function DetailTable({data, title, redirect=null}) {
 
     const [page, setPage] = useState(0);
     // const [selected, setSelected] = useState([]);
@@ -46,23 +33,13 @@ export default function DetailTable({data, title}) {
     const tableHead = tableHeadLabels.map((value) => {
         return { id: value, label: value.replace(/([A-Z])/g, ' $1').trim(), alignRight:false }
     });
-    // const handleClick = (event, name) => {
-    //     const selectedIndex = selected.indexOf(name);
-    //     let newSelected = [];
-    //     if (selectedIndex === -1) {
-    //         newSelected = newSelected.concat(selected, name);
-    //     } else if (selectedIndex === 0) {
-    //         newSelected = newSelected.concat(selected.slice(1));
-    //     } else if (selectedIndex === selected.length - 1) {
-    //         newSelected = newSelected.concat(selected.slice(0, -1));
-    //     } else if (selectedIndex > 0) {
-    //         newSelected = newSelected.concat(
-    //             selected.slice(0, selectedIndex),
-    //             selected.slice(selectedIndex + 1)
-    //         );
-    //     }
-    //     setSelected(newSelected);
-    // };
+
+    // const location = useLocation();
+
+    const handleClick = (event, Id) => {
+        if (!redirect) return;
+        navigate(redirect+Id);
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -97,13 +74,14 @@ export default function DetailTable({data, title}) {
                                         .map((row) => {
                                             return (
                                                 <TableRow
+                                                    onClick={(event) => handleClick(event, row.Id)}
                                                     hover
                                                     key={row.Id}
                                                     tabIndex={-1}
                                                 >
                                                     {tableHeadLabels.map((label) => {
                                                         return (
-                                                            <TableCell align="left">{row[label]}</TableCell>
+                                                            <TableCell style={{cursor:'pointer'}} align="left">{row[label]}</TableCell>
                                                         );
                                                     })}
 

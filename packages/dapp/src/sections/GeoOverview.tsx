@@ -12,9 +12,6 @@ import PieChart from "./PieChart";
 import EvolutionChart from "./EvolutionChart";
 import DetailTable from "./detail/DetailTableMain";
 
-// import EvolutionChart from "./EvolutionChart";
-// import GeoRegionalDetail from "./GeoRegionalDetail";
-
 export default function GeoOverview() {
 
     const { lastUpdated, api } = usePolkawatchApi();
@@ -54,7 +51,7 @@ export default function GeoOverview() {
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.regionalDistributionDetail && (
-                        <DetailTable data={pwData.regionalDistributionDetail} title='Regional Distribution Detail'/>
+                        <DetailTable redirect='/geography/region/' data={pwData.regionalDistributionDetail} title='Regional Distribution Detail'/>
                     )}
                 </Grid>
             </Grid>

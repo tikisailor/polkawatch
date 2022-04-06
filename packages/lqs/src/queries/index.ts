@@ -9,6 +9,7 @@ import { AboutDataset } from './controller.distribuition.about.dataset';
 import { GeoRegionEvolution } from './controller.evolution.geo.region';
 import { AboutEraEvolution } from './controller.evolution.about.era';
 import { DataSetInventory } from './controller.inventory.about.dataset';
+import { Distribution } from './controller.distribuition';
 
 export default [
     GeoRegion,
@@ -21,5 +22,7 @@ export default [
     AboutEraEvolution,
 
     DataSetInventory,
+
+    Distribution,
 
 ];
