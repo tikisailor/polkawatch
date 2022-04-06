@@ -16,7 +16,6 @@ export class Distribution extends BaseController {
     constructor(protected queryService: IndexQueryService) {
         super(queryService);
     }
-    // /:regionId/:countryId/:networkId
     @Post('distribution/geo/:group_by')
     @ApiOperation({
         description: 'Get the distribution of DOT Rewards filtered by Region Country Network ValidatorGroup',
@@ -27,25 +26,17 @@ export class Distribution extends BaseController {
     async post(
         @Body() params: RewardDistributionQuery,
         @Param('group_by') group_by,
-            // @Param('countryId') countryId,
-            // @Param('networkId') networkId,
     ): Promise<Array<RewardsByRegion | RewardsByCountry | RewardsByNetworkProvider | RewardsByValidationGroup>> {
         return (await super.runQuery(
             params,
             ramda.curry(this.queryTemplate)(group_by) as QueryTemplate,
             ramda.curry(this.queryResponseTransformer)(group_by),
-            // this.queryResponseTransformer,
         )) as Array<RewardsByRegion>;
     }
 
     queryResponseTransformer(group_by, indexResponse): Array<RewardsByRegion | RewardsByCountry | RewardsByNetworkProvider | RewardsByValidationGroup> {
-        // console.log(indexResponse.body);
-        // console.log(group_by);
-
 
         const buckets = indexResponse.body.aggregations['polkawatch'].buckets as AggregatedIndexData;
-        console.log('BUCKETS', JSON.stringify(buckets));
-        console.log('BUCKETS', buckets);
 
         if (group_by === 'region') {
             return plainToInstance(RewardsByRegion, buckets, {
@@ -66,7 +57,6 @@ export class Distribution extends BaseController {
         }
 
         if (group_by === 'validator') {
-            console.log('validatooooor')
             return plainToInstance(RewardsByValidationGroup, buckets, {
                 excludeExtraneousValues: true,
             });
@@ -77,7 +67,6 @@ export class Distribution extends BaseController {
     queryTemplate(group_by, params: RewardDistributionQuery) {
         let field1;
         let field2;
-        console.log(group_by);
         if (group_by === 'region') {
             field1 = 'validator_country_group_code';
             field2 = 'validator_country_group_name';
