@@ -2,16 +2,16 @@ import * as React from 'react';
 import DashboardLayout from "../../layouts/dashboard";
 import Page from '../../components/Page';
 import { Container } from '@mui/material';
-import CountryOverview from "../../sections/detail/CountryOverview";
+import CountryNetworkOverview from "../../sections/detail/CountryNetworkOverview";
 
 
-export default function CountryDetail({countryId, networkId}) {
+export default function CountryNetworkDetail({networkId, countryId}) {
 
     return (
         <DashboardLayout>
-            <Page title={countryId}>
+            <Page title={networkId}>
                 <Container maxWidth="xl">
-                    <CountryOverview countryId={countryId} networkId={networkId}/>
+                    <CountryNetworkOverview networkId={networkId} countryId={countryId}/>
                 </Container>
             </Page>
         </DashboardLayout>

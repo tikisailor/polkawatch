@@ -40,7 +40,7 @@ export default function NetOverview() {
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.networkDistributionDetail && (
-                        <DetailTable data={pwData.networkDistributionDetail} title='Network Distribution Detail'/>
+                        <DetailTable redirect='/network/' data={pwData.networkDistributionDetail} title='Network Distribution Detail'/>
                     )}
                 </Grid>
             </Grid>

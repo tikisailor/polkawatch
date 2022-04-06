@@ -167,3 +167,24 @@ export class RegionDetail {
     })
         countryDistributionDetail: Array<RewardsByCountry>;
 }
+
+export class CountryDetail {
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topNetworkDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: RewardsByNetworkProvider,
+        isArray: true,
+    })
+        networkDistributionDetail: Array<RewardsByNetworkProvider>;
+}
+
+export class NetworkDetail {
+    @ApiProperty({
+        type: RewardsByValidationGroup,
+        isArray: true,
+    })
+        validatorDistributionDetail: Array<RewardsByValidationGroup>;
+}

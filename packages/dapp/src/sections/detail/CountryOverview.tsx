@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { Grid } from '@mui/material';
 
 import {
-    CountryDetail
+    CountryDetail,
+    NetworkDetail,
 } from '@ddp/client';
 import usePolkawatchApi from "../../hooks/usePolkawatchApi";
 
@@ -17,6 +18,7 @@ export default function CountryOverview({countryId}) {
     const { lastUpdated, api } = usePolkawatchApi();
 
     const [pwData, setPwData] = useState({} as CountryDetail);
+
 
     useEffect(() => {
         api.ddpIpfsCountryDetail({
@@ -39,10 +41,15 @@ export default function CountryOverview({countryId}) {
                     )}
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
-                    {pwData.countryDistributionDetail && (
-                        <DetailTable redirect='/geography/country/' data={pwData.networkDistributionDetail} title='Country Distribution Detail'/>
+                    {pwData.networkDistributionDetail && (
+                        <DetailTable redirect='/geography/country-network/' data={pwData.networkDistributionDetail} title='Network Distribution Detail'/>
                     )}
                 </Grid>
+                {/*<Grid item xs={12} md={12} lg={12}>*/}
+                {/*    {pwData2.validatorDistributionDetail && (*/}
+                {/*        <DetailTable redirect='' data={pwData2.validatorDistributionDetail} title='Validator Distribution Detail'/>*/}
+                {/*    )}*/}
+                {/*</Grid>*/}
             </Grid>
         </>
     );

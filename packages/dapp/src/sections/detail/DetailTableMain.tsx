@@ -19,13 +19,13 @@ import {
 import Page from '../../components/Page';
 import DetailTableHead from './DetailTableHead';
 import {navigate} from 'gatsby';
+import {useLocation} from "@reach/router";
 // import { useLocation } from '@reach/router';
 
 
 export default function DetailTable({data, title, redirect=null}) {
 
     const [page, setPage] = useState(0);
-    // const [selected, setSelected] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const tableHeadLabels = Object.keys(data[0])
@@ -34,10 +34,18 @@ export default function DetailTable({data, title, redirect=null}) {
         return { id: value, label: value.replace(/([A-Z])/g, ' $1').trim(), alignRight:false }
     });
 
-    // const location = useLocation();
+    const location = useLocation();
 
-    const handleClick = (event, Id) => {
+
+
+    const handleClick = (event, Id, row) => {
+        const path = location.pathname.split('/')
+        const slice = path.slice(1, path.length -1);
         if (!redirect) return;
+        if((slice[0] === 'geography') && (slice[1] === 'country')) {
+            navigate(redirect+Id+'/'+path[path.length -1]);
+            return;
+        }
         navigate(redirect+Id);
     }
 
@@ -55,7 +63,6 @@ export default function DetailTable({data, title, redirect=null}) {
     return (
         <Box sx={{ p: 3, pb: 1 }} dir="ltr">
             <Page title="User | Minimal-UI">
-                {/*<Container>*/}
                     <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                         <Typography variant="h4" gutterBottom>
                             {title}
@@ -74,7 +81,7 @@ export default function DetailTable({data, title, redirect=null}) {
                                         .map((row) => {
                                             return (
                                                 <TableRow
-                                                    onClick={(event) => handleClick(event, row.Id)}
+                                                    onClick={(event) => handleClick(event, row.Id, row)}
                                                     hover
                                                     key={row.Id}
                                                     tabIndex={-1}
@@ -107,7 +114,6 @@ export default function DetailTable({data, title, redirect=null}) {
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         />
                     </Card>
-                {/*</Container>*/}
             </Page>
         </Box>
     );

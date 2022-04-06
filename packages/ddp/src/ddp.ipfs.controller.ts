@@ -8,7 +8,7 @@ import { DdpLqsService, InventoryRecord } from './ddp.lqs.service';
 import { DdpTransformationService } from './ddp.transformations.service';
 import {
     AboutData,
-    GeoRegionOverview, NetworkOverview, OperatorOverview, RegionDetail,
+    GeoRegionOverview, NetworkOverview, OperatorOverview, RegionDetail, CountryDetail, NetworkDetail,
 } from './ddp.types';
 import { InventoryQuery } from '@lqs/client';
 
@@ -273,6 +273,106 @@ export class DdpIpfs {
         } as RegionDetail;
     }
 
+    /**
+     * Country Detail View
+     */
+    @Get('/geography/country/:country/:last_eras.json')
+    @ApiOkResponse({ description: 'Data bundle of country detail data', type: CountryDetail, isArray: false })
+    @ApiParam({
+        description: 'Country ID to request',
+        name:'country',
+    })
+    @ApiParam({
+        description: 'Available set of eras to query',
+        type: Number,
+        name:'last_eras',
+        enum: [10, 30, 60],
+    })
+    async countryDetail(
+        @Param('country') country,
+        @Param('last_eras') last_eras:number,
+    ): Promise<CountryDetail> {
+        const api = this.lqs.getAPI();
+
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 200 });
+        const detailQuery = { CountryFilter: country, ... commonParams };
+
+        return {
+            topNetworkDistributionChart: this.transformer.toTreemapChart((await api.network.networkProviderPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'NetworkProvider'),
+            networkDistributionDetail: (await api.network.networkProviderPost({
+                rewardDistributionQuery: detailQuery,
+            })).data,
+        } as CountryDetail;
+    }
+
+    /**
+     * Network Detail View
+     */
+    @Get('/network/:network/:last_eras.json')
+    @ApiOkResponse({ description: 'Data bundle of network detail data', type: NetworkDetail, isArray: false })
+    @ApiParam({
+        description: 'Network ID to request',
+        name:'network',
+    })
+    @ApiParam({
+        description: 'Available set of eras to query',
+        type: Number,
+        name:'last_eras',
+        enum: [10, 30, 60],
+    })
+    async networkDetail(
+        @Param('network') network,
+        @Param('last_eras') last_eras:number,
+    ): Promise<NetworkDetail> {
+        const api = this.lqs.getAPI();
+
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 200 });
+        const detailQuery = { NetworkFilter: network, ... commonParams };
+
+        return {
+            validatorDistributionDetail: (await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
+            })).data,
+        } as NetworkDetail;
+    }
+
+    /**
+     * Network by Coutry Detail View
+     */
+    @Get('/geography/country/:country/network/:network/:last_eras.json')
+    @ApiOkResponse({ description: 'Data bundle of network detail per country', type: NetworkDetail, isArray: false })
+    @ApiParam({
+        description: 'Network ID to request',
+        name:'network',
+    })
+    @ApiParam({
+        description: 'Country ID to request',
+        name:'country',
+    })
+    @ApiParam({
+        description: 'Available set of eras to query',
+        type: Number,
+        name:'last_eras',
+        enum: [10, 30, 60],
+    })
+    async countryNetworkDetail(
+        @Param('network') network,
+        @Param('country') country,
+        @Param('last_eras') last_eras:number,
+    ): Promise<NetworkDetail> {
+        const api = this.lqs.getAPI();
+
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 200 });
+        const detailQuery = { NetworkFilter: network, CountryFilter: country, ... commonParams };
+
+        return {
+            validatorDistributionDetail: (await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
+            })).data,
+        } as NetworkDetail;
+    }
 
     /**
      * Helper method to fill up convert shared request parameters to LQS request parameters
