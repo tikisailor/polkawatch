@@ -90,7 +90,7 @@ export class DdpIpfs {
     @ApiParam({
         description: 'The record type to get Identifiers from',
         name:'record_type',
-        enum:['region', 'country', 'network', 'validator_group', 'validator', 'nominator'],
+        enum:['region', 'country', 'network', 'operator', 'validator', 'nominator'],
     })
     async aboutInventory(
         @Param('record_type') record_type,
@@ -102,6 +102,9 @@ export class DdpIpfs {
             validation_type: 'public',
             top_results: 25000,
         });
+
+        // different nomenclature in LQS :(
+        if(record_type=="operator") record_type="validator_group";
 
         const query:InventoryQuery = {
             RecordType: record_type,
