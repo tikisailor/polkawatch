@@ -177,21 +177,15 @@ export class CountryDetail {
         topNetworkDistributionChart: Array<TreemapSegment>;
 
     @ApiProperty({
-        type: RewardsByNetworkProvider,
-        isArray: true,
-    })
-        networkDistributionDetail: Array<RewardsByNetworkProvider>;
-
-    @ApiProperty({
         type: TreemapSegment,
     })
         topOperatorDistributionChart: Array<TreemapSegment>;
 
     @ApiProperty({
-        type: RewardsByNetworkProvider,
+        type: RewardsByValidationGroup,
         isArray: true,
     })
-        operatorDistributionDetail: Array<RewardsByNetworkProvider>;
+        operatorDistributionDetail: Array<RewardsByValidationGroup>;
 }
 
 export class NetworkDetail {

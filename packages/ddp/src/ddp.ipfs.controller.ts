@@ -322,7 +322,10 @@ export class DdpIpfs {
             topNetworkDistributionChart: this.transformer.toTreemapChart((await api.network.networkProviderPost({
                 rewardDistributionQuery: detailQuery,
             })).data, 'NetworkProvider'),
-            networkDistributionDetail: (await api.network.networkProviderPost({
+            topOperatorDistributionChart: this.transformer.toTreemapChart((await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'ValidationGroup'),
+            operatorDistributionDetail: (await api.validator.validatorGroupPost({
                 rewardDistributionQuery: detailQuery,
             })).data,
         } as CountryDetail;
