@@ -34,6 +34,7 @@ export type QueryResponseRecord = RewardsByRegion |
     RewardsByCountry |
     RewardsByNetworkProvider |
     RewardsByValidationGroup |
+    RewardsByValidationNode |
     AboutData |
     EntitiesEraEvolution |
     RewardEraEvolution |
@@ -235,6 +236,50 @@ export class RewardsByValidationGroup extends PickType(RewardAggregations, ['Dot
     @Expose({ name: 'median_nomination' })
         DotMedianNomination: number;
 
+}
+
+export class RewardsByValidationNode extends PickType(RewardAggregations, ['DotRewards', 'Regions', 'Countries', 'Networks', 'Nominators'] as const) {
+
+    @ApiProperty({
+        description: 'The id for the validator',
+    })
+    @Expose({ name: 'key' })
+        Id: string;
+
+    @ApiProperty({
+        description: 'The validator name',
+    })
+    @Transform(({ value }) => value.hits.hits['0'].fields.validator_name['0'], { toClassOnly: true })
+    @Expose({ name: 'name' })
+        Validator: string;
+
+    @ApiProperty({
+        description: 'The last region recorded',
+    })
+    @Transform(({ value }) => value.hits.hits['0'].fields.validator_country_group_name['0'], { toClassOnly: true })
+    @Expose({ name: 'last_region' })
+        LastRegion: string;
+
+    @ApiProperty({
+        description: 'The last country recorded',
+    })
+    @Transform(({ value }) => value.hits.hits['0'].fields.validator_country_name['0'], { toClassOnly: true })
+    @Expose({ name: 'last_country' })
+        LastCountry: string;
+
+    @ApiProperty({
+        description: 'The last country recorded',
+    })
+    @Transform(({ value }) => value.hits.hits['0'].fields.validator_asn_name['0'], { toClassOnly: true })
+    @Expose({ name: 'last_network' })
+        LastNetwork: string;
+
+    @ApiProperty({
+        description: 'The median nomination in Dots for this validator',
+    })
+    @Transform(({ value }) => value.values['50.0'], { toClassOnly: true })
+    @Expose({ name: 'median_nomination' })
+        DotMedianNomination: number;
 }
 
 /**
