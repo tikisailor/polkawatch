@@ -10,7 +10,11 @@ import {
     RewardsByNetworkProvider,
     RewardsByValidationGroup,
 } from '@lqs/client';
-import { DistributionChart, EvolutionChart, TreemapChart } from './ddp.types';
+import {
+    DistributionChart,
+    EvolutionChart,
+    TreemapChart,
+} from './ddp.types';
 
 const range = (start, end) => {
     if(start === end) return [start];

@@ -10,9 +10,11 @@ export {
 } from '@lqs/client';
 
 import {
+    RewardsByRegion,
     RewardsByCountry,
     RewardsByNetworkProvider,
-    RewardsByRegion, RewardsByValidationGroup,
+    RewardsByValidationGroup,
+    RewardsByValidationNode,
 } from '@lqs/types';
 
 export class DistributionChart {
@@ -179,12 +181,55 @@ export class CountryDetail {
         isArray: true,
     })
         networkDistributionDetail: Array<RewardsByNetworkProvider>;
+
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topOperatorDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: RewardsByNetworkProvider,
+        isArray: true,
+    })
+        operatorDistributionDetail: Array<RewardsByNetworkProvider>;
 }
 
 export class NetworkDetail {
+
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topCountryDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topOperatorDistributionChart: Array<TreemapSegment>;
+
     @ApiProperty({
         type: RewardsByValidationGroup,
         isArray: true,
     })
-        validatorDistributionDetail: Array<RewardsByValidationGroup>;
+        operatorDistributionDetail: Array<RewardsByValidationGroup>;
+
+}
+
+export class OperatorDetail {
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topCountryDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topNetworkDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: RewardsByValidationNode,
+        isArray: true,
+    })
+        nodeDistributionDetail: Array<RewardsByValidationNode>;
+
 }

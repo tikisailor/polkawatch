@@ -4,11 +4,20 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
-import { DdpLqsService, InventoryRecord } from './ddp.lqs.service';
+import {
+    DdpLqsService,
+    InventoryRecord,
+} from './ddp.lqs.service';
 import { DdpTransformationService } from './ddp.transformations.service';
 import {
     AboutData,
-    GeoRegionOverview, NetworkOverview, OperatorOverview, RegionDetail, CountryDetail, NetworkDetail,
+    GeoRegionOverview,
+    NetworkOverview,
+    OperatorOverview,
+    RegionDetail,
+    CountryDetail,
+    NetworkDetail,
+    OperatorDetail,
 } from './ddp.types';
 import { InventoryQuery } from '@lqs/client';
 
@@ -242,7 +251,7 @@ export class DdpIpfs {
     /**
      * Region Detail View
      */
-    @Get('/geography/region/:region/:last_eras.json')
+    @Get('/geography/region/:region/:validation_type/:last_eras.json')
     @ApiOkResponse({ description: 'Data bundle of region detail data', type: RegionDetail, isArray: false })
     @ApiParam({
         description: 'Region ID to request',
@@ -254,13 +263,19 @@ export class DdpIpfs {
         name:'last_eras',
         enum: [10, 30, 60],
     })
+    @ApiParam({
+        description: 'Limit to Staking Rewards of Public Validators with Identity or include ALL rewards and commissions from All validators',
+        name:'validation_type',
+        enum:['public', 'all'],
+    })
     async regionDetail(
         @Param('region') region,
         @Param('last_eras') last_eras:number,
+        @Param('validation_type') validation_type,
     ): Promise<RegionDetail> {
         const api = this.lqs.getAPI();
 
-        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 200 });
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:validation_type, top_results: 200 });
         const detailQuery = { RegionFilter: region, ... commonParams };
 
         return {
@@ -276,7 +291,7 @@ export class DdpIpfs {
     /**
      * Country Detail View
      */
-    @Get('/geography/country/:country/:last_eras.json')
+    @Get('/geography/country/:country/:validation_type/:last_eras.json')
     @ApiOkResponse({ description: 'Data bundle of country detail data', type: CountryDetail, isArray: false })
     @ApiParam({
         description: 'Country ID to request',
@@ -288,13 +303,19 @@ export class DdpIpfs {
         name:'last_eras',
         enum: [10, 30, 60],
     })
+    @ApiParam({
+        description: 'Limit to Staking Rewards of Public Validators with Identity or include ALL rewards and commissions from All validators',
+        name:'validation_type',
+        enum:['public', 'all'],
+    })
     async countryDetail(
         @Param('country') country,
         @Param('last_eras') last_eras:number,
+        @Param('validation_type') validation_type,
     ): Promise<CountryDetail> {
         const api = this.lqs.getAPI();
 
-        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 200 });
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:validation_type, top_results: 200 });
         const detailQuery = { CountryFilter: country, ... commonParams };
 
         return {
@@ -310,8 +331,8 @@ export class DdpIpfs {
     /**
      * Network Detail View
      */
-    @Get('/network/:network/:last_eras.json')
-    @ApiOkResponse({ description: 'Data bundle of network detail data', type: NetworkDetail, isArray: false })
+    @Get('/network/:network/:validation_type/:last_eras.json')
+    @ApiOkResponse({ description: 'Data bundle of country detail data', type: NetworkDetail, isArray: false })
     @ApiParam({
         description: 'Network ID to request',
         name:'network',
@@ -322,34 +343,42 @@ export class DdpIpfs {
         name:'last_eras',
         enum: [10, 30, 60],
     })
+    @ApiParam({
+        description: 'Limit to Staking Rewards of Public Validators with Identity or include ALL rewards and commissions from All validators',
+        name:'validation_type',
+        enum:['public', 'all'],
+    })
     async networkDetail(
         @Param('network') network,
         @Param('last_eras') last_eras:number,
+        @Param('validation_type') validation_type,
     ): Promise<NetworkDetail> {
         const api = this.lqs.getAPI();
 
-        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 200 });
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:validation_type, top_results: 200 });
         const detailQuery = { NetworkFilter: network, ... commonParams };
 
         return {
-            validatorDistributionDetail: (await api.validator.validatorGroupPost({
+            topCountryDistributionChart: this.transformer.toTreemapChart((await api.geography.geoCountryPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'Country'),
+            topOperatorDistributionChart: this.transformer.toTreemapChart((await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'ValidationGroup'),
+            operatorDistributionDetail: (await api.validator.validatorGroupPost({
                 rewardDistributionQuery: detailQuery,
             })).data,
         } as NetworkDetail;
     }
 
     /**
-     * Network by Coutry Detail View
+     * Operator Detail View
      */
-    @Get('/geography/country/:country/network/:network/:last_eras.json')
-    @ApiOkResponse({ description: 'Data bundle of network detail per country', type: NetworkDetail, isArray: false })
+    @Get('/operator/:operator/:validation_type/:last_eras.json')
+    @ApiOkResponse({ description: 'Data bundle of network detail data', type: OperatorDetail, isArray: false })
     @ApiParam({
-        description: 'Network ID to request',
-        name:'network',
-    })
-    @ApiParam({
-        description: 'Country ID to request',
-        name:'country',
+        description: 'Operator ID to request',
+        name:'operator',
     })
     @ApiParam({
         description: 'Available set of eras to query',
@@ -357,22 +386,34 @@ export class DdpIpfs {
         name:'last_eras',
         enum: [10, 30, 60],
     })
-    async countryNetworkDetail(
-        @Param('network') network,
-        @Param('country') country,
+    @ApiParam({
+        description: 'Limit to Staking Rewards of Public Validators with Identity or include ALL rewards and commissions from All validators',
+        name:'validation_type',
+        enum:['public', 'all'],
+    })
+    async operatorDetail(
+        @Param('operator') operator,
         @Param('last_eras') last_eras:number,
-    ): Promise<NetworkDetail> {
+        @Param('validation_type') validation_type,
+    ): Promise<OperatorDetail> {
         const api = this.lqs.getAPI();
 
-        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 200 });
-        const detailQuery = { NetworkFilter: network, CountryFilter: country, ... commonParams };
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:validation_type, top_results: 50 });
+        const detailQuery = { ValidatorGroupFilter: operator, ... commonParams };
 
         return {
-            validatorDistributionDetail: (await api.validator.validatorGroupPost({
+            topCountryDistributionChart: this.transformer.toDistributionChart((await api.geography.geoCountryPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'Country'),
+            topNetworkDistributionChart: this.transformer.toDistributionChart((await api.network.networkProviderPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'NetworkProvider'),
+            nodeDistributionDetail: (await api.validator.validatorNodePost({
                 rewardDistributionQuery: detailQuery,
             })).data,
-        } as NetworkDetail;
+        } as OperatorDetail;
     }
+
 
     /**
      * Helper method to fill up convert shared request parameters to LQS request parameters
