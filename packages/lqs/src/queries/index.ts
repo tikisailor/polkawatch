@@ -9,12 +9,14 @@ import { AboutDataset } from './controller.distribuition.about.dataset';
 import { GeoRegionEvolution } from './controller.evolution.geo.region';
 import { AboutEraEvolution } from './controller.evolution.about.era';
 import { DataSetInventory } from './controller.inventory.about.dataset';
+import { ValidatorNode } from './controller.distribuition.validator.node';
 
 export default [
     GeoRegion,
     GeoCountry,
     NetworkProvider,
     ValidatorGroup,
+    ValidatorNode,
     AboutDataset,
 
     GeoRegionEvolution,

@@ -51,7 +51,7 @@ let InventoryCache;
 
 async function PopulateInventoryCache(){
     let cache={}
-    for (const recordType of ['region', 'country', 'network', 'validator_group', 'validator', 'nominator']) {
+    for (const recordType of ['region', 'country', 'network', 'operator', 'validator', 'nominator']) {
         log(`Populating inventory for ${recordType}`);
         cache[recordType] = await getInventory(recordType);
     }
@@ -161,6 +161,8 @@ async function clean(){
  */
 async function build(){
 
+    let count=0;
+
     // Cache the Inventory
     InventoryCache= await PopulateInventoryCache();
 
@@ -168,10 +170,11 @@ async function build(){
     let promise=Promise.resolve();
     getApiEndpoints().forEach(endpoint => {
         getEndpointFileSet(endpoint).forEach(async file =>{
+            count ++;
             promise=promise.then(r=>dumpFile(file));
         });
     });
-
+    log(`IPFS File set is ${count}`);
     return promise;
 }
 

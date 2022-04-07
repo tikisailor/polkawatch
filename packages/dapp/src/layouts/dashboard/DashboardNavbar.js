@@ -1,19 +1,19 @@
 import * as React from 'react';
 
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import menu2Fill from '@iconify/icons-eva/menu-2-fill';
+// import { Icon } from '@iconify/react';
+// import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Button } from '@mui/material';
 // components
-import { MHidden } from '../../components/@material-extend';
+// import { MHidden } from '../../components/@material-extend';
 //
-import Searchbar from './Searchbar';
-import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
-import NotificationsPopover from './NotificationsPopover';
-import WalletConnect from "../../sections/detail/WalletConnect";
+// import Searchbar from './Searchbar';
+// import AccountPopover from './AccountPopover';
+// import LanguagePopover from './LanguagePopover';
+// import NotificationsPopover from './NotificationsPopover';
+// import WalletConnect from "../../sections/detail/WalletConnect";
 
 // ----------------------------------------------------------------------
 

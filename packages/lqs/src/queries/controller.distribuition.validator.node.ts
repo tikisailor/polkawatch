@@ -5,35 +5,35 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '../lqs.controller';
 import { AggregatedIndexData, IndexQueryService, QueryTemplate } from '../lqs.index.service';
-import { RewardsByValidationGroup } from './query.responses.dtos';
+import { RewardsByValidationNode } from './query.responses.dtos';
 import { RewardDistributionQuery } from './query.parameters.dtos';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('validator')
 @Controller()
-export class ValidatorGroup extends BaseController {
+export class ValidatorNode extends BaseController {
     constructor(protected queryService: IndexQueryService) {
         super(queryService);
     }
 
-    @Post('distribution/validator/group')
+    @Post('distribution/validator/node')
     @ApiOperation({
-        description: 'Get the distribution of DOT Rewards per Validator Group',
+        description: 'Get the distribution of DOT Rewards per Validator Node',
     })
-    @ApiOkResponse({ description: 'The distribution of DOT Rewards per Validator Group', type: RewardsByValidationGroup, isArray: true })
+    @ApiOkResponse({ description: 'The distribution of DOT Rewards per Validator Node', type: RewardsByValidationNode, isArray: true })
     @HttpCode(HttpStatus.OK)
     async post(
-        @Body() params: RewardDistributionQuery): Promise<Array<RewardsByValidationGroup>> {
+        @Body() params: RewardDistributionQuery): Promise<Array<RewardsByValidationNode>> {
         return (await super.runQuery(
             params,
             this.queryTemplate as QueryTemplate,
             this.queryResponseTransformer,
-        )) as Array<RewardsByValidationGroup>;
+        )) as Array<RewardsByValidationNode>;
     }
 
-    queryResponseTransformer(indexResponse): Array<RewardsByValidationGroup> {
+    queryResponseTransformer(indexResponse): Array<RewardsByValidationNode> {
         const buckets = indexResponse.body.aggregations['polkawatch'].buckets as AggregatedIndexData;
-        return plainToInstance(RewardsByValidationGroup, buckets, {
+        return plainToInstance(RewardsByValidationNode, buckets, {
             excludeExtraneousValues: true,
         });
     }
@@ -43,7 +43,7 @@ export class ValidatorGroup extends BaseController {
             'aggs': {
                 polkawatch: {
                     'terms': {
-                        'field': 'validator_parent',
+                        'field': 'validator',
                         'order': {
                             reward: 'desc',
                         },
@@ -54,7 +54,61 @@ export class ValidatorGroup extends BaseController {
                             'top_hits': {
                                 'fields': [
                                     {
-                                        'field': 'validator_parent_name',
+                                        'field': 'validator_name',
+                                    },
+                                ],
+                                '_source': false,
+                                'size': 1,
+                                'sort': [
+                                    {
+                                        'date': {
+                                            'order': 'desc',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        last_region: {
+                            'top_hits': {
+                                'fields': [
+                                    {
+                                        'field': 'validator_country_group_name',
+                                    },
+                                ],
+                                '_source': false,
+                                'size': 1,
+                                'sort': [
+                                    {
+                                        'date': {
+                                            'order': 'desc',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        last_country: {
+                            'top_hits': {
+                                'fields': [
+                                    {
+                                        'field': 'validator_country_name',
+                                    },
+                                ],
+                                '_source': false,
+                                'size': 1,
+                                'sort': [
+                                    {
+                                        'date': {
+                                            'order': 'desc',
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                        last_network: {
+                            'top_hits': {
+                                'fields': [
+                                    {
+                                        'field': 'validator_asn_name',
                                     },
                                 ],
                                 '_source': false,

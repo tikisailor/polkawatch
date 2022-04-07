@@ -5,23 +5,25 @@ import { useEffect, useState } from "react";
 import { Grid } from '@mui/material';
 
 import {
-    NetworkOverview
+    CountryDetail,
+    NetworkDetail,
 } from '@ddp/client';
-import usePolkawatchApi from "../hooks/usePolkawatchApi";
+import usePolkawatchApi from "../../hooks/usePolkawatchApi";
 
-import TreeMap from "./TreeMap";
-import DetailTable from "./detail/DetailTableMain";
+import TreeMap from "../TreeMap";
+import DetailTable from "./DetailTableMain";
 
-export default function NetOverview() {
+export default function CountryOverview({countryId}) {
 
     const { lastUpdated, api } = usePolkawatchApi();
 
-    const [pwData, setPwData] = useState({} as NetworkOverview);
+    const [pwData, setPwData] = useState({} as CountryDetail);
+
 
     useEffect(() => {
-        api.ddpIpfsNetworkOverview({
+        api.ddpIpfsCountryDetail({
             lastEras: 60,
-            validationType: 'public',
+            country: countryId,
         }).then(response => setPwData(response.data));
         return () => {
         };
@@ -40,9 +42,14 @@ export default function NetOverview() {
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.networkDistributionDetail && (
-                        <DetailTable redirect='/network/' data={pwData.networkDistributionDetail} title='Network Distribution Detail'/>
+                        <DetailTable redirect='/geography/country-network/' data={pwData.networkDistributionDetail} title='Network Distribution Detail'/>
                     )}
                 </Grid>
+                {/*<Grid item xs={12} md={12} lg={12}>*/}
+                {/*    {pwData2.validatorDistributionDetail && (*/}
+                {/*        <DetailTable redirect='' data={pwData2.validatorDistributionDetail} title='Validator Distribution Detail'/>*/}
+                {/*    )}*/}
+                {/*</Grid>*/}
             </Grid>
         </>
     );
