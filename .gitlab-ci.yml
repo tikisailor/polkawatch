@@ -63,7 +63,6 @@ polkawatch docker image deployment:
   services:
     - docker:19.03.12-dind
   before_script:
-    # Setup Git for Push
     - apk add --no-cache docker-cli
   script:
     - export DOCKER_HOST="tcp://docker:2375"
