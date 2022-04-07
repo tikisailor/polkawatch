@@ -104,7 +104,7 @@ export class DdpIpfs {
         });
 
         // different nomenclature in LQS :(
-        if(record_type=="operator") record_type="validator_group";
+        if(record_type == 'operator') record_type = 'validator_group';
 
         const query:InventoryQuery = {
             RecordType: record_type,
