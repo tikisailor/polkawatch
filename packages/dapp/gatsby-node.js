@@ -23,7 +23,7 @@ exports.createPages = ({ graphql, actions }) => {
 
     createPage({
         path: `/operator/:operatorId/:operatorName`,
-        matchPath: `/operator/:operatorId/operatorName`,
+        matchPath: `/operator/:operatorId/:operatorName`,
         component: require.resolve('./src/pages/detail/operator.tsx'),
     })
 
