@@ -11,6 +11,7 @@ import usePolkawatchApi from "../hooks/usePolkawatchApi";
 import PieChart from "./PieChart";
 import EvolutionChart from "./EvolutionChart";
 import DetailTable from "./detail/DetailTableMain";
+import {RewardDistributionDetailTable} from "../components/RewardDistributionDetailTable";
 
 export default function GeoOverview() {
 
@@ -51,7 +52,11 @@ export default function GeoOverview() {
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.regionalDistributionDetail && (
-                        <DetailTable redirect='/geography/region/' data={pwData.regionalDistributionDetail} title='Regional Distribution Detail'/>
+                        <RewardDistributionDetailTable
+                            rowUri={row=>`/geography/region/${row.Id}/${encodeURI(row.Region)}`}
+                            tableData={pwData.regionalDistributionDetail}
+                            title='Regional Distribution Detail'
+                        />
                     )}
                 </Grid>
             </Grid>
