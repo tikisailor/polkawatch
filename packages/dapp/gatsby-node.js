@@ -4,34 +4,28 @@ exports.createPages = ({ graphql, actions }) => {
     const { createPage } = actions;
 
     createPage({
-        path: `/geography/region/:regionId`,
-        matchPath: `/geography/region/:regionId`,
+        path: `/geography/region/:regionId/:regionName`,
+        matchPath: `/geography/region/:regionId/:regionName`,
         component: require.resolve('./src/pages/detail/region.tsx'),
     })
 
     createPage({
-        path: `/geography/country/:countryId`,
-        matchPath: `/geography/country/:countryId/`,
+        path: `/geography/country/:countryId/:countryName`,
+        matchPath: `/geography/country/:countryId/:countryName`,
         component: require.resolve('./src/pages/detail/country.tsx'),
     })
 
     createPage({
-        path: `/geography/country-network/:networkId/:countryId`,
-        matchPath: `/geography/country-network/:networkId/:countryId`,
-        component: require.resolve('./src/pages/detail/country-network.tsx'),
-    })
-
-    createPage({
-        path: `/network/:networkId`,
-        matchPath: `/network/:networkId`,
+        path: `/network/:networkId/:networkName`,
+        matchPath: `/network/:networkId/:networkName`,
         component: require.resolve('./src/pages/detail/network.tsx'),
     })
 
-    // createPage({
-    //     path: `/validator/:validatorId`,
-    //     matchPath: `/validator/:validatorId`,
-    //     component: require.resolve('./src/pages/detail/validator.tsx'),
-    // })
+    createPage({
+        path: `/operator/:operatorId/:operatorName`,
+        matchPath: `/operator/:operatorId/operatorName`,
+        component: require.resolve('./src/pages/detail/operator.tsx'),
+    })
 
     const { createRedirect } = actions;
     createRedirect({

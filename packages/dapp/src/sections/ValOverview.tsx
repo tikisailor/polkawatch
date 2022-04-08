@@ -11,7 +11,7 @@ import {
 import usePolkawatchApi from "../hooks/usePolkawatchApi";
 
 import TreeMap from "./TreeMap";
-import DetailTable from "./detail/DetailTableMain";
+import {RewardDistributionDetailTable} from "../components/RewardDistributionDetailTable";
 
 
 
@@ -36,14 +36,18 @@ export default function ValOverview() {
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.topOperatorDistributionChart && (
                         <TreeMap
-                            title={pwData.topOperatorDistributionChart[0].name}
+                            title='Operator Distribution Overview'
                             series={pwData.topOperatorDistributionChart}
                         />
                     )}
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.operatorDistributionDetail && (
-                        <DetailTable data={pwData.operatorDistributionDetail} title='Validator Distribution Detail'/>
+                        <RewardDistributionDetailTable
+                            rowUri={row=>`/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
+                            tableData={pwData.operatorDistributionDetail}
+                            title='Operator Distribution Detail'
+                        />
                     )}
                 </Grid>
             </Grid>

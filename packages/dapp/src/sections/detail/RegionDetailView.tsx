@@ -10,9 +10,9 @@ import {
 import usePolkawatchApi from "../../hooks/usePolkawatchApi";
 
 import TreeMap from "../TreeMap";
-import DetailTable from "./DetailTableMain";
+import {RewardDistributionDetailTable} from "../../components/RewardDistributionDetailTable";
 
-export default function RegionOverview({regionId}) {
+export default function RegionDetailView({regionId, regionName}) {
 
     const { lastUpdated, api } = usePolkawatchApi();
 
@@ -22,6 +22,7 @@ export default function RegionOverview({regionId}) {
         api.ddpIpfsRegionDetail({
             lastEras: 60,
             region: regionId,
+            validationType: 'public',
         }).then(response => setPwData(response.data));
         return () => {
         };
@@ -33,14 +34,18 @@ export default function RegionOverview({regionId}) {
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.topCountryDistributionChart && (
                         <TreeMap
-                            title={pwData.topCountryDistributionChart[0].name}
+                            title={`Reward distribution in ${decodeURI(regionName)}`}
                             series={pwData.topCountryDistributionChart}
                         />
                     )}
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.countryDistributionDetail && (
-                        <DetailTable redirect='/geography/country/' data={pwData.countryDistributionDetail} title='Regional Distribution Detail'/>
+                        <RewardDistributionDetailTable
+                            rowUri={row=>`/geography/country/${row.Id}/${encodeURI(row.Country)}`}
+                            tableData={pwData.countryDistributionDetail}
+                            title={`Reward distribution in ${decodeURI(regionName)}`}
+                        />
                     )}
                 </Grid>
             </Grid>

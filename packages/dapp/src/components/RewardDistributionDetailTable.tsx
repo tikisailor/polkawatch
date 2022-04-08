@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Expose } from "class-transformer";
 import DetailTable from "./DetailTable";
 
-class RegionDistributionRow  {
+class RewardDistributionRow  {
 
   @Expose()
   public Region: string
@@ -77,11 +77,11 @@ export function RewardDistributionDetailTable(
     tableData,
     minTableWidth=880,
     rowsPerPageOptions=[10,25,50],
-    rowUri=null
+    rowUri=null,
   }){
   return (
     <DetailTable
-      RowClass={RegionDistributionRow}
+      RowClass={RewardDistributionRow}
       title={title}
       tableData={tableData}
       minTableWidth={minTableWidth}

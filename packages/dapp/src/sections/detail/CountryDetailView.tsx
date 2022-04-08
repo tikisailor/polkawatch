@@ -6,24 +6,23 @@ import { Grid } from '@mui/material';
 
 import {
     CountryDetail,
-    NetworkDetail,
 } from '@ddp/client';
 import usePolkawatchApi from "../../hooks/usePolkawatchApi";
 
 import TreeMap from "../TreeMap";
-import DetailTable from "./DetailTableMain";
+import {RewardDistributionDetailTable} from "../../components/RewardDistributionDetailTable";
 
-export default function CountryOverview({countryId}) {
+export default function CountryDetailView({countryId, countryName}) {
 
     const { lastUpdated, api } = usePolkawatchApi();
 
     const [pwData, setPwData] = useState({} as CountryDetail);
 
-
     useEffect(() => {
         api.ddpIpfsCountryDetail({
             lastEras: 60,
             country: countryId,
+            validationType: 'public',
         }).then(response => setPwData(response.data));
         return () => {
         };
@@ -35,21 +34,28 @@ export default function CountryOverview({countryId}) {
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.topNetworkDistributionChart && (
                         <TreeMap
-                            title={pwData.topNetworkDistributionChart[0].name}
+                            title={`Reward distribution by network in ${decodeURI(countryName)}`}
                             series={pwData.topNetworkDistributionChart}
                         />
                     )}
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
-                    {pwData.networkDistributionDetail && (
-                        <DetailTable redirect='/geography/country-network/' data={pwData.networkDistributionDetail} title='Network Distribution Detail'/>
+                    {pwData.topOperatorDistributionChart && (
+                        <TreeMap
+                            title={`Reward distribution by operator in ${decodeURI(countryName)}`}
+                            series={pwData.topOperatorDistributionChart}
+                        />
                     )}
                 </Grid>
-                {/*<Grid item xs={12} md={12} lg={12}>*/}
-                {/*    {pwData2.validatorDistributionDetail && (*/}
-                {/*        <DetailTable redirect='' data={pwData2.validatorDistributionDetail} title='Validator Distribution Detail'/>*/}
-                {/*    )}*/}
-                {/*</Grid>*/}
+                <Grid item xs={12} md={12} lg={12}>
+                    {pwData.operatorDistributionDetail && (
+                        <RewardDistributionDetailTable
+                            rowUri={null}
+                            tableData={pwData.operatorDistributionDetail}
+                            title={`Reward distribution by operator in ${decodeURI(countryName)}`}
+                        />
+                    )}
+                </Grid>
             </Grid>
         </>
     );

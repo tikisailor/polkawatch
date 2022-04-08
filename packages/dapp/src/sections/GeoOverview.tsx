@@ -10,7 +10,6 @@ import {
 import usePolkawatchApi from "../hooks/usePolkawatchApi";
 import PieChart from "./PieChart";
 import EvolutionChart from "./EvolutionChart";
-import DetailTable from "./detail/DetailTableMain";
 import {RewardDistributionDetailTable} from "../components/RewardDistributionDetailTable";
 
 export default function GeoOverview() {
