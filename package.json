@@ -6,8 +6,7 @@
     "packages/archive",
     "packages/indexer",
     "packages/lqs",
-    "packages/ddp",
-    "packages/dapp"
+    "packages/ddp"
   ],
   "scripts": {
     "docker": "yarn docker:testdeploy",
