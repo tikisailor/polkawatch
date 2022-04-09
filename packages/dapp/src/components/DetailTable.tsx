@@ -17,6 +17,7 @@ import { plainToInstance } from "class-transformer";
 
 import {fShortenNumber} from '../utils/formatNumber';
 
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 function fieldAttributes(index,name,value){
   return {
@@ -27,6 +28,24 @@ function fieldAttributes(index,name,value){
 }
 
 export default function DetailTable({title="Table", tableData, RowClass, rowsPerPageOptions=[5, 10, 25], minTableWidth=880, rowUri}){
+
+  const matches = useMediaQuery('(min-width:600px)');
+
+  return (
+      <Card>
+        <CardHeader title={title} sx={{ mb: 3 }} />
+        {matches ?
+            <TableMain tableData={tableData} RowClass={RowClass} rowsPerPageOptions={rowsPerPageOptions} minTableWidth={minTableWidth} rowUri={rowUri}/> :
+            <Scrollbar>
+              <TableMain tableData={tableData} RowClass={RowClass} rowsPerPageOptions={rowsPerPageOptions} minTableWidth={minTableWidth} rowUri={rowUri}/>
+            </Scrollbar>
+        }
+      </Card>
+  )
+}
+
+
+function TableMain({tableData, RowClass, rowsPerPageOptions, minTableWidth, rowUri}){
 
   const [page, setPage] = useState(0);
 
@@ -46,58 +65,55 @@ export default function DetailTable({title="Table", tableData, RowClass, rowsPer
   });
 
   return (
-    <Card>
-      <CardHeader title={title} sx={{ mb: 3 }} />
-      <Scrollbar>
-        <TableContainer sx={{ minWidth: minTableWidth }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {Object.keys(firstRow).map((field,i) => {
-                  const {align,header,value} = fieldAttributes(i,field,firstRow[field]);
-                  if (value!==undefined) return (
-                    <TableCell align={align}>
-                        {header}
-                    </TableCell>
+      <>
+          <TableContainer sx={{ minWidth: minTableWidth }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {Object.keys(firstRow).map((field,i) => {
+                    const {align,header,value} = fieldAttributes(i,field,firstRow[field]);
+                    if (value!==undefined) return (
+                        <TableCell align={align}>
+                          {header}
+                        </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row=>{
+                  const dataRow = plainToInstance(RowClass,row, {
+                    excludeExtraneousValues: true,
+                  });
+                  return (
+                      <TableRow
+                          key={row.Id}
+                          onMouseUp={(event) => handleClick(event, row.Id, row)}
+                          style={{cursor: 'pointer'}}
+                          hover>
+                        {Object.keys(dataRow).map((field,i) => {
+                          const {align,value} = fieldAttributes(i,field,dataRow[field]);
+                          if (value!==undefined) return (
+                              <TableCell align={align}>
+                                {value}
+                              </TableCell>
+                          );
+                        })}
+                      </TableRow>
                   );
                 })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row=>{
-                const dataRow = plainToInstance(RowClass,row, {
-                  excludeExtraneousValues: true,
-                });
-                return (
-                    <TableRow
-                      key={row.Id}
-                      onMouseUp={(event) => handleClick(event, row.Id, row)}
-                      style={{cursor: 'pointer'}}
-                      hover>
-                      {Object.keys(dataRow).map((field,i) => {
-                        const {align,value} = fieldAttributes(i,field,dataRow[field]);
-                        if (value!==undefined) return (
-                          <TableCell align={align}>
-                            {value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        { rowsPerPageOptions[0] < tableData.length && <TablePagination
-          rowsPerPageOptions={rowsPerPageOptions}
-          component="div"
-          count={tableData.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(event, value) => setPage(value)}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        /> }
-      </Scrollbar>
-    </Card>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          { rowsPerPageOptions[0] < tableData.length && <TablePagination
+              rowsPerPageOptions={rowsPerPageOptions}
+              component="div"
+              count={tableData.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={(event, value) => setPage(value)}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+          /> }
+      </>
   )
 }
