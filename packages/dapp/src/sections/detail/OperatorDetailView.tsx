@@ -11,6 +11,7 @@ import usePolkawatchApi from "../../hooks/usePolkawatchApi";
 
 import TreeMap from "../TreeMap";
 import {RewardDistributionDetailTable} from "../../components/RewardDistributionDetailTable";
+import PieChart from "../PieChart";
 
 export default function OperatorDetailView({operatorId, operatorName}) {
 
@@ -30,21 +31,25 @@ export default function OperatorDetailView({operatorId, operatorName}) {
 
     return (
         <>
-            <Grid item xs={12} md={12} lg={12}>
+            <Grid container spacing={3} pb={3}>
+            <Grid item xs={12} md={6} lg={4}>
                 {pwData.topCountryDistributionChart && (
-                    <TreeMap
+                    <PieChart
                         title={`Reward distribution by country for ${decodeURI(operatorName)}`}
-                        series={pwData.topCountryDistributionChart}
+                        labels={pwData.topCountryDistributionChart.labels}
+                        series={pwData.topCountryDistributionChart.data}
                     />
                 )}
             </Grid>
-            <Grid item xs={12} md={12} lg={12}>
+            <Grid item xs={12} md={6} lg={4}>
                 {pwData.topNetworkDistributionChart && (
-                    <TreeMap
+                    <PieChart
                         title={`Reward distribution by network for ${decodeURI(operatorName)}`}
-                        series={pwData.topNetworkDistributionChart}
+                        labels={pwData.topNetworkDistributionChart.labels}
+                        series={pwData.topNetworkDistributionChart.data}
                     />
                 )}
+            </Grid>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
                 {pwData.nodeDistributionDetail && (
