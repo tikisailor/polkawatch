@@ -2,17 +2,12 @@ import * as React from 'react';
 import { useState } from "react";
 import {navigate} from "gatsby";
 import {
-  Box,
   Card,
   Table,
-  Button,
   TableRow,
-  Checkbox,
   TableBody,
   TableCell,
   TableHead,
-  Container,
-  Typography,
   TableContainer,
   TablePagination, CardHeader
 } from "@mui/material";
@@ -21,7 +16,6 @@ import Scrollbar from './Scrollbar';
 import { plainToInstance } from "class-transformer";
 
 import {fShortenNumber} from '../utils/formatNumber';
-import { Link } from "gatsby";
 
 
 function fieldAttributes(index,name,value){
@@ -77,7 +71,8 @@ export default function DetailTable({title="Table", tableData, RowClass, rowsPer
                 return (
                     <TableRow
                       key={row.Id}
-                      onClick={(event) => handleClick(event, row.Id, row)}
+                      onMouseUp={(event) => handleClick(event, row.Id, row)}
+                      style={{cursor: 'pointer'}}
                       hover>
                       {Object.keys(dataRow).map((field,i) => {
                         const {align,value} = fieldAttributes(i,field,dataRow[field]);
