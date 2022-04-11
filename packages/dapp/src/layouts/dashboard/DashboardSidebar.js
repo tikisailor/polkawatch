@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useLocation } from '@reach/router';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Button, Drawer } from '@mui/material';
+import { Box, Drawer } from '@mui/material';
 // components
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';

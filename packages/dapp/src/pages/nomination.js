@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import NomOverview from "../sections/NomOverview";
 
 // components
