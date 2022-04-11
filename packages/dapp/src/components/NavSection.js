@@ -158,7 +158,7 @@ NavSection.propTypes = {
 
 export default function NavSection({ navConfig, ...other }) {
   const { pathname } = useLocation();
-  const match = (path) => (path ? pathname.startsWith(path) : false);
+  const match = (path) => (path ? (path === "/" ? pathname === path : pathname.startsWith(path) ): false);
 
   return (
     <Box {...other}>
