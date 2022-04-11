@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 // import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton, Button } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar } from '@mui/material';
 // components
 // import { MHidden } from '../../components/@material-extend';
 //

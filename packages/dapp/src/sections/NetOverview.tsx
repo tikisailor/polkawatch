@@ -10,7 +10,7 @@ import {
 import usePolkawatchApi from "../hooks/usePolkawatchApi";
 
 import TreeMap from "./TreeMap";
-import DetailTable from "./detail/DetailTableMain";
+import {RewardDistributionDetailTable} from "../components/RewardDistributionDetailTable";
 
 export default function NetOverview() {
 
@@ -33,14 +33,18 @@ export default function NetOverview() {
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.topNetworkDistributionChart && (
                         <TreeMap
-                            title={pwData.topNetworkDistributionChart[0].name}
+                            title='Network Distribution Overview'
                             series={pwData.topNetworkDistributionChart}
                         />
                     )}
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.networkDistributionDetail && (
-                        <DetailTable redirect='/network/' data={pwData.networkDistributionDetail} title='Network Distribution Detail'/>
+                        <RewardDistributionDetailTable
+                            rowUri={row=>`/network/${row.Id}/${encodeURI(row.NetworkProvider)}`}
+                            tableData={pwData.networkDistributionDetail}
+                            title='Network Distribution Detail'
+                        />
                     )}
                 </Grid>
             </Grid>

@@ -5,6 +5,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider,StyledEngineProvider } from '@mui/material/styles';
 import theme from '../../src/theme';
 
+// scroll bar
+import 'simplebar/src/simplebar.css';
+
 export default function TopLayout(props) {
   return (
     <React.Fragment>
