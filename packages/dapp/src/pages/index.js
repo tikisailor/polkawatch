@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { Box, Grid, Container, Typography } from '@mui/material';
 // components
-import Page from '../../components/Page';
-import DashboardLayout from "../../layouts/dashboard";
-import AboutDataset from "../../sections/AboutData";
+import Page from '../components/Page';
+import DashboardLayout from "../layouts/dashboard";
+import AboutDataset from "../sections/AboutData";
 
 export default function DashboardHome() {
     return (
         <DashboardLayout>
-            <Page title="Dashboard | Minimal-UI">
+            <Page title="Polkawatch">
                 <Container maxWidth="xl">
                     <Box sx={{ pb: 5 }}>
-                        <Typography variant="h4">Hi, Welcome back</Typography>
+                        <Typography variant="h3">Welcome to Polkawatch.</Typography>
+                        <Typography variant="h5">Learn about our Validation Network and lets decentralize!</Typography>
                     </Box>
                     <Grid container spacing={3}>
                         <AboutDataset/>

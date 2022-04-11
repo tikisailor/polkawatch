@@ -52,6 +52,7 @@ export default function NetworkDetailView({networkId, networkName}) {
                         rowUri={null}
                         tableData={pwData.operatorDistributionDetail}
                         title={`Reward distribution detail by operator in ${decodeURI(networkName)}`}
+                        rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
                     />
                 )}
             </Grid>

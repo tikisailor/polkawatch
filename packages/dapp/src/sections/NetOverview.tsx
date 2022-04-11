@@ -41,7 +41,7 @@ export default function NetOverview() {
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.networkDistributionDetail && (
                         <RewardDistributionDetailTable
-                            rowUri={row=>`/network/${row.Id}/${encodeURI(row.NetworkProvider)}`}
+                            rowUri={row=>`/network/provider/${row.Id}/${encodeURI(row.NetworkProvider)}`}
                             tableData={pwData.networkDistributionDetail}
                             title='Network Distribution Detail'
                         />

@@ -2,16 +2,16 @@ import * as React from 'react';
 import DashboardLayout from "../../layouts/dashboard";
 import Page from '../../components/Page';
 import { Container } from '@mui/material';
-import CountryDetailView from "../../sections/detail/CountryDetailView";
+import {CountryDetailView} from "../../sections";
 
 
-export default function CountryDetail({countryId, countryName}) {
+export default function CountryDetail({countryId, countryLabel}) {
 
     return (
         <DashboardLayout>
-            <Page title={countryId}>
+            <Page title={`Country Detail: ${countryLabel}`}>
                 <Container maxWidth="xl">
-                    <CountryDetailView countryId={countryId} countryName={countryName}/>
+                    <CountryDetailView countryId={countryId} countryName={countryLabel}/>
                 </Container>
             </Page>
         </DashboardLayout>

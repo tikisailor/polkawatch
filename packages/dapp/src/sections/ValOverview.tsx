@@ -44,7 +44,7 @@ export default function ValOverview() {
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.operatorDistributionDetail && (
                         <RewardDistributionDetailTable
-                            rowUri={row=>`/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
+                            rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
                             tableData={pwData.operatorDistributionDetail}
                             title='Operator Distribution Detail'
                         />

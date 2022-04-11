@@ -50,7 +50,7 @@ export default function CountryDetailView({countryId, countryName}) {
                 <Grid item xs={12} md={12} lg={12}>
                     {pwData.operatorDistributionDetail && (
                         <RewardDistributionDetailTable
-                            rowUri={null}
+                            rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
                             tableData={pwData.operatorDistributionDetail}
                             title={`Reward distribution by operator in ${decodeURI(countryName)}`}
                         />
