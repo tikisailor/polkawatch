@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from "react";
-import {navigate} from "gatsby";
+import { navigate } from "gatsby";
 import {
   Card,
   Table,
@@ -15,8 +15,7 @@ import {
 import Scrollbar from './Scrollbar';
 import { plainToInstance } from "class-transformer";
 
-import {fShortenNumber} from '../utils/formatNumber';
-
+import { fShortenNumber } from '../utils/formatNumber';
 
 function fieldAttributes(index,name,value){
   return {
@@ -56,7 +55,7 @@ export default function DetailTable({title="Table", tableData, RowClass, rowsPer
                 {Object.keys(firstRow).map((field,i) => {
                   const {align,header,value} = fieldAttributes(i,field,firstRow[field]);
                   if (value!==undefined) return (
-                    <TableCell align={align}>
+                    <TableCell align={align} key={`h-${i}`}>
                         {header}
                     </TableCell>
                   );
@@ -72,12 +71,12 @@ export default function DetailTable({title="Table", tableData, RowClass, rowsPer
                     <TableRow
                       key={row.Id}
                       onMouseUp={(event) => handleClick(event, row.Id, row)}
-                      style={{cursor: 'pointer'}}
+                      style={{ cursor: 'pointer' }}
                       hover>
                       {Object.keys(dataRow).map((field,i) => {
-                        const {align,value} = fieldAttributes(i,field,dataRow[field]);
+                        const { align,value } = fieldAttributes(i,field,dataRow[field]);
                         if (value!==undefined) return (
-                          <TableCell align={align}>
+                          <TableCell align={align} key={`${row.Id}-${i}`}>
                             {value}
                           </TableCell>
                         );
@@ -88,6 +87,7 @@ export default function DetailTable({title="Table", tableData, RowClass, rowsPer
             </TableBody>
           </Table>
         </TableContainer>
+        </Scrollbar>
         { rowsPerPageOptions[0] < tableData.length && <TablePagination
           rowsPerPageOptions={rowsPerPageOptions}
           component="div"
@@ -97,7 +97,6 @@ export default function DetailTable({title="Table", tableData, RowClass, rowsPer
           onPageChange={(event, value) => setPage(value)}
           onRowsPerPageChange={handleChangeRowsPerPage}
         /> }
-      </Scrollbar>
     </Card>
   )
 }

@@ -3,7 +3,12 @@ import * as React from 'react';
 import { Expose } from "class-transformer";
 import DetailTable from "./DetailTable";
 
-class RewardDistributionRow  {
+/**
+ * This class is capable of mapping any Reward Distribution table row.
+ * The Table will ignore missing columns, thus this is an Union of all possible
+ * fields in the right order.
+ */
+class AnyDistributionRow  {
 
   @Expose()
   public Region: string
@@ -77,11 +82,11 @@ export function RewardDistributionDetailTable(
     tableData,
     minTableWidth=880,
     rowsPerPageOptions=[10,25,50],
-    rowUri=null,
+    rowUri=null
   }){
   return (
     <DetailTable
-      RowClass={RewardDistributionRow}
+      RowClass={AnyDistributionRow}
       title={title}
       tableData={tableData}
       minTableWidth={minTableWidth}
