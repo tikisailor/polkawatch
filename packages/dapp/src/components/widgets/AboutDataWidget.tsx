@@ -41,7 +41,7 @@ export default function AboutDataWidget({total,icon,title}) {
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon={icon} width={24} height={24} />
+        <Icon icon={icon} width={64} height={64} />
       </IconWrapperStyle>
       <Typography variant="h3">{fShortenNumber(total)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
