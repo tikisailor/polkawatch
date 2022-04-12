@@ -29,11 +29,11 @@ export default function NetworkDetailView({networkId, networkName}) {
     }, [lastUpdated]);
 
     return (
-        <>
+        <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
                 {pwData.topCountryDistributionChart && (
                     <TreeMap
-                        title={`Reward distribution by country in ${decodeURI(networkName)}`}
+                        title={`Reward by Country for ${decodeURI(networkName)}`}
                         series={pwData.topCountryDistributionChart}
                     />
                 )}
@@ -41,7 +41,7 @@ export default function NetworkDetailView({networkId, networkName}) {
             <Grid item xs={12} md={12} lg={12}>
                 {pwData.topOperatorDistributionChart && (
                     <TreeMap
-                        title={`Reward distribution by operator in ${decodeURI(networkName)}`}
+                        title={`Reward by Operator for ${decodeURI(networkName)}`}
                         series={pwData.topOperatorDistributionChart}
                     />
                 )}
@@ -51,11 +51,11 @@ export default function NetworkDetailView({networkId, networkName}) {
                     <RewardDistributionDetailTable
                         rowUri={null}
                         tableData={pwData.operatorDistributionDetail}
-                        title={`Reward distribution detail by operator in ${decodeURI(networkName)}`}
+                        title={`Reward by Operator for ${decodeURI(networkName)}`}
                         rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
                     />
                 )}
             </Grid>
-        </>
+        </Grid>
     );
 }

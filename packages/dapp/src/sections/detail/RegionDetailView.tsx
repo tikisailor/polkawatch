@@ -29,44 +29,42 @@ export default function RegionDetailView({regionId, regionName}) {
     }, [lastUpdated]);
 
     return (
-        <>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.topCountryDistributionChart && (
-                        <TreeMap
-                            title={`Reward distribution in ${decodeURI(regionName)}`}
-                            series={pwData.topCountryDistributionChart}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.countryDistributionDetail && (
-                        <RewardDistributionDetailTable
-                            rowUri={row=>`/geography/country/${row.Id}/${encodeURI(row.Country)}`}
-                            tableData={pwData.countryDistributionDetail}
-                            title={`Reward distribution in ${decodeURI(regionName)}`}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.topOperatorDistributionChart && (
-                        <TreeMap
-                            title={`Reward distribution by operator in ${decodeURI(regionName)}`}
-                            series={pwData.topOperatorDistributionChart}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.operatorDistributionDetail && (
-                        <RewardDistributionDetailTable
-                            rowUri={null}
-                            tableData={pwData.operatorDistributionDetail}
-                            title={`Reward distribution detail by operator in ${decodeURI(regionName)}`}
-                            rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
-                        />
-                    )}
-                </Grid>
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.topCountryDistributionChart && (
+                    <TreeMap
+                        title={`Rewards by Country in ${decodeURI(regionName)}`}
+                        series={pwData.topCountryDistributionChart}
+                    />
+                )}
             </Grid>
-        </>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.countryDistributionDetail && (
+                    <RewardDistributionDetailTable
+                        rowUri={row=>`/geography/country/${row.Id}/${encodeURI(row.Country)}`}
+                        tableData={pwData.countryDistributionDetail}
+                        title={`Rewards by Country in ${decodeURI(regionName)}`}
+                    />
+                )}
+            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.topOperatorDistributionChart && (
+                    <TreeMap
+                        title={`Rewards by Operator in ${decodeURI(regionName)}`}
+                        series={pwData.topOperatorDistributionChart}
+                    />
+                )}
+            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.operatorDistributionDetail && (
+                    <RewardDistributionDetailTable
+                        rowUri={null}
+                        tableData={pwData.operatorDistributionDetail}
+                        title={`Rewards by Operator in ${decodeURI(regionName)}`}
+                        rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
+                    />
+                )}
+            </Grid>
+        </Grid>
     );
 }
