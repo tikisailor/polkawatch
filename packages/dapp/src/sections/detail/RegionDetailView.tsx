@@ -48,6 +48,24 @@ export default function RegionDetailView({regionId, regionName}) {
                         />
                     )}
                 </Grid>
+                <Grid item xs={12} md={12} lg={12}>
+                    {pwData.topOperatorDistributionChart && (
+                        <TreeMap
+                            title={`Reward distribution by operator in ${decodeURI(regionName)}`}
+                            series={pwData.topOperatorDistributionChart}
+                        />
+                    )}
+                </Grid>
+                <Grid item xs={12} md={12} lg={12}>
+                    {pwData.operatorDistributionDetail && (
+                        <RewardDistributionDetailTable
+                            rowUri={null}
+                            tableData={pwData.operatorDistributionDetail}
+                            title={`Reward distribution detail by operator in ${decodeURI(regionName)}`}
+                            rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
+                        />
+                    )}
+                </Grid>
             </Grid>
         </>
     );
