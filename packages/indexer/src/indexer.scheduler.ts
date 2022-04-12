@@ -4,12 +4,14 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 
-import { Cron, Timeout } from '@nestjs/schedule';
+import { SchedulerRegistry, Timeout } from '@nestjs/schedule';
+import { CronJob } from 'cron';
 
 import { ArchiveService } from './archive.service';
 import { SubstrateHistoryService } from './substrate.history.service';
 import { GeoliteService } from './geolite.service';
 import { ElasticService } from './elastic.service';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * This is the main entrypoint of Polkawatch second pass indexing
@@ -27,14 +29,21 @@ export class IndexerSchedulerService {
     private substrateHistory: SubstrateHistoryService,
     private geoliteService: GeoliteService,
     private elasticService: ElasticService,
+    private configService: ConfigService,
+    private schedulerRegistry: SchedulerRegistry,
     ) {
-        // ignore
+        const hour = configService.get('INDEXER_CRON_HOUR');
+        const job = new CronJob(`0 0 ${hour} * * *`, () => {
+            this.processRewardsDaily();
+        });
+        schedulerRegistry.addCronJob('processRewardsDaily', job);
+        job.start();
+        this.logger.log(`Daily indexing scheduled for ${hour}h.`);
     }
 
     /**
-     * We will run the indexing every night a 3 in the morning.
+     * We will run the indexing every day at 7 in the afternoon by default.
      */
-    @Cron('0 0 3 * * *')
     async processRewardsDaily() {
         if(!this.processing) this.rewardProcessing();
     }

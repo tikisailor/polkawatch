@@ -31,6 +31,7 @@ import * as Joi from 'joi';
                 INDEXER_SUBSTRATE_HISTORY_DEPTH_MARGIN: Joi.number().default(0),
                 INDEXER_ELASTIC_PORT: Joi.number().default(9200),
                 INDEXER_ELASTIC_HOST: Joi.string().default('localhost'),
+                INDEXER_CRON_HOUR: Joi.number().default(19),
             }),
         }),
         ScheduleModule.forRoot(),
