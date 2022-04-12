@@ -168,6 +168,17 @@ export class RegionDetail {
         isArray: true,
     })
         countryDistributionDetail: Array<RewardsByCountry>;
+
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topOperatorDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: RewardsByValidationGroup,
+        isArray: true,
+    })
+        operatorDistributionDetail: Array<RewardsByValidationGroup>;
 }
 
 export class CountryDetail {

@@ -288,6 +288,12 @@ export class DdpIpfs {
             countryDistributionDetail: (await api.geography.geoCountryPost({
                 rewardDistributionQuery: detailQuery,
             })).data,
+            topOperatorDistributionChart: this.transformer.toTreemapChart((await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'ValidationGroup'),
+            operatorDistributionDetail: (await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
+            })).data,
         } as RegionDetail;
     }
 
