@@ -9,7 +9,7 @@ import DashboardLayout from "../layouts/dashboard";
 export default function DashboardNominator() {
     return (
         <DashboardLayout>
-            <Page title="Dashboard | Minimal-UI">
+            <Page title="Nomination">
                 <Container maxWidth="xl">
                     <NominatorDetailView
                         nominatorName={"SAMPLE-STASH"}
