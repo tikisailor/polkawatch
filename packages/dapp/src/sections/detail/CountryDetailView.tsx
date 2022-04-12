@@ -29,34 +29,32 @@ export default function CountryDetailView({countryId, countryName}) {
     }, [lastUpdated]);
 
     return (
-        <>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.topNetworkDistributionChart && (
-                        <TreeMap
-                            title={`Reward distribution by network in ${decodeURI(countryName)}`}
-                            series={pwData.topNetworkDistributionChart}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.topOperatorDistributionChart && (
-                        <TreeMap
-                            title={`Reward distribution by operator in ${decodeURI(countryName)}`}
-                            series={pwData.topOperatorDistributionChart}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.operatorDistributionDetail && (
-                        <RewardDistributionDetailTable
-                            rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
-                            tableData={pwData.operatorDistributionDetail}
-                            title={`Reward distribution by operator in ${decodeURI(countryName)}`}
-                        />
-                    )}
-                </Grid>
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.topNetworkDistributionChart && (
+                    <TreeMap
+                        title={`Rewards by Network in ${decodeURI(countryName)}`}
+                        series={pwData.topNetworkDistributionChart}
+                    />
+                )}
             </Grid>
-        </>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.topOperatorDistributionChart && (
+                    <TreeMap
+                        title={`Rewards by Operator in ${decodeURI(countryName)}`}
+                        series={pwData.topOperatorDistributionChart}
+                    />
+                )}
+            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.operatorDistributionDetail && (
+                    <RewardDistributionDetailTable
+                        rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
+                        tableData={pwData.operatorDistributionDetail}
+                        title={`Rewards by Operator in ${decodeURI(countryName)}`}
+                    />
+                )}
+            </Grid>
+        </Grid>
     );
 }

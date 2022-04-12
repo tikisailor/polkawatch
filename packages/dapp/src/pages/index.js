@@ -12,7 +12,7 @@ export default function DashboardHome() {
                 <Container maxWidth="xl">
                     <Box sx={{ pb: 5 }}>
                         <Typography variant="h3">Welcome to Polkawatch.</Typography>
-                        <Typography variant="h5">Learn about our Validation Network and lets decentralize!</Typography>
+                        <Typography variant="h5">Learn about Polkadot's Validation Network: Lets decentralize!</Typography>
                     </Box>
                     <Grid container spacing={3}>
                         <AboutDataset/>

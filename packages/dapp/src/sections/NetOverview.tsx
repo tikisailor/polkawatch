@@ -28,26 +28,24 @@ export default function NetOverview() {
     }, [lastUpdated]);
 
     return (
-        <>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.topNetworkDistributionChart && (
-                        <TreeMap
-                            title='Network Distribution Overview'
-                            series={pwData.topNetworkDistributionChart}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.networkDistributionDetail && (
-                        <RewardDistributionDetailTable
-                            rowUri={row=>`/network/provider/${row.Id}/${encodeURI(row.NetworkProvider)}`}
-                            tableData={pwData.networkDistributionDetail}
-                            title='Network Distribution Detail'
-                        />
-                    )}
-                </Grid>
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.topNetworkDistributionChart && (
+                    <TreeMap
+                        title='Rewards by Network'
+                        series={pwData.topNetworkDistributionChart}
+                    />
+                )}
             </Grid>
-        </>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.networkDistributionDetail && (
+                    <RewardDistributionDetailTable
+                        rowUri={row=>`/network/provider/${row.Id}/${encodeURI(row.NetworkProvider)}`}
+                        tableData={pwData.networkDistributionDetail}
+                        title='Rewards by Network'
+                    />
+                )}
+            </Grid>
+        </Grid>
     );
 }

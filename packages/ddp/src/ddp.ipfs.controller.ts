@@ -344,7 +344,7 @@ export class DdpIpfs {
      * Network Detail View
      */
     @Get('/network/:network/:validation_type/:last_eras.json')
-    @ApiOkResponse({ description: 'Data bundle of country detail data', type: NetworkDetail, isArray: false })
+    @ApiOkResponse({ description: 'Data bundle of network detail data', type: NetworkDetail, isArray: false })
     @ApiParam({
         description: 'Network ID to request',
         name:'network',
@@ -387,7 +387,7 @@ export class DdpIpfs {
      * Operator Detail View
      */
     @Get('/operator/:operator/:validation_type/:last_eras.json')
-    @ApiOkResponse({ description: 'Data bundle of network detail data', type: OperatorDetail, isArray: false })
+    @ApiOkResponse({ description: 'Data bundle of operator detail data', type: OperatorDetail, isArray: false })
     @ApiParam({
         description: 'Operator ID to request',
         name:'operator',
@@ -431,7 +431,7 @@ export class DdpIpfs {
      * Nominator Detail View, only available for public validation and last 30 eras
      */
     @Get('/nominator/:nominator/:last_eras.json')
-    @ApiOkResponse({ description: 'Data bundle of network detail data', type: OperatorDetail, isArray: false })
+    @ApiOkResponse({ description: 'Data bundle of nominator detail data', type: NominatorDetail, isArray: false })
     @ApiParam({
         description: 'Nominator ID to request',
         name:'nominator',

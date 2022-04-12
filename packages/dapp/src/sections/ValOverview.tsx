@@ -31,26 +31,24 @@ export default function ValOverview() {
     }, [lastUpdated]);
 
     return (
-        <>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.topOperatorDistributionChart && (
-                        <TreeMap
-                            title='Operator Distribution Overview'
-                            series={pwData.topOperatorDistributionChart}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.operatorDistributionDetail && (
-                        <RewardDistributionDetailTable
-                            rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
-                            tableData={pwData.operatorDistributionDetail}
-                            title='Operator Distribution Detail'
-                        />
-                    )}
-                </Grid>
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.topOperatorDistributionChart && (
+                    <TreeMap
+                        title='Rewards by Operator'
+                        series={pwData.topOperatorDistributionChart}
+                    />
+                )}
             </Grid>
-        </>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.operatorDistributionDetail && (
+                    <RewardDistributionDetailTable
+                        rowUri={row=>`/validation/operator/${row.Id}/${encodeURI(row.ValidationGroup)}`}
+                        tableData={pwData.operatorDistributionDetail}
+                        title='Rewards by Operator'
+                    />
+                )}
+            </Grid>
+        </Grid>
     );
 }

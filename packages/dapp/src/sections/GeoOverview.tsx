@@ -29,36 +29,34 @@ export default function GeoOverview() {
     }, [lastUpdated]);
 
     return (
-        <>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={6} lg={4}>
-                    {pwData.topRegionalDistributionChart && (
-                        <PieChart
-                            title={'Rewards by Region'}
-                            labels={pwData.topRegionalDistributionChart.labels}
-                            series={pwData.topRegionalDistributionChart.data}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={6} lg={8}>
-                    {pwData.topRegionalDistributionChart && (
-                        <EvolutionChart
-                            title={'Evolution of Rewards by Region'}
-                            labels={pwData.regionalEvolutionChart.labels}
-                            series={pwData.regionalEvolutionChart.segments}
-                        />
-                    )}
-                </Grid>
-                <Grid item xs={12} md={12} lg={12}>
-                    {pwData.regionalDistributionDetail && (
-                        <RewardDistributionDetailTable
-                            rowUri={row=>`/geography/region/${row.Id}/${encodeURI(row.Region)}`}
-                            tableData={pwData.regionalDistributionDetail}
-                            title='Regional Distribution Detail'
-                        />
-                    )}
-                </Grid>
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={6} lg={4}>
+                {pwData.topRegionalDistributionChart && (
+                    <PieChart
+                        title={'Rewards by Region'}
+                        labels={pwData.topRegionalDistributionChart.labels}
+                        series={pwData.topRegionalDistributionChart.data}
+                    />
+                )}
             </Grid>
-        </>
+            <Grid item xs={12} md={6} lg={8}>
+                {pwData.topRegionalDistributionChart && (
+                    <EvolutionChart
+                        title={'Evolution of Rewards by Region'}
+                        labels={pwData.regionalEvolutionChart.labels}
+                        series={pwData.regionalEvolutionChart.segments}
+                    />
+                )}
+            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
+                {pwData.regionalDistributionDetail && (
+                    <RewardDistributionDetailTable
+                        rowUri={row=>`/geography/region/${row.Id}/${encodeURI(row.Region)}`}
+                        tableData={pwData.regionalDistributionDetail}
+                        title='Rewards by Region'
+                    />
+                )}
+            </Grid>
+        </Grid>
     );
 }
