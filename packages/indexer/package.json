@@ -40,6 +40,7 @@
     "@polkadot/keyring": "^8.4.1",
     "@polkadot/util": "^8.4.1",
     "cache-manager": "^3.6.0",
+    "cron": "^1.8.2",
     "geolite2-redist": "^2.0.4",
     "global-agent": "^3.0.0",
     "graphql": "^16.3.0",
