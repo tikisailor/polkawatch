@@ -227,3 +227,32 @@ export class OperatorDetail {
         nodeDistributionDetail: Array<RewardsByValidationNode>;
 
 }
+
+export class NominatorDetail {
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topRegionalDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topCountryDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topNetworkDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topOperatorDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: RewardsByValidationNode,
+        isArray: true,
+    })
+        nodeDistributionDetail: Array<RewardsByValidationNode>;
+}

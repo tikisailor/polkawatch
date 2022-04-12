@@ -17,7 +17,7 @@ import {
     RegionDetail,
     CountryDetail,
     NetworkDetail,
-    OperatorDetail,
+    OperatorDetail, NominatorDetail,
 } from './ddp.types';
 import { InventoryQuery } from '@lqs/client';
 
@@ -418,6 +418,50 @@ export class DdpIpfs {
                 rewardDistributionQuery: detailQuery,
             })).data,
         } as OperatorDetail;
+    }
+
+
+    /**
+     * Nominator Detail View, only available for public validation and last 30 eras
+     */
+    @Get('/nominator/:nominator/:last_eras.json')
+    @ApiOkResponse({ description: 'Data bundle of network detail data', type: OperatorDetail, isArray: false })
+    @ApiParam({
+        description: 'Nominator ID to request',
+        name:'nominator',
+    })
+    @ApiParam({
+        description: 'Available set of eras to query',
+        type: Number,
+        name:'last_eras',
+        enum: [30],
+    })
+    async nominatorDetail(
+        @Param('nominator') nominator,
+        @Param('last_eras') last_eras:number,
+    ): Promise<NominatorDetail> {
+        const api = this.lqs.getAPI();
+
+        const commonParams = await this.getCommonRequestParameters({ last_eras, validation_type:'public', top_results: 20 });
+        const detailQuery = { NominatorFilter: nominator, ... commonParams };
+
+        return {
+            topRegionalDistributionChart:  this.transformer.toDistributionChart((await api.geography.geoRegionPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'Region'),
+            topCountryDistributionChart: this.transformer.toDistributionChart((await api.geography.geoCountryPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'Country'),
+            topNetworkDistributionChart: this.transformer.toDistributionChart((await api.network.networkProviderPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'NetworkProvider'),
+            topOperatorDistributionChart:  this.transformer.toTreemapChart((await api.validator.validatorGroupPost({
+                rewardDistributionQuery: detailQuery,
+            })).data, 'ValidationGroup'),
+            nodeDistributionDetail: (await api.validator.validatorNodePost({
+                rewardDistributionQuery: detailQuery,
+            })).data,
+        } as NominatorDetail;
     }
 
 
