@@ -32,7 +32,7 @@ export default function OperatorDetailView({operatorId, operatorName}) {
     return (
         <>
             <Grid container spacing={3} pb={3}>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={6}>
                 {pwData.topCountryDistributionChart && (
                     <PieChart
                         title={`Reward distribution by country for ${decodeURI(operatorName)}`}
@@ -41,7 +41,7 @@ export default function OperatorDetailView({operatorId, operatorName}) {
                     />
                 )}
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={6}>
                 {pwData.topNetworkDistributionChart && (
                     <PieChart
                         title={`Reward distribution by network for ${decodeURI(operatorName)}`}

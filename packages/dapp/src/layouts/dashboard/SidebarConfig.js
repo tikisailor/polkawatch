@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 import { Icon } from '@iconify/react';
-import homeSolid from '@iconify/icons-clarity/home-solid';
-import location from '@iconify/icons-akar-icons/location';
-import network4 from '@iconify/icons-carbon/network-4';
-import lock from '@iconify/icons-bxs/lock';
-import dots from '@iconify/icons-simple-icons/polkadot';
+
+import homeOutlined from '@iconify/icons-ant-design/home-outlined';
+import globalOutlined from '@iconify/icons-ant-design/global-outlined';
+import cloudServerOutlined from '@iconify/icons-ant-design/cloud-server-outlined';
+import safetyCertificateOutlined from '@iconify/icons-ant-design/safety-certificate-outlined';
+import userOutlined from '@iconify/icons-ant-design/user-outlined';
 
 // ----------------------------------------------------------------------
 
@@ -14,28 +15,28 @@ const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 const sidebarConfig = [
   {
     title: 'home',
-    path: '/dashboard/home',
-    icon: getIcon(homeSolid)
+    path: '/',
+    icon: getIcon(homeOutlined)
   },
   {
     title: 'geography',
-    path: '/dashboard/geography',
-    icon: getIcon(location)
+    path: '/geography',
+    icon: getIcon(globalOutlined)
   },
   {
     title: 'network',
-    path: '/dashboard/network',
-    icon: getIcon(network4)
+    path: '/network',
+    icon: getIcon(cloudServerOutlined)
   },
   {
-    title: 'validator',
-    path: '/dashboard/validator',
-    icon: getIcon(lock)
+    title: 'validation',
+    path: '/validation',
+    icon: getIcon(safetyCertificateOutlined)
   },
   {
-    title: 'nominator',
-    path: '/dashboard/nominator',
-    icon: getIcon(dots)
+    title: 'nomination',
+    path: '/nomination',
+    icon: getIcon(userOutlined)
   },
 ];
 

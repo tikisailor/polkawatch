@@ -6,7 +6,7 @@ import ReactApexChart from '../components/ReactApexCharts';
 import { useTheme, styled } from '@mui/material/styles';
 import { Card, CardHeader } from '@mui/material';
 // utils
-import { fNumber } from '../utils/formatNumber';
+import { fNumber, fPercent } from '../utils/formatNumber';
 //
 import { BaseOptionChart } from '../components/charts';
 
@@ -42,19 +42,33 @@ export default function PieChart({title,labels,series}) {
         labels: labels,
         stroke: { colors: [theme.palette.background.paper] },
         legend: { floating: true, horizontalAlign: 'center' },
-        dataLabels: { enabled: true, dropShadow: { enabled: false } },
         tooltip: {
             fillSeriesColor: false,
             y: {
-                formatter: (seriesName) => fNumber(seriesName),
+                formatter: (value: string, w: { globals: { seriesTotals: number[] } }) => fPercent(value/w.globals.seriesTotals.reduce((a, b) => a + b, 0)*100),
                 title: {
-                    formatter: (seriesName) => `#${seriesName}`
-                }
-            }
+                    formatter: (seriesName: string) => `${seriesName}`,
+                },
+            },
         },
         plotOptions: {
-            pie: { donut: { labels: { show: false } } }
-        }
+            pie: {
+                donut: {
+                    size: '90%',
+                    labels: {
+                        value: {
+                            formatter: (val: number | string) => fNumber(val),
+                        },
+                        total: {
+                            formatter: (w: { globals: { seriesTotals: number[] } }) => {
+                                const sum = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                return fNumber(sum);
+                            },
+                        },
+                    },
+                },
+            },
+        },
     });
     return (
         <Card>

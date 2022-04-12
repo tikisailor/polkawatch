@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useLocation } from '@reach/router';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Button, Drawer } from '@mui/material';
+import { Box, Drawer } from '@mui/material';
 // components
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
@@ -54,16 +54,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
         <Box sx={{ flexGrow: 1 }} />
 
-        <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
-          <Button
-              fullWidth
-              href="https://material-ui.com/store/items/minimal-dashboard/"
-              target="_blank"
-              variant="contained"
-          >
-            Upgrade to Pro
-          </Button>
-        </Box>
       </Scrollbar>
   );
 
