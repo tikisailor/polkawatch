@@ -168,6 +168,17 @@ export class RegionDetail {
         isArray: true,
     })
         countryDistributionDetail: Array<RewardsByCountry>;
+
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topOperatorDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: RewardsByValidationGroup,
+        isArray: true,
+    })
+        operatorDistributionDetail: Array<RewardsByValidationGroup>;
 }
 
 export class CountryDetail {
@@ -226,4 +237,33 @@ export class OperatorDetail {
     })
         nodeDistributionDetail: Array<RewardsByValidationNode>;
 
+}
+
+export class NominatorDetail {
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topRegionalDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topCountryDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: DistributionChart,
+    })
+        topNetworkDistributionChart: DistributionChart;
+
+    @ApiProperty({
+        type: TreemapSegment,
+    })
+        topOperatorDistributionChart: Array<TreemapSegment>;
+
+    @ApiProperty({
+        type: RewardsByValidationNode,
+        isArray: true,
+    })
+        nodeDistributionDetail: Array<RewardsByValidationNode>;
 }
