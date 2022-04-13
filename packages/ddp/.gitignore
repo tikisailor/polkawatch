@@ -38,6 +38,7 @@ lerna-debug.log*
 # Generated
 ddp-api-spec.json
 ipfs_dist
+ipfs_dist.car
 
 # set by workspace root
 yarn.lock

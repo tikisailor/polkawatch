@@ -14,6 +14,8 @@
 
 import * as fs from 'fs';
 import * as Mustache from 'mustache';
+import { packToFs } from 'ipfs-car/pack/fs'
+import { FsBlockStore } from 'ipfs-car/blockstore/fs'
 
 const axios = require('axios').default;
 const path = require('path');
@@ -59,7 +61,7 @@ async function PopulateInventoryCache(){
 }
 
 /**
- * Reads generated API specification and stract the endpoints and parameters
+ * Reads generated API specification and extract the endpoints and parameters
  */
 function getApiEndpoints(){
     const apiSpec=JSON.parse(fs.readFileSync('ddp-api-spec.json').toString());
@@ -151,7 +153,14 @@ async function dumpFile(file){
  * Clean the output directory
  */
 async function clean(){
-    return del('${DDP_IPFS_HOME}/ipfs_dist/**', {force:true});
+    return del(`${DDP_IPFS_HOME}/ipfs_dist.car`, {force:true});
+}
+
+/**
+ * Clean the temporal directory
+ */
+async function clean_tmp(){
+    return del(`${DDP_IPFS_HOME}/ipfs_dist`, {force:true});
 }
 
 /**
@@ -178,6 +187,18 @@ async function build(){
     return promise;
 }
 
+/**
+ *
+ */
+async function pack(){
+    return packToFs({
+        input: `${process.cwd()}/ipfs_dist/ddp`,
+        output: `${process.cwd()}/ipfs_dist.car`,
+        blockstore: new FsBlockStore()
+    })
+}
+
 exports.build = build;
 exports.clean = clean;
-export default series(clean,build);
+exports.pack = pack;
+export default series(clean,build,pack,clean_tmp);
