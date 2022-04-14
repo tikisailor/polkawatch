@@ -1,6 +1,6 @@
 {
   "name": "archive",
-  "version": "0.4.24",
+  "version": "0.4.25",
   "main": "dist/index.js",
   "scripts": {
     "build:workspace": "yarn codegen && yarn build",
