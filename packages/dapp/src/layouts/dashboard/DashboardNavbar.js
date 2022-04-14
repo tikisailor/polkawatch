@@ -13,7 +13,10 @@ import { Box, Stack, AppBar, Toolbar } from '@mui/material';
 // import AccountPopover from './AccountPopover';
 // import LanguagePopover from './LanguagePopover';
 // import NotificationsPopover from './NotificationsPopover';
-// import WalletConnect from "../../sections/detail/WalletConnect";
+//import WalletConnect from "../../sections/detail/WalletConnect";
+
+import usePolkadotExtension from "../../hooks/usePolkadotExtension";
+import PolkadotWallet from "./PolkadotWallet"
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +49,9 @@ DashboardNavbar.propTypes = {
 };
 
 export default function DashboardNavbar({ onOpenSidebar }) {
+
+  const extWallet = usePolkadotExtension();
+
   return (
     <RootStyle>
       <ToolbarStyle>
@@ -61,8 +67,16 @@ export default function DashboardNavbar({ onOpenSidebar }) {
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           {/*<LanguagePopover />*/}
           {/*<NotificationsPopover />*/}
-          {/*<WalletConnect />*/}
+          {/*<WalletConnect/>*/}
           {/*<AccountPopover />*/}
+          <PolkadotWallet
+              permission={extWallet.permission}
+              onPermissionRequest={extWallet.setPermission}
+              onAccountSelected={extWallet.setAddress}
+              extensions={extWallet.extensions}
+              accounts={extWallet.accounts}
+              address={extWallet.address}
+          />
         </Stack>
       </ToolbarStyle>
     </RootStyle>
