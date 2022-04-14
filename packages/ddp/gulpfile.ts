@@ -192,8 +192,8 @@ async function build(){
  */
 async function pack(){
     return packToFs({
-        input: `${process.cwd()}/ipfs_dist/ddp`,
-        output: `${process.cwd()}/ipfs_dist.car`,
+        input: `${DDP_IPFS_HOME}/ipfs_dist/ddp`,
+        output: `${DDP_IPFS_HOME}/ipfs_dist.car`,
         blockstore: new FsBlockStore()
     })
 }
