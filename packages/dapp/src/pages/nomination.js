@@ -5,23 +5,24 @@ import {NominatorDetailView} from "../sections";
 // components
 import Page from '../components/Page';
 import DashboardLayout from "../layouts/dashboard";
-import usePolkadotExtension from "../hooks/usePolkadotExtension";
-
+import {usePolkadotExtensionContext} from "../contexts/PolkadotExtensionContext";
 export default function DashboardNominator() {
-    const extWallet = usePolkadotExtension();
+
+    const {selectedAccount} = usePolkadotExtensionContext();
+
     return (
         <DashboardLayout>
             <Page title="Nomination">
                 <Container maxWidth="xl">
                     {
-                        extWallet.address ?
+                        selectedAccount ?
                             (
                                 <NominatorDetailView
-                                    nominatorName={"SAMPLE-STASH"}
-                                    nominatorId={extWallet.address}/>
+                                    nominatorName={selectedAccount.meta.name}
+                                    nominatorId={selectedAccount.address}/>
                             ) :
                             (
-                                <Typography>Select Wallet</Typography>
+                                <Typography>Connect Your wallet</Typography>
                             )
                     }
                 </Container>

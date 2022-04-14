@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider,StyledEngineProvider } from '@mui/material/styles';
 import theme from '../../src/theme';
+import {PolkadotExtensionProvider} from "../../src/contexts/PolkadotExtensionContext";
 
 // scroll bar
 import 'simplebar/src/simplebar.css';
@@ -22,7 +23,9 @@ export default function TopLayout(props) {
             <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            {props.children}
+            <PolkadotExtensionProvider>
+                {props.children}
+            </PolkadotExtensionProvider>
           </ThemeProvider>
         </StyledEngineProvider>
     </React.Fragment>

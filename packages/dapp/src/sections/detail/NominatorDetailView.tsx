@@ -18,17 +18,30 @@ export default function NominatorDetailView({nominatorId, nominatorName}) {
     const { lastUpdated, api } = usePolkawatchApi();
 
     const [pwData, setPwData] = useState({} as NominatorDetail);
+    const [error,setError] = useState(undefined);
 
     useEffect(() => {
         api.ddpIpfsNominatorDetail({
             lastEras: 30,
             nominator: nominatorId,
-        }).then(response => setPwData(response.data));
+        }).then(response => {
+            setPwData(response.data);
+            setError(undefined);
+        }).catch(error => {
+            setError(error);
+        });
         return () => {
         };
-    }, [lastUpdated]);
+    }, [lastUpdated, nominatorId]);
 
-    return (
+    if(error) return (
+        <>
+            <p>{`No Reward events located on ${nominatorName} in the last 30 eras`}</p>
+            <p>{`Account address is ${nominatorId}`}</p>
+        </>
+
+)
+    else return (
         <Grid container spacing={3} pb={3}>
             <Grid item xs={12} md={6} lg={4}>
                 {pwData.topRegionalDistributionChart && (

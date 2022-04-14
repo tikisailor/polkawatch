@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import PropTypes from 'prop-types';
-// import { Icon } from '@iconify/react';
-// import menu2Fill from '@iconify/icons-eva/menu-2-fill';
+import { Icon } from '@iconify/react';
+import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar } from '@mui/material';
+import {Box, Stack, AppBar, Toolbar, IconButton} from '@mui/material';
 // components
-// import { MHidden } from '../../components/@material-extend';
+import { MHidden } from '../../components/@material-extend';
 //
 // import Searchbar from './Searchbar';
 // import AccountPopover from './AccountPopover';
@@ -15,8 +15,8 @@ import { Box, Stack, AppBar, Toolbar } from '@mui/material';
 // import NotificationsPopover from './NotificationsPopover';
 //import WalletConnect from "../../sections/detail/WalletConnect";
 
-import usePolkadotExtension from "../../hooks/usePolkadotExtension";
 import PolkadotWallet from "./PolkadotWallet"
+import {usePolkadotExtensionContext} from "../../contexts/PolkadotExtensionContext";
 
 // ----------------------------------------------------------------------
 
@@ -50,16 +50,17 @@ DashboardNavbar.propTypes = {
 
 export default function DashboardNavbar({ onOpenSidebar }) {
 
-  const extWallet = usePolkadotExtension();
+  const wallet = usePolkadotExtensionContext();
+  console.log(`NAV: wallet is ${JSON.stringify(wallet)}`)
 
   return (
     <RootStyle>
       <ToolbarStyle>
-        {/*<MHidden width="lgUp">*/}
-        {/*  <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>*/}
-        {/*    <Icon icon={menu2Fill} />*/}
-        {/*  </IconButton>*/}
-        {/*</MHidden>*/}
+        <MHidden width="lgUp">
+          <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
+            <Icon icon={menu2Fill} />
+          </IconButton>
+        </MHidden>
 
         {/*<Searchbar />*/}
         <Box sx={{ flexGrow: 1 }} />
@@ -67,15 +68,13 @@ export default function DashboardNavbar({ onOpenSidebar }) {
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           {/*<LanguagePopover />*/}
           {/*<NotificationsPopover />*/}
-          {/*<WalletConnect/>*/}
-          {/*<AccountPopover />*/}
           <PolkadotWallet
-              permission={extWallet.permission}
-              onPermissionRequest={extWallet.setPermission}
-              onAccountSelected={extWallet.setAddress}
-              extensions={extWallet.extensions}
-              accounts={extWallet.accounts}
-              address={extWallet.address}
+            permission={wallet.permission}
+            selectedAccount={wallet.selectedAccount}
+            extensions={wallet.extensions}
+            accounts={wallet.accounts}
+            onAccountSelected={wallet.setSelectedAccount}
+            onPermissionRequest={wallet.setPermission}
           />
         </Stack>
       </ToolbarStyle>

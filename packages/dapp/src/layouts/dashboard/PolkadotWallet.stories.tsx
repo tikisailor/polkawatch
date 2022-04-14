@@ -15,7 +15,7 @@ export default {
 
 export const GrantedPermission = (args) => <PolkadotWallet
     permission={true}
-    address={"5FRvjNMCtB8EbBVioW8NgHZQPKuoaRw8nuyeYGv6nTgQUW5D"}
+    selectedAccount={test_data.wallet1[1]}
     accounts={test_data.wallet1}
     extensions={test_data.extensions1}
     {...args}
@@ -23,7 +23,7 @@ export const GrantedPermission = (args) => <PolkadotWallet
 
 export const NoWalletPermission = (args) => <PolkadotWallet
     permission={false}
-    address={undefined}
+    selectedAccount={undefined}
     accounts={undefined}
     extensions={[]}
     {...args}
@@ -31,7 +31,7 @@ export const NoWalletPermission = (args) => <PolkadotWallet
 
 export const PermissionNotAccounts = (args) => <PolkadotWallet
     permission={true}
-    address={undefined}
+    selectedAccount={undefined}
     accounts={undefined}
     extensions={[]}
     {...args}
@@ -39,7 +39,7 @@ export const PermissionNotAccounts = (args) => <PolkadotWallet
 
 export const PermissionNoSelectedAccounts = (args) => <PolkadotWallet
     permission={true}
-    address={undefined}
+    selectedAccount={undefined}
     accounts={test_data.wallet1}
     extensions={test_data.extensions1}
     {...args}
