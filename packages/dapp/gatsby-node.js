@@ -1,15 +1,33 @@
 const path = require('path');
 
-exports.onCreateWebpackConfig = function({ actions }) {
-    actions.setWebpackConfig({
-        resolve: {
-            alias: {
-                '@ddp/client': path.resolve(__dirname, '../ddp-client')
-            }
-        }
-    })
+exports.onCreateWebpackConfig = function({ stage, loaders, actions }) {
+    if (stage === "build-html" || stage === "develop-html") {
+        actions.setWebpackConfig({
+            resolve: {
+                alias: {
+                    '@ddp/client': path.resolve(__dirname, '../ddp-client')
+                }
+            },
+            module: {
+                rules: [
+                    {
+                        test: /\@polkadot\/extension-dapp/,
+                        use: loaders.null(),
+                    },
+                ],
+            },
+        })
+    }
+    else {
+        actions.setWebpackConfig({
+            resolve: {
+                alias: {
+                    '@ddp/client': path.resolve(__dirname, '../ddp-client')
+                }
+            },
+        })
+    }
 }
-
 
 exports.createPages = function({actions}){
     const { createPage } = actions;
