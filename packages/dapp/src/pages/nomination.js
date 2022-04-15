@@ -1,19 +1,30 @@
 import * as React from 'react';
-import { Container } from '@mui/material';
+import {Container, Typography} from '@mui/material';
 import {NominatorDetailView} from "../sections";
 
 // components
 import Page from '../components/Page';
 import DashboardLayout from "../layouts/dashboard";
-
+import {usePolkadotExtensionContext} from "../contexts/PolkadotExtensionContext";
 export default function DashboardNominator() {
+
+    const {selectedAccount} = usePolkadotExtensionContext();
+
     return (
         <DashboardLayout>
             <Page title="Nomination">
                 <Container maxWidth="xl">
-                    <NominatorDetailView
-                        nominatorName={"SAMPLE-STASH"}
-                        nominatorId={"14zV6AH1pQRq35ESHEQuz3rxcaXDRh2rrC3nUJEfoMGNLRB7"}/>
+                    {
+                        selectedAccount ?
+                            (
+                                <NominatorDetailView
+                                    nominatorName={selectedAccount.meta.name}
+                                    nominatorId={selectedAccount.address}/>
+                            ) :
+                            (
+                                <Typography>Connect Your wallet</Typography>
+                            )
+                    }
                 </Container>
             </Page>
         </DashboardLayout>
