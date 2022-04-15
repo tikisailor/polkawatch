@@ -5,17 +5,10 @@ import {
     PolkawatchApi,
 } from '@ddp/client';
 
-// TODO: dev/prod
-// TODO: IPFS DDP updates
-
 export default function usePolkawatchApi(): UpdatedPolkawatchApi {
 
-    const basePath = `${process.env.GATSBY_POLKAWATCH_API_URL}`
-
-    console.log(process.env.GATSBY_POLKAWATCH_API_URL)
-
-    // const basePath = "http://localhost:7200";
-    // const basePath = 'https://api.polkawatch.app';
+    const envPath = process.env.GATSBY_POLKAWATCH_API_URL;
+    const basePath = envPath ? envPath : 'https://api.polkawatch.app';
 
     const checkSeconds = 60;
 
