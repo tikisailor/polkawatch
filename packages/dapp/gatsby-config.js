@@ -12,6 +12,6 @@ module.exports = {
     'gatsby-plugin-meta-redirect'
   ],
   siteMetadata: {
-    title: 'Minimal-UI',
+    title: 'Polkawatch',
   },
 };
