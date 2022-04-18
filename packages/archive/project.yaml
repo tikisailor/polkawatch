@@ -15,7 +15,7 @@ dataSources:
     # For testing use minimum the last 500K blocks
     # 1.5M for safely storing history depth
     # more for getting IP history before history_depth starts
-    startBlock: 7000000
+    startBlock: 8700000
     mapping:
       file: ./dist/index.js
       handlers:
