@@ -36,3 +36,18 @@ Use the following commands to develop this DAPP:
 DAPP includes StoryShots Regressions tests based on Storybook, run as:
 
 - ```yarn test```
+
+# Attribution of Design Work.
+
+This DAPP is based on Design deliverables from the 
+[minimals design template](https://github.com/minimal-ui-kit/material-kit-react) which has been ported to Gatsby by the 
+Polkawatch team in coordination with the author. 
+
+Minimals Design Templates are Distributed under the MIT License.
+
+## License and Copyright
+
+Polkawatch is Open Source, Apache License Version 2.0.
+
+©2022 [Valletech AB](https://valletech.eu), Authors and Contributors.
+

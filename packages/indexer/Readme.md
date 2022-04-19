@@ -23,3 +23,8 @@ Depth is reindexed once a day.
 ## Technology stack
 
 The module is based on [NetsJS](https://nestjs.com/)
+
+#License and Copyright
+Polkawatch is Open Source, Apache License Version 2.0.
+
+©2022 Valletech AB, Authors and Contributors.

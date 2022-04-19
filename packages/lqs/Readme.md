@@ -56,6 +56,8 @@ See the [queries documentation](./src/queries/Readme.md).
 
 ## Generating Client SDKs
 
-## License
+# License and Copyright
 
-LQS is part of the Polkawatch Project and it is licensed under Apache 2 License.
+Polkawatch is Open Source, Apache License Version 2.0.
+
+©2022 Valletech AB, Authors and Contributors.
