@@ -17,6 +17,10 @@ import {
     RewardsByValidationNode,
 } from '@lqs/types';
 
+/**
+ * The distribution chart type describes the data as requested by DAPP charting library
+ * Any distribution query result can be transformed into this data type using the transformation service.
+ */
 export class DistributionChart {
     @ApiProperty({
         description: 'Distribution Chart Labels',
@@ -33,6 +37,10 @@ export class DistributionChart {
         data: number[];
 }
 
+/**
+ * The evolution chart type describes the data as requested by DAPP charting library
+ * Any evolution query result can be transformed into this data type using the transformation service.
+ */
 export class EvolutionChartSegment {
     @ApiProperty({
         description: 'Segment Name',
@@ -48,6 +56,10 @@ export class EvolutionChartSegment {
 
 }
 
+/**
+ * An evolution chart is an Array of Evolution segments that share the same labels. For example Evolution of several
+ * parameters across eras.
+ */
 export class EvolutionChart {
     @ApiProperty({
         description: 'Segment Data Points',
@@ -63,6 +75,11 @@ export class EvolutionChart {
     })
         labels: number[];
 }
+
+/**
+ * Treemap chart. Any distribution can be transformed into a treemap chart.
+ * A Treemap is an array of Segments and the Segment an Array of points.
+ */
 
 export class TreemapPoint {
     @ApiProperty({
@@ -93,7 +110,7 @@ export class TreemapSegment {
 export type TreemapChart = Array<TreemapSegment>;
 
 /**
- * This is a bundle reply type. Packs all required responses for Geographic Regional Evolution
+ * Geographic Region Bundle. Packs all required responses for Geographic Regional Evolution
  */
 export class GeoRegionOverview {
 
@@ -135,7 +152,7 @@ export class NetworkOverview {
 }
 
 /**
- * Validator Group / Operator overview
+ * Validator Group / Operator overview data bundle.
  */
 
 export class OperatorOverview {
@@ -154,7 +171,7 @@ export class OperatorOverview {
 }
 
 /**
- * Region Detail
+ * Detail information about a Region Data Bundle.
  */
 
 export class RegionDetail {
@@ -181,6 +198,9 @@ export class RegionDetail {
         operatorDistributionDetail: Array<RewardsByValidationGroup>;
 }
 
+/**
+ * Country detail data bundle
+ */
 export class CountryDetail {
     @ApiProperty({
         type: TreemapSegment,
@@ -199,6 +219,9 @@ export class CountryDetail {
         operatorDistributionDetail: Array<RewardsByValidationGroup>;
 }
 
+/**
+ * Network Detail Data Bundle
+ */
 export class NetworkDetail {
 
     @ApiProperty({
@@ -219,6 +242,9 @@ export class NetworkDetail {
 
 }
 
+/**
+ * Operator Detail Data Bundle
+ */
 export class OperatorDetail {
 
     @ApiProperty({
@@ -239,6 +265,9 @@ export class OperatorDetail {
 
 }
 
+/**
+ * Nominator Detail Data Bundle
+ */
 export class NominatorDetail {
 
     @ApiProperty({

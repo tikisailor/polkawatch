@@ -8,7 +8,7 @@ import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
 import { DdpTransformationService } from './ddp.transformations.service';
 
-describe('AppController', () => {
+describe('IPFSController', () => {
     let appController: DdpIpfs;
 
     beforeEach(async () => {
@@ -27,7 +27,7 @@ describe('AppController', () => {
             providers: [DdpLqsService, DdpTransformationService],
         }).compile();
 
-        appController = app.get<DdpIpfs>(DdpIpfs);
+        appController = app.get<DdpIpfs>(DdpIpfs) as DdpIpfs ;
     });
 
     describe('root', () => {

@@ -78,7 +78,8 @@ export class DdpIpfs {
 
     /**
      * Information about the dataset. Inventory of IDs of participating objects.
-     * This is required for IPFS generation
+     * This is required for IPFS generation in order to build all possible populated endpoints and dump them into an
+     * ipfs CAR archive.
      *
      * @param record_type
      */
@@ -117,7 +118,7 @@ export class DdpIpfs {
     }
 
     /**
-     * Reginal infomration bundle.
+     * Regional information bundle.
      *
      * Returns all the queries required to present regional status of the network in one single object. Top N distribution,
      * Top N evolution, and All Regions detail.
@@ -172,11 +173,10 @@ export class DdpIpfs {
     /**
      * Network information bundle.
      *
-     * Returns all the queries required to present status by operating network in one single object. Top N distribution and detail.
+     * Returns all the queries required to present status by operating network in one single object.
      *
      * @param last_eras
      * @param validation_type
-     * @param top_results
      *
      */
     @Get('/network/overview/:validation_type/:last_eras.json')
@@ -213,11 +213,10 @@ export class DdpIpfs {
     /**
      * ValidationGroup/Operator information bundle.
      *
-     * Returns all the queries required to present status by vdalidator group or operator in one single object. Top N distribution and detail.
+     * Returns all the queries required to present status by validator group or operator in one single object.
      *
      * @param last_eras
      * @param validation_type
-     * @param top_results
      *
      */
     @Get('/operator/overview/:validation_type/:last_eras.json')
@@ -252,7 +251,7 @@ export class DdpIpfs {
     }
 
     /**
-     * Region Detail View
+     * Region Detail View. In depth view about a single region: i.e. Africa.
      */
     @Get('/geography/region/:region/:validation_type/:last_eras.json')
     @ApiOkResponse({ description: 'Data bundle of region detail data', type: RegionDetail, isArray: false })
@@ -485,6 +484,5 @@ export class DdpIpfs {
         if(params.top_results) queryParams['TopResults'] = params.top_results;
         return queryParams;
     }
-
 
 }
