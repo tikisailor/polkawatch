@@ -28,8 +28,8 @@
     "pkg:version": "echo $npm_package_version",
     "release:setversion": "yarn workspaces run version:workspace",
     "dapp:install": "cd packages/dapp && yarn install",
-    "dapp:build": "cd packages/dapp && yarn build",
-    "dapp:test": "cd packages/dapp && yarn test",
-    "dapp:lint:test": "cd packages/dapp && yarn lint:test"
+    "dapp:build": "cd packages/dapp && yarn install && yarn build",
+    "dapp:test": "cd packages/dapp && yarn install && yarn test",
+    "dapp:lint:test": "cd packages/dapp && yarn install && yarn lint:test"
   }
 }
