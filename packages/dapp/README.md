@@ -5,7 +5,7 @@ This application presents the Polkawatch data to the user.
 ## Accessing Polkawatch Data
 
 The access to Polkawatch Data is managed by the DDP client api. The client API can be connected to a local DDP server
-during development or to a DDP package published on IPFS by DDP. 
+during full-stack development or to a DDP package published on IPFS by DDP during UI development. 
 
 Using IPFS data allows UI development without having to host the Polkawatch cluster.
 
@@ -26,7 +26,13 @@ port to Gatsby by Polkawatch team.
 
 Use the following commands to develop this DAPP:
 
-- ```yarn start:dev``` to develop the DAPP with hot code updates. Will use IPFS Data Pack. Use for UI work only.
+- ```yarn start:dev``` to develop the DAPP with hot code updates. Will use IPFS Data Pack. Use for UI development only.
 - ```yarn start:dev:dapp``` to develop the DAPP using your local DDP. Use for new Data + UI development.
-- ```yarn storybook``` playground to develop UI components in isolation, with hot code updates.
+- ```yarn start:dev:ui``` storybook playground to develop UI components in isolation, with hot code updates.
 - ```yarn start:prod``` to build the production version of the application. 
+
+## DAPP Testing
+
+DAPP includes StoryShots Regressions tests based on Storybook, run as:
+
+- ```yarn test```
