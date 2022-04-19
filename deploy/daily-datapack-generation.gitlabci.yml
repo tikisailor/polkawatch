@@ -1,5 +1,4 @@
 variables:
-  IPFS_OPTS: --basic-auth ${IPFS_CLUSTER_AUTH} --host ${IPFS_CLUSTER_HOST}
   PW_VERSION: latest
   DDP_LQS_HOST: $CI_DDP_LQS_HOST
   CONTENT_CAR: ipfs_dist.car
