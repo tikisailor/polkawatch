@@ -26,8 +26,11 @@ first pass event archiving.
 between on-chain events, builds and inverted index with the resulting dataset. The indexing process runs on start and on
 daily schedule.
 - [Live Query Server](./packages/lqs): Provides access to the inverted index to the DDPP and the DAPP.
-- Distributed Data Pack Publisher (Coming Soon): Publishes the dataset on IPFS ready for consumption by the DAPP.
-- DAPP (Coming Soon): Presents the data to users, mainly from IPFS may also access directly the LQS for advanced queries.
+- [Distributed Data Pack Publisher](./packages/ddp): Publishes the dataset on IPFS ready for consumption by the DAPP.
+- [DAPP](./packages/dapp): Presents the data to users. Allows browsing the decentralization status of the network and
+the user's nomination.
+
+Note that DAPP is technicall not part of the workspace, but an isolated project, due to incompatibilities with webpack.
 
 # Testing Guide
 
@@ -67,6 +70,8 @@ You can access the following playgrouds / UIs to monitor de indexing process and
 1. [Archive GraphQL](http://localhost:3000) Provided by Subquery, during the 1st pass archive.
 2. [Elasticsearch Kibana](http://localhost:5601) Used to compose complex queries that can be used to create LQS templates.
 3. [LQS API UI](http://localhost:7000/lqs) Used to test the Live Query Server API methods and test query templates.
+4. [DDP API / IPFS DEV](http://localhost:7200/ddp) Used to emulate IPFS during development and during IPFS data pack geenration.
+5. [DAPP Storybook](http://localhost:6006) Used to develop UI components states (stories) in isolation.
 
 ### Developing locally
 

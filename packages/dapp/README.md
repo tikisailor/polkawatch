@@ -1,28 +1,32 @@
-# Minimals Port to Gatsby
+# Polkawatch DAPP
 
-## Stack
+This application presents the Polkawatch data to the user. 
 
-This Minimal Gatsby dashboard/demo is based:
+## Accessing Polkawatch Data
 
-- MUI Gatsby [example project](https://github.com/mui-org/material-ui/tree/master/examples/gatsby) 
-- Minimal [Free version](https://github.com/minimal-ui-kit/material-kit-react)
+The access to Polkawatch Data is managed by the DDP client api. The client API can be connected to a local DDP server
+during development or to a DDP package published on IPFS by DDP. 
 
-## Changes
+Using IPFS data allows UI development without having to host the Polkawatch cluster.
 
-Minimal is a React Application has been ported to Gatsby following the guidelines provided in 
-the [documentation](https://www.gatsbyjs.com/docs/porting-from-create-react-app-to-gatsby/)
+## Technology Stack
 
-- Refactored Theme, split between theme and Top Layout Plugin
-- All components must include React
-- Removed react-router-dom dependencies
-- Restructured dashboard pages to explicitly use DashboardLayout
-- Moved /static path to /
-- Implemented dashboard to dashboard/app redirection via plugin [gatsby-plugin-meta-redirect](https://www.gatsbyjs.com/plugins/gatsby-plugin-meta-redirect/)
-- Implemented alternative match path
+This DAPP is built on the following technology stack:
 
-## Development and Testing
+- [Polkadot API](https://polkadot.js.org/docs/api/) and Browser Extension
+- [Apex Charts](https://apexcharts.com/)  Modern & Interactive Open-source Charts
+- [Storybook](https://storybook.js.org/) Tool for building UI components in isolation.
+- Gatsby MUI Minimal Design Template, see [example project](https://gitlab.com/polkawatch/gatsby-mui-minimal) including 
+port to Gatsby by Polkawatch team.
+- [Material UI](https://mui.com/) tool suite and component library.
+- [Gatsby](https://www.gatsbyjs.com/) React Framework. 
+- [React](https://reactjs.org/) A JavaScript library for building user interfaces.
 
-```
-yarn install
-gatsby develop
-```
+## Developing the DAPP
+
+Use the following commands to develop this DAPP:
+
+- ```yarn start:dev``` to develop the DAPP with hot code updates. Will use IPFS Data Pack. Use for UI work only.
+- ```yarn start:dev:dapp``` to develop the DAPP using your local DDP. Use for new Data + UI development.
+- ```yarn storybook``` playground to develop UI components in isolation, with hot code updates.
+- ```yarn start:prod``` to build the production version of the application. 
