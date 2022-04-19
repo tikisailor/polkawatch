@@ -1,0 +1,20 @@
+variables:
+  IPFS_OPTS: --basic-auth ${IPFS_CLUSTER_AUTH} --host ${IPFS_CLUSTER_HOST}
+  PW_VERSION: latest
+  DDP_LQS_HOST: $CI_DDP_LQS_HOST
+  CONTENT_CAR: ipfs_dist.car
+
+build pw ddp:
+  stage: build
+  services:
+    - name: valletech/polkawatch-ddp:${PW_VERSION}
+      alias: ddp
+  image: valletech/polkawatch-ddp:${PW_VERSION}
+  script:
+    - export DDP_HOST=ddp
+    - export DDP_PORT=7200
+    - ddp-ipfs-dump
+  artifacts:
+    paths:
+      - ipfs_dist.car
+    expire_in: 1 week
