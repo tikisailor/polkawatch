@@ -19,13 +19,17 @@
     "docker:dev": "docker-compose --profile development up",
     "docker:testdeploy": "docker-compose --profile testdeploy up",
     "docker:clean": "docker-compose rm -f && docker volume rm $(basename $(pwd))_pgdata $(basename $(pwd))_esdata",
-    "build": "yarn workspaces run build:workspace",
+    "build": "yarn workspaces run build:workspace && yarn dapp:build",
     "build:client": "yarn build:tools && yarn workspaces run build:workspace:client",
     "lock": "yarn workspaces run lock:workspace",
-    "test": "yarn workspaces run test:workspace",
+    "test": "yarn workspaces run test:workspace && yarn dapp:test",
     "test:e2e": "yarn workspaces run test:workspace:e2e",
-    "lint:test": "yarn workspaces run lint:workspace:test",
+    "lint:test": "yarn workspaces run lint:workspace:test && yarn dapp:lint:test",
     "pkg:version": "echo $npm_package_version",
-    "release:setversion": "yarn workspaces run version:workspace"
+    "release:setversion": "yarn workspaces run version:workspace",
+    "dapp:install": "cd packages/dapp && yarn install",
+    "dapp:build": "cd packages/dapp && yarn build",
+    "dapp:test": "cd packages/dapp && yarn test",
+    "dapp:lint:test": "cd packages/dapp && yarn lint:test"
   }
 }
